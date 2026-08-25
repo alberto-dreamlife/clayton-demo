@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20260825a">
+<link rel="stylesheet" href="assets/site.css?v=20260825b">
 <style>
 .pagehead{padding:clamp(44px,6vw,80px) 0 0}
 
@@ -31,9 +31,21 @@
                 font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--muted);
                 padding:8px 13px;border-radius:999px;transition:background .25s ease,color .25s ease}
 .pswitch button.on{background:var(--ink);color:#fff}
-.am h2{font-size:clamp(24px,2.8vw,38px);line-height:1.1;margin:12px 0 0}
+.am h2{font-size:clamp(24px,2.8vw,44px);line-height:1.1;margin:12px 0 0}
 .am p{max-width:52ch}
 @media(max-width:900px){.am.flip .grid2>figure{order:0}}
+.am figure img{cursor:zoom-in}
+
+/* ---- the paired lightbox ----
+   Same dark room as the shared lightbox, but the stage holds both images of a
+   pair stacked, with the same switch riding along, so the big view answers the
+   same two questions as the small one. */
+.pairbox{position:relative;max-width:min(94vw,1560px)}
+.pairbox img{max-width:100%;max-height:calc(100vh - 170px);width:auto;height:auto;
+             border-radius:8px;box-shadow:0 30px 80px rgba(0,0,0,.5);cursor:default}
+.pairbox .pb{position:absolute;inset:0;opacity:0;transition:opacity .45s ease}
+.pairbox.peopled .pb{opacity:1}
+.pairbox .pswitch{right:16px;bottom:16px}
 </style>
 </head>
 <body>
@@ -76,8 +88,8 @@
 <section class="am" style="padding-top:clamp(30px,4vw,50px)">
   <div class="wrap grid2">
     <figure class="frame reveal" data-pair>
-      <img class="a" src="assets/img/Clayton_CoWorking_fr.webp?v=20260825a" alt="The co-working lounge">
-      <img class="b" src="assets/img/Clayton_CoWorking_fr_people.webp?v=20260825a" alt="The co-working lounge in use" loading="lazy">
+      <img class="a" src="assets/img/Clayton_CoWorking_fr.webp?v=20260825b" alt="The co-working lounge">
+      <img class="b" src="assets/img/Clayton_CoWorking_fr_people.webp?v=20260825b" alt="The co-working lounge in use" loading="lazy">
       <div class="pswitch" role="group" aria-label="Show the room with or without people">
         <button type="button" class="on" data-mode="empty">The room</button>
         <button type="button" data-mode="people">In use</button>
@@ -97,8 +109,8 @@
 <section class="am flip" style="background:#fff">
   <div class="wrap grid2">
     <figure class="frame reveal" data-pair>
-      <img class="a" src="assets/img/Clayton_Daycare_fr.webp?v=20260825a" alt="The daycare" loading="lazy">
-      <img class="b" src="assets/img/Clayton_Daycare_fr_people.webp?v=20260825a" alt="The daycare in use" loading="lazy">
+      <img class="a" src="assets/img/Clayton_Daycare_fr.webp?v=20260825b" alt="The daycare" loading="lazy">
+      <img class="b" src="assets/img/Clayton_Daycare_fr_people.webp?v=20260825b" alt="The daycare in use" loading="lazy">
       <div class="pswitch" role="group" aria-label="Show the room with or without people">
         <button type="button" class="on" data-mode="empty">The room</button>
         <button type="button" data-mode="people">In use</button>
@@ -118,8 +130,8 @@
 <section class="am">
   <div class="wrap grid2">
     <figure class="frame reveal" data-pair>
-      <img class="a" src="assets/img/Clayton_Fitness_fr.webp?v=20260825a" alt="The fitness studio" loading="lazy">
-      <img class="b" src="assets/img/Clayton_Fitness_fr_people.webp?v=20260825a" alt="The fitness studio in use" loading="lazy">
+      <img class="a" src="assets/img/Clayton_Fitness_fr.webp?v=20260825b" alt="The fitness studio" loading="lazy">
+      <img class="b" src="assets/img/Clayton_Fitness_fr_people.webp?v=20260825b" alt="The fitness studio in use" loading="lazy">
       <div class="pswitch" role="group" aria-label="Show the room with or without people">
         <button type="button" class="on" data-mode="empty">The room</button>
         <button type="button" data-mode="people">In use</button>
@@ -139,8 +151,8 @@
 <section class="am flip" style="background:#fff">
   <div class="wrap grid2">
     <figure class="frame reveal" data-pair>
-      <img class="a" src="assets/img/Clayton_GamesRoom_fr.webp?v=20260825a" alt="The games room" loading="lazy">
-      <img class="b" src="assets/img/Clayton_GamesRoom_fr_people.webp?v=20260825a" alt="The games room in use" loading="lazy">
+      <img class="a" src="assets/img/Clayton_GamesRoom_fr.webp?v=20260825b" alt="The games room" loading="lazy">
+      <img class="b" src="assets/img/Clayton_GamesRoom_fr_people.webp?v=20260825b" alt="The games room in use" loading="lazy">
       <div class="pswitch" role="group" aria-label="Show the room with or without people">
         <button type="button" class="on" data-mode="empty">The room</button>
         <button type="button" data-mode="people">In use</button>
@@ -159,8 +171,8 @@
 <section class="am">
   <div class="wrap grid2">
     <figure class="frame reveal" data-lightbox data-title="The lobby"
-            data-full="assets/img/Clayton_Lobby_fr.webp?v=20260825a">
-      <img src="assets/img/Clayton_Lobby_fr.webp?v=20260825a" alt="The lobby" loading="lazy">
+            data-full="assets/img/Clayton_Lobby_fr.webp?v=20260825b">
+      <img src="assets/img/Clayton_Lobby_fr.webp?v=20260825b" alt="The lobby" loading="lazy">
     </figure>
     <div>
       <div class="kicker reveal">The arrival</div>
@@ -175,8 +187,8 @@
 <section class="am flip" style="background:#fff">
   <div class="wrap grid2">
     <figure class="frame reveal" data-lightbox data-title="The kids room"
-            data-full="assets/img/Clayton_KidsRoom_fr.webp?v=20260825a">
-      <img src="assets/img/Clayton_KidsRoom_fr.webp?v=20260825a" alt="The kids room" loading="lazy">
+            data-full="assets/img/Clayton_KidsRoom_fr.webp?v=20260825b">
+      <img src="assets/img/Clayton_KidsRoom_fr.webp?v=20260825b" alt="The kids room" loading="lazy">
     </figure>
     <div>
       <div class="kicker reveal">Rainy days</div>
@@ -198,12 +210,12 @@
        the courtyard, and every home has a claim on both.</p>
     <div class="grid2" style="margin-top:clamp(26px,3.4vw,44px)">
       <figure class="frame reveal" style="margin:0" data-lightbox data-title="Quadra rooftop"
-              data-full="assets/img/Clayton_Rooftop_Building_A_View1_fr.webp?v=20260825a">
-        <img src="assets/img/Clayton_Rooftop_Building_A_View1_fr.webp?v=20260825a" alt="Quadra rooftop terrace" loading="lazy">
+              data-full="assets/img/Clayton_Rooftop_Building_A_View1_fr.webp?v=20260825b">
+        <img src="assets/img/Clayton_Rooftop_Building_A_View1_fr.webp?v=20260825b" alt="Quadra rooftop terrace" loading="lazy">
       </figure>
       <figure class="frame reveal d1" style="margin:0" data-lightbox data-title="Saturna rooftop"
-              data-full="assets/img/Clayton_Rooftop_Building_B_View1_fr.webp?v=20260825a">
-        <img src="assets/img/Clayton_Rooftop_Building_B_View1_fr.webp?v=20260825a" alt="Saturna rooftop terrace" loading="lazy">
+              data-full="assets/img/Clayton_Rooftop_Building_B_View1_fr.webp?v=20260825b">
+        <img src="assets/img/Clayton_Rooftop_Building_B_View1_fr.webp?v=20260825b" alt="Saturna rooftop terrace" loading="lazy">
       </figure>
     </div>
     <div class="hero-ctas reveal d2" style="margin-top:clamp(26px,3.4vw,40px)">
@@ -214,8 +226,8 @@
 </section>
 
 <footer>
-  <div class="wrap">
-    <div class="foot">
+  <div class="wrap f-top">
+    <div class="f-brand">
       <a class="brand" href="index.html">
         <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true">
           <rect x="14" y="14" width="40" height="12" rx="1.5"/>
@@ -226,36 +238,124 @@
         </svg>
         CLAYTON
       </a>
-      <div class="foot-links">
+      <p>198 homes in two buildings at West Clayton, Surrey. Studios to three bedrooms,
+         minutes from three schools, the parks and the SkyTrain now under construction.</p>
+    </div>
+    <nav class="f-cols" aria-label="Footer">
+      <div>
+        <h4>Explore</h4>
         <a href="homes.html">Homes</a>
         <a href="amenities.html">Amenities</a>
         <a href="neighbourhood.html">Neighbourhood</a>
         <a href="gallery.html">Gallery</a>
         <a href="tour.html">3D Tour</a>
-        <a href="features.html" target="_blank" rel="noopener">Features</a>
+        <a href="features.html" target="_blank" rel="noopener">Features and Finishes</a>
       </div>
-    </div>
-    <p class="legal">Clayton is a demonstration project. Renderings are artistic representations
-       and may differ from the finished buildings. Dimensions and areas are approximate. The
-       developer reserves the right to modify plans, specifications and features without notice.
-       This is not an offering for sale; any such offering may only be made with a disclosure
-       statement. E.&amp;O.E. &nbsp;&#183;&nbsp; Website by Dreamlife.</p>
+      <div>
+        <h4>Presentation Centre</h4>
+        <span>184 Street &amp; 72 Avenue, Surrey</span>
+        <span>Open daily 12&ndash;5pm, closed Fridays</span>
+        <a href="tel:5550122026">555.012.2026</a>
+        <a href="mailto:hello@liveclayton.ca">hello@liveclayton.ca</a>
+      </div>
+      <div>
+        <h4>Register</h4>
+        <span>Priority access to plans and pricing.</span>
+        <a class="f-cta" href="index.html#register">Join the list &rarr;</a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="wrap f-credits">
+    <span class="credit">
+      <small>Renderings by</small>
+      <a href="https://dreamlife.org" target="_blank" rel="noopener">
+        <img class="mk dl" src="assets/logos/dreamlife-white.svg" alt="Dreamlife" width="387" height="87">
+      </a>
+    </span>
+    <span class="credit">
+      <small>2D floor plans by</small>
+      <img class="mk tl" src="assets/logos/twinlines-white.png" alt="TwinLines Studio" width="820" height="225">
+    </span>
+    <span class="credit f-demo"><small>A demonstration project</small></span>
+  </div>
+
+  <div class="wrap f-legal">
+    <p>Renderings are artistic representations and may differ from the finished buildings.
+       Dimensions and areas are approximate. The developer reserves the right to modify plans,
+       specifications and features without notice. This is not an offering for sale; any such
+       offering may only be made with a disclosure statement. E.&amp;O.E.</p>
+    <p class="f-copy">&copy; 2026 Clayton &nbsp;&#183;&nbsp; Website by Dreamlife</p>
   </div>
 </footer>
 
-<script src="assets/site.js?v=20260825a"></script>
+<script src="assets/site.js?v=20260825b"></script>
 <script>
 /* The people switch. Two stacked images per figure and a crossfade between
    them, so the camera never moves and only the life appears. */
+function setMode(fig, mode){
+  fig.classList.toggle("peopled", mode === "people");
+  fig.querySelectorAll(":scope > .pswitch button, :scope .pswitch button").forEach(b =>
+    b.classList.toggle("on", b.dataset.mode === mode));
+}
 document.querySelectorAll("[data-pair]").forEach(fig => {
   fig.querySelectorAll(".pswitch button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      fig.classList.toggle("peopled", btn.dataset.mode === "people");
-      fig.querySelectorAll(".pswitch button").forEach(b =>
-        b.classList.toggle("on", b === btn));
-    });
+    btn.addEventListener("click", () => setMode(fig, btn.dataset.mode));
   });
 });
+
+/* Big view for the pairs. One overlay reused for every pair; the switch inside
+   stays in step with the one on the page, so closing never loses your choice. */
+(function(){
+  const ov = document.createElement("div");
+  ov.className = "lb";
+  ov.innerHTML = `
+    <button class="lb-close" aria-label="Close">&#10005;</button>
+    <div class="lb-stage"><div class="pairbox" id="pairbox">
+      <img class="pa" alt=""><img class="pb" alt="" aria-hidden="true">
+      <div class="pswitch" role="group" aria-label="Show the room with or without people">
+        <button type="button" data-mode="empty">The room</button>
+        <button type="button" data-mode="people">In use</button>
+      </div>
+    </div></div>
+    <div class="lb-bar"><div class="lb-cap"><b id="pairCap"></b></div></div>`;
+  document.body.appendChild(ov);
+  const box = ov.querySelector("#pairbox");
+  let src = null;
+
+  const sync = mode => { setMode(box, mode); if (src) setMode(src, mode); };
+  box.querySelectorAll(".pswitch button").forEach(btn =>
+    btn.addEventListener("click", e => { e.stopPropagation(); sync(btn.dataset.mode); }));
+
+  function open(fig){
+    src = fig;
+    box.querySelector(".pa").src = fig.querySelector("img.a").src;
+    box.querySelector(".pb").src = fig.querySelector("img.b").src;
+    ov.querySelector("#pairCap").textContent = fig.querySelector("img.a").alt;
+    setMode(box, fig.classList.contains("peopled") ? "people" : "empty");
+    ov.classList.add("open");
+    requestAnimationFrame(() => ov.classList.add("show"));
+    document.body.style.overflow = "hidden";
+  }
+  function close(){
+    ov.classList.remove("show");
+    setTimeout(() => ov.classList.remove("open"), 300);
+    document.body.style.overflow = "";
+  }
+  ov.addEventListener("click", e => {
+    if (e.target === ov || e.target.classList.contains("lb-stage") ||
+        e.target.classList.contains("lb-close")) close();
+  });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && ov.classList.contains("open")) close();
+  });
+  document.querySelectorAll("[data-pair]").forEach(fig => {
+    fig.addEventListener("click", e => {
+      if (e.target.closest(".pswitch")) return;
+      open(fig);
+    });
+  });
+})();
 </script>
 </body>
 </html>

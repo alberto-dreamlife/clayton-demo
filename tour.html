@@ -8,17 +8,33 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20260825a">
+<link rel="stylesheet" href="assets/site.css?v=20260825b">
 <style>
 .pagehead{padding:clamp(44px,6vw,80px) 0 0}
-/* 16/9 keeps the panorama viewer at cinema proportions on any width */
-.tourbox{position:relative;border-radius:18px;overflow:hidden;background:var(--ink);
+/* 16/9 keeps the panorama viewer at cinema proportions on any width.
+   The player boots behind our own cover: a render in the site palette with one
+   button, so the page never shows the host's black loading screen, and the
+   viewer only appears once someone actually asks for it. */
+.tourbox{position:relative;border-radius:18px;overflow:hidden;background:var(--sand);
          box-shadow:0 22px 54px rgba(28,42,51,.16);aspect-ratio:16/9;
          margin-top:clamp(24px,3vw,40px)}
 .tourbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.rooms{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;font-size:12.5px;color:var(--muted)}
-.rooms span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px;
-            font-weight:600}
+.tour-cover{position:absolute;inset:0;z-index:2;cursor:pointer;border:0;padding:0;
+            background:none;display:block;width:100%;text-align:center;
+            transition:opacity .6s ease,visibility .6s ease}
+.tour-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tour-cover::after{content:"";position:absolute;inset:0;
+                   background:linear-gradient(to top,rgba(12,20,26,.55),rgba(12,20,26,.12) 55%)}
+.tour-cover .go{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;
+                display:inline-flex;align-items:center;gap:.6em;
+                background:var(--clay);color:#fff;border-radius:999px;
+                padding:1.05em 2em;font-family:'Inter',sans-serif;font-weight:600;
+                font-size:clamp(14px,1.05vw,18px);box-shadow:0 14px 40px rgba(12,20,26,.45);
+                transition:background .25s ease,transform .25s var(--ease)}
+.tour-cover:hover .go{background:#A9552F;transform:translate(-50%,-50%) translateY(-2px)}
+.tour-cover .hintline{position:absolute;left:0;right:0;bottom:18px;z-index:2;color:rgba(255,255,255,.85);
+                      font-size:12.5px;font-weight:600;letter-spacing:.08em}
+.tourbox.playing .tour-cover{opacity:0;visibility:hidden}
 .tips{margin-top:18px;font-size:13px;line-height:1.7;color:var(--muted);max-width:74ch}
 </style>
 </head>
@@ -60,17 +76,14 @@
 
 <section style="padding-top:clamp(10px,1.6vw,20px)">
   <div class="wrap">
-    <div class="tourbox reveal">
-      <!-- Kuula hosts the panoramas; the iframe keeps their player sandboxed and
-           saves this page from carrying 2.4 MB of equirectangular imagery -->
-      <iframe title="Clayton 360 tour"
-              src="https://kuula.co/share/collection/7DFTN?logo=0&info=0&fs=1&vr=1&thumbs=1&inst=0"
-              allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer"
-              allowfullscreen loading="lazy"></iframe>
-    </div>
-    <div class="rooms reveal d1">
-      <span>Entry</span><span>Kitchen</span><span>Living</span><span>Bedroom</span>
-      <span>Ensuite</span><span>Bathroom</span><span>Kids room</span><span>Den</span>
+    <div class="tourbox reveal" id="tourbox">
+      <!-- The player loads only on demand, behind our own cover, so the page
+           opens on a render instead of the host's black boot screen -->
+      <button class="tour-cover" id="tourGo" type="button" aria-label="Start the 3D tour">
+        <img src="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260825b" alt="">
+        <span class="go">Step inside <span class="arr">&#8594;</span></span>
+        <span class="hintline">Drag to look around &#183; use the arrows on the floor to move</span>
+      </button>
     </div>
     <p class="tips reveal d2">On a phone, the view follows the phone: move it and the room moves
        with you. The finishes shown are the Dawn scheme; the same rooms in Dusk are in the
@@ -83,8 +96,8 @@
 </section>
 
 <footer>
-  <div class="wrap">
-    <div class="foot">
+  <div class="wrap f-top">
+    <div class="f-brand">
       <a class="brand" href="index.html">
         <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true">
           <rect x="14" y="14" width="40" height="12" rx="1.5"/>
@@ -95,23 +108,72 @@
         </svg>
         CLAYTON
       </a>
-      <div class="foot-links">
+      <p>198 homes in two buildings at West Clayton, Surrey. Studios to three bedrooms,
+         minutes from three schools, the parks and the SkyTrain now under construction.</p>
+    </div>
+    <nav class="f-cols" aria-label="Footer">
+      <div>
+        <h4>Explore</h4>
         <a href="homes.html">Homes</a>
         <a href="amenities.html">Amenities</a>
         <a href="neighbourhood.html">Neighbourhood</a>
         <a href="gallery.html">Gallery</a>
         <a href="tour.html">3D Tour</a>
-        <a href="features.html" target="_blank" rel="noopener">Features</a>
+        <a href="features.html" target="_blank" rel="noopener">Features and Finishes</a>
       </div>
-    </div>
-    <p class="legal">Clayton is a demonstration project. Renderings are artistic representations
-       and may differ from the finished buildings. Dimensions and areas are approximate. The
-       developer reserves the right to modify plans, specifications and features without notice.
-       This is not an offering for sale; any such offering may only be made with a disclosure
-       statement. E.&amp;O.E. &nbsp;&#183;&nbsp; Website by Dreamlife.</p>
+      <div>
+        <h4>Presentation Centre</h4>
+        <span>184 Street &amp; 72 Avenue, Surrey</span>
+        <span>Open daily 12&ndash;5pm, closed Fridays</span>
+        <a href="tel:5550122026">555.012.2026</a>
+        <a href="mailto:hello@liveclayton.ca">hello@liveclayton.ca</a>
+      </div>
+      <div>
+        <h4>Register</h4>
+        <span>Priority access to plans and pricing.</span>
+        <a class="f-cta" href="index.html#register">Join the list &rarr;</a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="wrap f-credits">
+    <span class="credit">
+      <small>Renderings by</small>
+      <a href="https://dreamlife.org" target="_blank" rel="noopener">
+        <img class="mk dl" src="assets/logos/dreamlife-white.svg" alt="Dreamlife" width="387" height="87">
+      </a>
+    </span>
+    <span class="credit">
+      <small>2D floor plans by</small>
+      <img class="mk tl" src="assets/logos/twinlines-white.png" alt="TwinLines Studio" width="820" height="225">
+    </span>
+    <span class="credit f-demo"><small>A demonstration project</small></span>
+  </div>
+
+  <div class="wrap f-legal">
+    <p>Renderings are artistic representations and may differ from the finished buildings.
+       Dimensions and areas are approximate. The developer reserves the right to modify plans,
+       specifications and features without notice. This is not an offering for sale; any such
+       offering may only be made with a disclosure statement. E.&amp;O.E.</p>
+    <p class="f-copy">&copy; 2026 Clayton &nbsp;&#183;&nbsp; Website by Dreamlife</p>
   </div>
 </footer>
 
-<script src="assets/site.js?v=20260825a"></script>
+<script src="assets/site.js?v=20260825b"></script>
+<script>
+/* The iframe exists only after the click, and the cover holds until the player
+   reports loaded, so black never gets a frame on screen. */
+document.getElementById("tourGo").addEventListener("click", () => {
+  const box = document.getElementById("tourbox");
+  if (box.querySelector("iframe")) return;
+  const f = document.createElement("iframe");
+  f.title = "Clayton 360 tour";
+  f.src = "https://kuula.co/share/collection/7DFTN?logo=0&info=0&fs=1&vr=1&thumbs=1&inst=0";
+  f.allow = "fullscreen; xr-spatial-tracking; gyroscope; accelerometer";
+  f.allowFullscreen = true;
+  f.addEventListener("load", () => setTimeout(() => box.classList.add("playing"), 600));
+  box.insertBefore(f, box.firstChild);
+});
+</script>
 </body>
 </html>
