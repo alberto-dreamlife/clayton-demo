@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 86 86" role="img" aria-label="Clayton">
+  <g fill="currentColor">
+    <rect x="14" y="14" width="40" height="12" rx="1.5"/>
+    <rect x="60" y="14" width="12" height="40" rx="1.5"/>
+    <rect x="32" y="60" width="40" height="12" rx="1.5"/>
+    <rect x="14" y="32" width="12" height="40" rx="1.5"
+          fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/>
+  </g>
+</svg>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Amenities | Clayton</title>
+<meta name="description" content="Co-working lounge, daycare, fitness studio, games room and two rooftop terraces, all inside Clayton.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=20260825a">
+<style>
+.pagehead{padding:clamp(44px,6vw,80px) 0 0}
+
+/* ---- an amenity band ----
+   Image on one side, words on the other, sides alternating so the page breathes.
+   Where the render exists with and without people, a switch sits on the image:
+   the empty room shows the architecture, the peopled one shows the life, and a
+   buyer wants both answers. */
+.am{padding-block:clamp(36px,4.6vw,64px)}
+.am .grid2{align-items:center}
+.am.flip .grid2>figure{order:2}
+.am figure{margin:0;position:relative}
+.am figure img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block}
+.am figure .b{position:absolute;inset:0;opacity:0;transition:opacity .45s ease}
+.am figure.peopled .b{opacity:1}
+.pswitch{position:absolute;right:14px;bottom:14px;z-index:2;display:inline-flex;gap:4px;
+         background:rgba(255,255,255,.92);border-radius:999px;padding:4px;
+         box-shadow:0 6px 20px rgba(12,20,26,.3)}
+.pswitch button{border:0;background:transparent;cursor:pointer;font-family:'Inter',sans-serif;
+                font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--muted);
+                padding:8px 13px;border-radius:999px;transition:background .25s ease,color .25s ease}
+.pswitch button.on{background:var(--ink);color:#fff}
+.am h2{font-size:clamp(24px,2.8vw,38px);line-height:1.1;margin:12px 0 0}
+.am p{max-width:52ch}
+@media(max-width:900px){.am.flip .grid2>figure{order:0}}
+</style>
+</head>
+<body>
+<!-- shared page head and nav, spliced into each page by the build step so the
+     markup stays identical everywhere without a template engine -->
+<nav class="nav static">
+  <div class="nav-in">
+    <a class="brand" href="index.html">
+      <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true">
+        <rect x="14" y="14" width="40" height="12" rx="1.5"/>
+        <rect x="60" y="14" width="12" height="40" rx="1.5"/>
+        <rect x="32" y="60" width="40" height="12" rx="1.5"/>
+        <rect x="14" y="32" width="12" height="40" rx="1.5"
+              fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/>
+      </svg>
+      CLAYTON
+    </a>
+    <div class="nav-links">
+      <a href="homes.html">Homes</a>
+      <a href="amenities.html">Amenities</a>
+      <a href="neighbourhood.html">Neighbourhood</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="tour.html">3D Tour</a>
+      <a class="cta" href="index.html#register">Register</a>
+    </div>
+  </div>
+</nav>
+
+<header class="pagehead">
+  <div class="wrap">
+    <div class="kicker reveal">Amenities</div>
+    <h1 class="title display reveal d1">The building is<br>part of the <i>home.</i></h1>
+    <p class="lead reveal d2">Some days the second bedroom is an office. Some days the office is
+       downstairs, the gym is two floors up, and dinner is on the rooftop. Everything here is
+       shared by 198 homes and owned by all of them.</p>
+  </div>
+</header>
+
+<!-- co-working -->
+<section class="am" style="padding-top:clamp(30px,4vw,50px)">
+  <div class="wrap grid2">
+    <figure class="frame reveal" data-pair>
+      <img class="a" src="assets/img/Clayton_CoWorking_fr.webp?v=20260825a" alt="The co-working lounge">
+      <img class="b" src="assets/img/Clayton_CoWorking_fr_people.webp?v=20260825a" alt="The co-working lounge in use" loading="lazy">
+      <div class="pswitch" role="group" aria-label="Show the room with or without people">
+        <button type="button" class="on" data-mode="empty">The room</button>
+        <button type="button" data-mode="people">In use</button>
+      </div>
+    </figure>
+    <div>
+      <div class="kicker reveal">Level 2, Quadra</div>
+      <h2 class="display reveal d1">The commute is an elevator.</h2>
+      <p class="lead reveal d2">A proper co-working lounge, not a corner with a desk: booths for
+         calls, a long table for laptops, and the coffee within reach. Book a seat downstairs
+         and keep the kitchen table for dinner.</p>
+    </div>
+  </div>
+</section>
+
+<!-- daycare -->
+<section class="am flip" style="background:#fff">
+  <div class="wrap grid2">
+    <figure class="frame reveal" data-pair>
+      <img class="a" src="assets/img/Clayton_Daycare_fr.webp?v=20260825a" alt="The daycare" loading="lazy">
+      <img class="b" src="assets/img/Clayton_Daycare_fr_people.webp?v=20260825a" alt="The daycare in use" loading="lazy">
+      <div class="pswitch" role="group" aria-label="Show the room with or without people">
+        <button type="button" class="on" data-mode="empty">The room</button>
+        <button type="button" data-mode="people">In use</button>
+      </div>
+    </figure>
+    <div>
+      <div class="kicker reveal">Ground floor, Quadra</div>
+      <h2 class="display reveal d1">Drop-off, thirty seconds.</h2>
+      <p class="lead reveal d2">A licensed daycare inside the building, with its own patio off
+         the courtyard. The kind of amenity that changes a family's whole morning, which is why
+         it sits at the front door and not in a brochure footnote.</p>
+    </div>
+  </div>
+</section>
+
+<!-- fitness -->
+<section class="am">
+  <div class="wrap grid2">
+    <figure class="frame reveal" data-pair>
+      <img class="a" src="assets/img/Clayton_Fitness_fr.webp?v=20260825a" alt="The fitness studio" loading="lazy">
+      <img class="b" src="assets/img/Clayton_Fitness_fr_people.webp?v=20260825a" alt="The fitness studio in use" loading="lazy">
+      <div class="pswitch" role="group" aria-label="Show the room with or without people">
+        <button type="button" class="on" data-mode="empty">The room</button>
+        <button type="button" data-mode="people">In use</button>
+      </div>
+    </figure>
+    <div>
+      <div class="kicker reveal">Level 2, Saturna</div>
+      <h2 class="display reveal d1">No membership, no excuse.</h2>
+      <p class="lead reveal d2">Cardio at the glass, weights along the mirror, and room to
+         stretch in between. Open early, open late, and never more than an elevator away from
+         your own shower.</p>
+    </div>
+  </div>
+</section>
+
+<!-- games room -->
+<section class="am flip" style="background:#fff">
+  <div class="wrap grid2">
+    <figure class="frame reveal" data-pair>
+      <img class="a" src="assets/img/Clayton_GamesRoom_fr.webp?v=20260825a" alt="The games room" loading="lazy">
+      <img class="b" src="assets/img/Clayton_GamesRoom_fr_people.webp?v=20260825a" alt="The games room in use" loading="lazy">
+      <div class="pswitch" role="group" aria-label="Show the room with or without people">
+        <button type="button" class="on" data-mode="empty">The room</button>
+        <button type="button" data-mode="people">In use</button>
+      </div>
+    </figure>
+    <div>
+      <div class="kicker reveal">Level 1, Quadra</div>
+      <h2 class="display reveal d1">The biggest room you own.</h2>
+      <p class="lead reveal d2">Pool table, lounge seating and a screen for game night. The
+         living room for the nights your living room is not big enough.</p>
+    </div>
+  </div>
+</section>
+
+<!-- lobby and kids room, no pairs -->
+<section class="am">
+  <div class="wrap grid2">
+    <figure class="frame reveal" data-lightbox data-title="The lobby"
+            data-full="assets/img/Clayton_Lobby_fr.webp?v=20260825a">
+      <img src="assets/img/Clayton_Lobby_fr.webp?v=20260825a" alt="The lobby" loading="lazy">
+    </figure>
+    <div>
+      <div class="kicker reveal">The arrival</div>
+      <h2 class="display reveal d1">First impressions, daily.</h2>
+      <p class="lead reveal d2">Double height glass, warm timber and a place to wait that
+         doesn't feel like waiting. Parcel storage sits off the lobby, because the boxes
+         arrive whether you are home or not.</p>
+    </div>
+  </div>
+</section>
+
+<section class="am flip" style="background:#fff">
+  <div class="wrap grid2">
+    <figure class="frame reveal" data-lightbox data-title="The kids room"
+            data-full="assets/img/Clayton_KidsRoom_fr.webp?v=20260825a">
+      <img src="assets/img/Clayton_KidsRoom_fr.webp?v=20260825a" alt="The kids room" loading="lazy">
+    </figure>
+    <div>
+      <div class="kicker reveal">Rainy days</div>
+      <h2 class="display reveal d1">An indoors worth going to.</h2>
+      <p class="lead reveal d2">A playroom scaled to its audience, soft where it should be and
+         washable where it must be. Twenty steps from the daycare, so the youngest residents
+         own this corner of the building.</p>
+    </div>
+  </div>
+</section>
+
+<!-- rooftops -->
+<section style="background:var(--sand)">
+  <div class="wrap">
+    <div class="kicker reveal">The rooftops</div>
+    <h2 class="title display reveal d1">Dinner, six storeys up.</h2>
+    <p class="lead reveal d2">Both buildings finish in a shared terrace: dining tables, loungers,
+       planting, and the long view over West Clayton. Quadra's faces the sunset, Saturna's faces
+       the courtyard, and every home has a claim on both.</p>
+    <div class="grid2" style="margin-top:clamp(26px,3.4vw,44px)">
+      <figure class="frame reveal" style="margin:0" data-lightbox data-title="Quadra rooftop"
+              data-full="assets/img/Clayton_Rooftop_Building_A_View1_fr.webp?v=20260825a">
+        <img src="assets/img/Clayton_Rooftop_Building_A_View1_fr.webp?v=20260825a" alt="Quadra rooftop terrace" loading="lazy">
+      </figure>
+      <figure class="frame reveal d1" style="margin:0" data-lightbox data-title="Saturna rooftop"
+              data-full="assets/img/Clayton_Rooftop_Building_B_View1_fr.webp?v=20260825a">
+        <img src="assets/img/Clayton_Rooftop_Building_B_View1_fr.webp?v=20260825a" alt="Saturna rooftop terrace" loading="lazy">
+      </figure>
+    </div>
+    <div class="hero-ctas reveal d2" style="margin-top:clamp(26px,3.4vw,40px)">
+      <a class="btn btn-dark" href="homes.html">Find your home <span class="arr">&#8594;</span></a>
+      <a class="btn btn-line" href="gallery.html">See the full gallery</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <a class="brand" href="index.html">
+        <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true">
+          <rect x="14" y="14" width="40" height="12" rx="1.5"/>
+          <rect x="60" y="14" width="12" height="40" rx="1.5"/>
+          <rect x="32" y="60" width="40" height="12" rx="1.5"/>
+          <rect x="14" y="32" width="12" height="40" rx="1.5"
+                fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/>
+        </svg>
+        CLAYTON
+      </a>
+      <div class="foot-links">
+        <a href="homes.html">Homes</a>
+        <a href="amenities.html">Amenities</a>
+        <a href="neighbourhood.html">Neighbourhood</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="tour.html">3D Tour</a>
+        <a href="features.html" target="_blank" rel="noopener">Features</a>
+      </div>
+    </div>
+    <p class="legal">Clayton is a demonstration project. Renderings are artistic representations
+       and may differ from the finished buildings. Dimensions and areas are approximate. The
+       developer reserves the right to modify plans, specifications and features without notice.
+       This is not an offering for sale; any such offering may only be made with a disclosure
+       statement. E.&amp;O.E. &nbsp;&#183;&nbsp; Website by Dreamlife.</p>
+  </div>
+</footer>
+
+<script src="assets/site.js?v=20260825a"></script>
+<script>
+/* The people switch. Two stacked images per figure and a crossfade between
+   them, so the camera never moves and only the life appears. */
+document.querySelectorAll("[data-pair]").forEach(fig => {
+  fig.querySelectorAll(".pswitch button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      fig.classList.toggle("peopled", btn.dataset.mode === "people");
+      fig.querySelectorAll(".pswitch button").forEach(b =>
+        b.classList.toggle("on", b === btn));
+    });
+  });
+});
+</script>
+</body>
+</html>

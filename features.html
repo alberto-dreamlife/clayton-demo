@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Features and Finishes | Clayton</title>
+<meta name="description" content="The written specification for every Clayton home: schemes, kitchens, bathrooms, comfort and warranty.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* This page is a document, not a webpage: two A4 sheets that print exactly as
+   they preview. Everything that is only useful on screen lives in .chrome and
+   dies inside @media print. */
+:root{
+  --ink:#1C2A33; --clay:#C0664A; --sand:#D8CDBE; --paper:#F7F5F1;
+  --muted:#5C6B75; --line:#E3DED4;
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{background:#3A464F;font-family:'Inter',sans-serif;color:var(--ink);
+     padding:34px 0 60px}
+
+/* on-screen furniture */
+.chrome{position:fixed;top:14px;right:14px;z-index:10;display:flex;gap:8px}
+.chrome button,.chrome a{border:0;cursor:pointer;font-family:'Inter',sans-serif;
+  font-size:12.5px;font-weight:700;padding:11px 18px;border-radius:999px;
+  text-decoration:none;display:inline-flex;align-items:center;gap:7px;
+  box-shadow:0 8px 22px rgba(0,0,0,.35)}
+.chrome .print{background:var(--clay);color:#fff}
+.chrome .close{background:#fff;color:var(--ink)}
+
+/* the sheets */
+.sheet{width:210mm;min-height:297mm;background:#fff;margin:0 auto 26px;
+       padding:16mm 17mm 14mm;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.4);
+       display:flex;flex-direction:column}
+/* phones are narrower than A4: scale the sheet down instead of reflowing it,
+   so the printed document and the pocket preview are the same document */
+@media(max-width:820px){
+  body{padding:16px 0 40px}
+  /* the sheet is wider than the phone: pin it to its true A4 width, center it
+     with a translate, then scale, so neither edge is ever cut off */
+  .zoom{width:210mm;position:relative;left:50%;transform-origin:top center;
+        transform:translateX(-50%) scale(calc(100vw / 226mm))}
+  .zoom .sheet{margin:0}
+  .zoomwrap{height:calc(297mm * (100vw / 226mm) + 20px);overflow:hidden}
+}
+
+.masth{display:flex;align-items:center;justify-content:space-between;
+       border-bottom:2.5px solid var(--ink);padding-bottom:7mm}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Archivo',sans-serif;
+       font-weight:600;font-size:21px;letter-spacing:.22em}
+.brand svg{width:30px;height:30px}
+.masth .doc{text-align:right;font-size:10px;font-weight:700;letter-spacing:.18em;
+            text-transform:uppercase;color:var(--muted);line-height:1.8}
+.masth .doc b{display:block;color:var(--clay);font-size:11px}
+
+h1{font-family:'Archivo',sans-serif;font-weight:500;font-size:34px;line-height:1.08;
+   margin:9mm 0 2.5mm}
+h1 i{font-style:italic;color:var(--clay)}
+.intro{font-size:11.5px;line-height:1.65;color:var(--muted);max-width:70ch;margin-bottom:7mm}
+
+.cols{columns:2;column-gap:9mm;flex:1}
+.blk{break-inside:avoid;margin-bottom:6.5mm}
+.blk h2{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+        color:var(--clay);border-bottom:1px solid var(--line);padding-bottom:2mm;
+        margin-bottom:2.6mm;display:flex;align-items:baseline;justify-content:space-between}
+.blk h2 span{color:var(--muted);letter-spacing:.06em;font-weight:600;text-transform:none}
+.blk ul{list-style:none;padding:0}
+.blk li{font-size:9.6px;line-height:1.5;padding:1.1mm 0 1.1mm 4.5mm;position:relative;
+        color:#2A3942}
+.blk li::before{content:"";position:absolute;left:0;top:2.45mm;width:2mm;height:2mm;
+                border-radius:.6mm;background:var(--sand)}
+.blk li b{font-weight:600}
+
+/* the two schemes side by side */
+.schemes{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-bottom:2mm}
+.scheme{border:1px solid var(--line);border-radius:3mm;overflow:hidden}
+.scheme .swatches{display:flex;height:9mm}
+.scheme .swatches i{flex:1}
+.scheme .nm{padding:2.6mm 3.2mm 3mm}
+.scheme .nm b{font-family:'Archivo',sans-serif;font-weight:500;font-size:13px;display:block}
+.scheme .nm span{font-size:8.8px;color:var(--muted);line-height:1.45;display:block;margin-top:.8mm}
+
+.foot{border-top:1px solid var(--line);padding-top:3.5mm;margin-top:5mm;
+      display:flex;justify-content:space-between;gap:8mm;align-items:flex-end}
+.foot p{font-size:7.6px;line-height:1.55;color:var(--muted);max-width:150mm}
+.foot .pg{font-size:9px;font-weight:700;letter-spacing:.14em;color:var(--muted);white-space:nowrap}
+
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff;padding:0}
+  .chrome{display:none}
+  .sheet{box-shadow:none;margin:0;width:auto}
+  .sheet+ .zoomwrap .sheet, .zoomwrap+.zoomwrap .sheet{page-break-before:always}
+  .zoomwrap{height:auto;overflow:visible}
+  .zoom{transform:none}
+  .zoomwrap:first-of-type{page-break-after:always}
+}
+</style>
+</head>
+<body>
+
+<div class="chrome">
+  <button class="print" type="button" onclick="window.print()">Print or save PDF</button>
+  <a class="close" href="index.html" id="closeBtn">Close</a>
+</div>
+
+<div class="zoomwrap"><div class="zoom">
+<section class="sheet">
+  <div class="masth">
+    <div class="brand">
+      <svg viewBox="0 0 86 86" fill="#1C2A33" aria-hidden="true">
+        <rect x="14" y="14" width="40" height="12" rx="1.5"/>
+        <rect x="60" y="14" width="12" height="40" rx="1.5"/>
+        <rect x="32" y="60" width="40" height="12" rx="1.5"/>
+        <rect x="14" y="32" width="12" height="40" rx="1.5"
+              fill="none" stroke="#1C2A33" stroke-width="2.4" opacity=".55"/>
+      </svg>
+      CLAYTON
+    </div>
+    <div class="doc"><b>Features and Finishes</b>West Clayton, Surrey BC<br>198 homes &#183; Quadra and Saturna</div>
+  </div>
+
+  <h1>Written down,<br>not <i>mood-boarded.</i></h1>
+  <p class="intro">Every Clayton home is delivered to this specification, in your choice of two
+     schemes. Keep this sheet: it is the answer to "what exactly am I buying" in two pages.</p>
+
+  <div class="cols">
+    <div class="blk">
+      <h2>Your scheme <span>choose one</span></h2>
+      <div class="schemes">
+        <div class="scheme">
+          <div class="swatches">
+            <i style="background:#D9CBB4"></i><i style="background:#EDE7DC"></i>
+            <i style="background:#C9CDCB"></i><i style="background:#F5F2EC"></i>
+          </div>
+          <div class="nm"><b>Dawn</b><span>Pale oak wide-plank flooring, soft stone quartz,
+            warm white cabinetry with brushed nickel pulls.</span></div>
+        </div>
+        <div class="scheme">
+          <div class="swatches">
+            <i style="background:#5A4A3C"></i><i style="background:#3A3D40"></i>
+            <i style="background:#8C8478"></i><i style="background:#23282C"></i>
+          </div>
+          <div class="nm"><b>Dusk</b><span>Smoked timber flooring, charcoal-veined quartz,
+            slate cabinetry with matte black pulls.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <h2>The home</h2>
+      <ul>
+        <li><b>Nine foot ceilings</b> in principal rooms on every level</li>
+        <li>Wide-plank laminate flooring throughout living areas and bedrooms</li>
+        <li>Low-E double-glazed windows with solar control coating</li>
+        <li>Roller-shade window coverings on all windows</li>
+        <li>Flat-panel interior doors with matte black lever hardware</li>
+        <li>Front-loading washer and dryer in every home</li>
+        <li>Adaptable homes available on request; see the adaptable plan set</li>
+        <li>Private balcony, patio or rooftop terrace with every home</li>
+      </ul>
+    </div>
+
+    <div class="blk">
+      <h2>The kitchen <span>Samsung throughout</span></h2>
+      <ul>
+        <li><b>Samsung</b> counter-depth French-door refrigerator, fingerprint-resistant finish</li>
+        <li><b>Samsung</b> slide-in electric convection range</li>
+        <li><b>Samsung</b> panel-ready dishwasher, integrated into the millwork</li>
+        <li><b>Samsung</b> over-the-range microwave with exterior venting</li>
+        <li>Quartz countertops with square-edge profile and full-height backsplash</li>
+        <li>Soft-close cabinetry with under-cabinet LED lighting</li>
+        <li>Single-bowl undermount stainless sink, pull-down spray faucet</li>
+        <li>Islands or eating bars in most plans; see individual floor plans</li>
+      </ul>
+    </div>
+
+    <div class="blk">
+      <h2>The bathrooms</h2>
+      <ul>
+        <li>Quartz vanity tops with undermount basins</li>
+        <li>Porcelain tile flooring and full-height tile at tubs and showers</li>
+        <li>Frameless glass showers in ensuites; deep soaker tubs in main baths</li>
+        <li>Matte black fixtures matched across every bathroom</li>
+        <li>Mirrored medicine cabinets with integrated lighting</li>
+        <li>Dual-flush water-saving toilets</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="foot">
+    <p>Clayton is a demonstration project. This specification is illustrative and subject to
+       change without notice; materials of equal or better quality may be substituted.
+       E.&amp;O.E.</p>
+    <div class="pg">01 / 02</div>
+  </div>
+</section>
+</div></div>
+
+<div class="zoomwrap"><div class="zoom">
+<section class="sheet">
+  <div class="masth">
+    <div class="brand">
+      <svg viewBox="0 0 86 86" fill="#1C2A33" aria-hidden="true">
+        <rect x="14" y="14" width="40" height="12" rx="1.5"/>
+        <rect x="60" y="14" width="12" height="40" rx="1.5"/>
+        <rect x="32" y="60" width="40" height="12" rx="1.5"/>
+        <rect x="14" y="32" width="12" height="40" rx="1.5"
+              fill="none" stroke="#1C2A33" stroke-width="2.4" opacity=".55"/>
+      </svg>
+      CLAYTON
+    </div>
+    <div class="doc"><b>Features and Finishes</b>West Clayton, Surrey BC<br>198 homes &#183; Quadra and Saturna</div>
+  </div>
+
+  <h1>The building keeps <i>its promises</i> too.</h1>
+  <p class="intro">What surrounds the home matters as much as what is inside it. This page covers
+     comfort, the shared spaces, and the warranty that stands behind all of it.</p>
+
+  <div class="cols">
+    <div class="blk">
+      <h2>Comfort and quiet</h2>
+      <ul>
+        <li>Individually controlled heating and cooling in every home</li>
+        <li>Energy-recovery ventilation supplying continuous fresh air</li>
+        <li>Acoustic underlay and resilient channel separation between homes</li>
+        <li>Solid-core entry doors with weather-sealed frames</li>
+        <li>LED lighting throughout, roughed-in dimmers in living and dining</li>
+      </ul>
+    </div>
+
+    <div class="blk">
+      <h2>Connected</h2>
+      <ul>
+        <li>Fibre-to-the-home internet, wired to every unit</li>
+        <li>USB-C charging outlets in kitchen and principal bedroom</li>
+        <li>Smart entry system with camera intercom to your phone</li>
+        <li>EV-ready parking stalls; rough-in at every residential stall</li>
+        <li>Secure bike storage with repair stand and wash station</li>
+      </ul>
+    </div>
+
+    <div class="blk">
+      <h2>The shared spaces</h2>
+      <ul>
+        <li>Co-working lounge with call booths, level 2 of Quadra</li>
+        <li>Licensed daycare with courtyard patio at the ground floor</li>
+        <li>Fitness studio, level 2 of Saturna</li>
+        <li>Games room and kids playroom off the courtyard</li>
+        <li>Two furnished rooftop terraces with dining and loungers</li>
+        <li>Landscaped courtyard connecting Quadra and Saturna</li>
+        <li>Parcel storage off the lobby; cold storage for grocery delivery</li>
+      </ul>
+    </div>
+
+    <div class="blk">
+      <h2>Peace of mind</h2>
+      <ul>
+        <li><b>2-5-10 National Home Warranty:</b> two years on materials and labour,
+            five on the building envelope, ten on structure</li>
+        <li>Restricted-access parkade with security cameras at entries</li>
+        <li>Fire sprinklers throughout homes and common areas</li>
+        <li>Deposit protection held in trust as required in British Columbia</li>
+      </ul>
+    </div>
+
+    <div class="blk">
+      <h2>The numbers</h2>
+      <ul>
+        <li><b>198 homes</b> across two six-storey buildings</li>
+        <li>Studios to three-bedroom homes, 451 to 1,253 sq ft</li>
+        <li>Junior one-bedroom and den plans for first buyers</li>
+        <li>Adaptable homes on every residential level</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="foot">
+    <p>Clayton is a demonstration project. This specification is illustrative and subject to
+       change without notice; materials of equal or better quality may be substituted. This is
+       not an offering for sale. E.&amp;O.E. &nbsp;&#183;&nbsp; Website by Dreamlife.</p>
+    <div class="pg">02 / 02</div>
+  </div>
+</section>
+</div></div>
+
+<script>
+/* The sheet opens in its own tab from most pages: if there is a tab to close,
+   the Close control closes it, and only falls back to walking home when the
+   browser refuses (a tab the user opened directly cannot be scripted shut). */
+document.getElementById("closeBtn").addEventListener("click", e => {
+  if (window.opener || history.length <= 1) {
+    e.preventDefault();
+    window.close();
+    setTimeout(() => { location.href = "index.html"; }, 250);
+  }
+});
+</script>
+</body>
+</html>

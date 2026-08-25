@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3D Tour | Clayton</title>
+<meta name="description" content="Walk a Clayton home in 360: kitchen, living, bedrooms, ensuite and the den.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=20260825a">
+<style>
+.pagehead{padding:clamp(44px,6vw,80px) 0 0}
+/* 16/9 keeps the panorama viewer at cinema proportions on any width */
+.tourbox{position:relative;border-radius:18px;overflow:hidden;background:var(--ink);
+         box-shadow:0 22px 54px rgba(28,42,51,.16);aspect-ratio:16/9;
+         margin-top:clamp(24px,3vw,40px)}
+.tourbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.rooms{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;font-size:12.5px;color:var(--muted)}
+.rooms span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px;
+            font-weight:600}
+.tips{margin-top:18px;font-size:13px;line-height:1.7;color:var(--muted);max-width:74ch}
+</style>
+</head>
+<body>
+<!-- shared page head and nav, spliced into each page by the build step so the
+     markup stays identical everywhere without a template engine -->
+<nav class="nav static">
+  <div class="nav-in">
+    <a class="brand" href="index.html">
+      <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true">
+        <rect x="14" y="14" width="40" height="12" rx="1.5"/>
+        <rect x="60" y="14" width="12" height="40" rx="1.5"/>
+        <rect x="32" y="60" width="40" height="12" rx="1.5"/>
+        <rect x="14" y="32" width="12" height="40" rx="1.5"
+              fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/>
+      </svg>
+      CLAYTON
+    </a>
+    <div class="nav-links">
+      <a href="homes.html">Homes</a>
+      <a href="amenities.html">Amenities</a>
+      <a href="neighbourhood.html">Neighbourhood</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="tour.html">3D Tour</a>
+      <a class="cta" href="index.html#register">Register</a>
+    </div>
+  </div>
+</nav>
+
+<header class="pagehead">
+  <div class="wrap">
+    <div class="kicker reveal">3D Tour</div>
+    <h1 class="title display reveal d1">Stand in the <i>kitchen.</i></h1>
+    <p class="lead reveal d2">Eight rooms of a Clayton home, in full 360. Drag to look around,
+       use the arrows in the viewer to move between rooms, and the goggles icon if you have a
+       VR headset within reach.</p>
+  </div>
+</header>
+
+<section style="padding-top:clamp(10px,1.6vw,20px)">
+  <div class="wrap">
+    <div class="tourbox reveal">
+      <!-- Kuula hosts the panoramas; the iframe keeps their player sandboxed and
+           saves this page from carrying 2.4 MB of equirectangular imagery -->
+      <iframe title="Clayton 360 tour"
+              src="https://kuula.co/share/collection/7DFTN?logo=0&info=0&fs=1&vr=1&thumbs=1&inst=0"
+              allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer"
+              allowfullscreen loading="lazy"></iframe>
+    </div>
+    <div class="rooms reveal d1">
+      <span>Entry</span><span>Kitchen</span><span>Living</span><span>Bedroom</span>
+      <span>Ensuite</span><span>Bathroom</span><span>Kids room</span><span>Den</span>
+    </div>
+    <p class="tips reveal d2">On a phone, the view follows the phone: move it and the room moves
+       with you. The finishes shown are the Dawn scheme; the same rooms in Dusk are in the
+       <a href="gallery.html">gallery</a>, and the full specification lives in
+       <a href="features.html" target="_blank" rel="noopener">Features and Finishes</a>.</p>
+    <div class="hero-ctas reveal d3" style="margin-top:26px">
+      <a class="btn btn-clay" href="homes.html">Find this home on a floor <span class="arr">&#8594;</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <a class="brand" href="index.html">
+        <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true">
+          <rect x="14" y="14" width="40" height="12" rx="1.5"/>
+          <rect x="60" y="14" width="12" height="40" rx="1.5"/>
+          <rect x="32" y="60" width="40" height="12" rx="1.5"/>
+          <rect x="14" y="32" width="12" height="40" rx="1.5"
+                fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/>
+        </svg>
+        CLAYTON
+      </a>
+      <div class="foot-links">
+        <a href="homes.html">Homes</a>
+        <a href="amenities.html">Amenities</a>
+        <a href="neighbourhood.html">Neighbourhood</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="tour.html">3D Tour</a>
+        <a href="features.html" target="_blank" rel="noopener">Features</a>
+      </div>
+    </div>
+    <p class="legal">Clayton is a demonstration project. Renderings are artistic representations
+       and may differ from the finished buildings. Dimensions and areas are approximate. The
+       developer reserves the right to modify plans, specifications and features without notice.
+       This is not an offering for sale; any such offering may only be made with a disclosure
+       statement. E.&amp;O.E. &nbsp;&#183;&nbsp; Website by Dreamlife.</p>
+  </div>
+</footer>
+
+<script src="assets/site.js?v=20260825a"></script>
+</body>
+</html>
