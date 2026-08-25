@@ -4,22 +4,69 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>3D Tour | Clayton</title>
-<meta name="description" content="Walk a Clayton home in 360: kitchen, living, bedrooms, ensuite and the den.">
+<meta name="description" content="Walk a Clayton home in 360: kitchen, living, bedrooms, ensuite and the office.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20260825b">
+<link rel="stylesheet" href="assets/site.css?v=20260825c">
+<link rel="stylesheet" href="assets/vr/pannellum.css?v=20260825c">
 <style>
 .pagehead{padding:clamp(44px,6vw,80px) 0 0}
-/* 16/9 keeps the panorama viewer at cinema proportions on any width.
-   The player boots behind our own cover: a render in the site palette with one
-   button, so the page never shows the host's black loading screen, and the
-   viewer only appears once someone actually asks for it. */
+
+/* ---- the viewer ----
+   Our own player: Pannellum renders the panoramas and everything around it is
+   Clayton, so the tour looks like a room of the website instead of a rented
+   window into somebody else's product. */
 .tourbox{position:relative;border-radius:18px;overflow:hidden;background:var(--sand);
          box-shadow:0 22px 54px rgba(28,42,51,.16);aspect-ratio:16/9;
          margin-top:clamp(24px,3vw,40px)}
-.tourbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.tour-cover{position:absolute;inset:0;z-index:2;cursor:pointer;border:0;padding:0;
+.tourbox:fullscreen{aspect-ratio:auto;border-radius:0}
+#pano{position:absolute;inset:0}
+/* the library's own chrome stays out of the picture */
+#pano .pnlm-about-msg,#pano .pnlm-controls-container{display:none !important}
+#pano .pnlm-load-box{background:rgba(28,42,51,.85);border-radius:12px;
+                     font-family:'Inter',sans-serif}
+
+/* room name, top left */
+.vr-room{position:absolute;left:16px;top:16px;z-index:5;background:rgba(255,255,255,.92);
+         border-radius:999px;padding:9px 16px;font-size:12.5px;font-weight:700;
+         color:var(--ink);box-shadow:0 6px 20px rgba(12,20,26,.3);pointer-events:none;
+         opacity:0;transition:opacity .4s ease}
+.vr-room em{font-style:normal;color:var(--clay);margin-right:7px;letter-spacing:.1em;
+            text-transform:uppercase;font-size:10px}
+
+/* fullscreen, top right */
+.vr-fs{position:absolute;right:16px;top:16px;z-index:5;border:0;cursor:pointer;
+       background:rgba(255,255,255,.92);border-radius:999px;padding:9px 16px;
+       font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;color:var(--ink);
+       box-shadow:0 6px 20px rgba(12,20,26,.3);opacity:0;transition:opacity .4s ease,background .2s ease;
+       display:inline-flex;align-items:center;gap:7px}
+.vr-fs:hover{background:#fff}
+.tourbox.on .vr-room,.tourbox.on .vr-fs,.tourbox.on .vr-rail{opacity:1}
+
+/* the room rail, bottom center: one card per room, ours to style */
+.vr-rail{position:absolute;left:0;right:0;bottom:0;z-index:5;display:flex;gap:8px;
+         justify-content:flex-start;padding:26px 16px 14px;overflow-x:auto;
+         scrollbar-width:none;opacity:0;transition:opacity .4s ease;
+         background:linear-gradient(to top,rgba(12,20,26,.55),transparent);
+         -webkit-overflow-scrolling:touch}
+.vr-rail::-webkit-scrollbar{display:none}
+.vr-rail::after{content:"";flex:0 0 8px}
+.vr-rail .sp{flex:1 0 0}
+.vr-card{flex:none;border:0;padding:0;cursor:pointer;background:none;text-align:left;
+         width:92px;transition:transform .25s var(--ease)}
+.vr-card:hover{transform:translateY(-3px)}
+.vr-card img{width:92px;height:60px;object-fit:cover;border-radius:10px;display:block;
+             box-shadow:0 6px 18px rgba(12,20,26,.4);border:2.5px solid transparent;
+             transition:border-color .25s ease}
+.vr-card span{display:block;margin-top:5px;font-family:'Inter',sans-serif;font-size:10.5px;
+              font-weight:700;color:rgba(255,255,255,.85);letter-spacing:.04em;
+              white-space:nowrap;text-shadow:0 1px 6px rgba(12,20,26,.6)}
+.vr-card.on img{border-color:var(--clay)}
+.vr-card.on span{color:#fff}
+
+/* the cover */
+.tour-cover{position:absolute;inset:0;z-index:8;cursor:pointer;border:0;padding:0;
             background:none;display:block;width:100%;text-align:center;
             transition:opacity .6s ease,visibility .6s ease}
 .tour-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -34,8 +81,14 @@
 .tour-cover:hover .go{background:#A9552F;transform:translate(-50%,-50%) translateY(-2px)}
 .tour-cover .hintline{position:absolute;left:0;right:0;bottom:18px;z-index:2;color:rgba(255,255,255,.85);
                       font-size:12.5px;font-weight:600;letter-spacing:.08em}
-.tourbox.playing .tour-cover{opacity:0;visibility:hidden}
+.tourbox.on .tour-cover{opacity:0;visibility:hidden}
+
 .tips{margin-top:18px;font-size:13px;line-height:1.7;color:var(--muted);max-width:74ch}
+@media(max-width:700px){
+  .tourbox{aspect-ratio:4/5}
+  .vr-card{width:74px}
+  .vr-card img{width:74px;height:48px}
+}
 </style>
 </head>
 <body>
@@ -69,25 +122,28 @@
     <div class="kicker reveal">3D Tour</div>
     <h1 class="title display reveal d1">Stand in the <i>kitchen.</i></h1>
     <p class="lead reveal d2">Eight rooms of a Clayton home, in full 360. Drag to look around,
-       use the arrows in the viewer to move between rooms, and the goggles icon if you have a
-       VR headset within reach.</p>
+       pinch or scroll to zoom, and pick any room from the rail under the view.</p>
   </div>
 </header>
 
 <section style="padding-top:clamp(10px,1.6vw,20px)">
   <div class="wrap">
     <div class="tourbox reveal" id="tourbox">
-      <!-- The player loads only on demand, behind our own cover, so the page
-           opens on a render instead of the host's black boot screen -->
+      <div id="pano"></div>
+
+      <div class="vr-room" id="vrRoom"><em>The home</em><span id="vrRoomName"></span></div>
+      <button class="vr-fs" id="vrFs" type="button">&#x26F6;&ensp;Fullscreen</button>
+      <div class="vr-rail" id="vrRail"><span class="sp"></span></div>
+
       <button class="tour-cover" id="tourGo" type="button" aria-label="Start the 3D tour">
-        <img src="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260825b" alt="">
+        <img src="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260825c" alt="">
         <span class="go">Step inside <span class="arr">&#8594;</span></span>
-        <span class="hintline">Drag to look around &#183; use the arrows on the floor to move</span>
+        <span class="hintline">Drag to look around &#183; pick a room below the view</span>
       </button>
     </div>
-    <p class="tips reveal d2">On a phone, the view follows the phone: move it and the room moves
-       with you. The finishes shown are the Dawn scheme; the same rooms in Dusk are in the
-       <a href="gallery.html">gallery</a>, and the full specification lives in
+
+    <p class="tips reveal d2">The finishes shown are the Dawn scheme; the same rooms in Dusk are
+       in the <a href="gallery.html">gallery</a>, and the full specification lives in
        <a href="features.html" target="_blank" rel="noopener">Features and Finishes</a>.</p>
     <div class="hero-ctas reveal d3" style="margin-top:26px">
       <a class="btn btn-clay" href="homes.html">Find this home on a floor <span class="arr">&#8594;</span></a>
@@ -159,20 +215,74 @@
   </div>
 </footer>
 
-<script src="assets/site.js?v=20260825b"></script>
+<script src="assets/site.js?v=20260825c"></script>
+<script src="assets/vr/pannellum.js?v=20260825c"></script>
 <script>
-/* The iframe exists only after the click, and the cover holds until the player
-   reports loaded, so black never gets a frame on screen. */
+/* ---------- the tour ----------
+   One scene per room, defined in walking order. The panoramas live in this
+   repo, so the whole tour deploys with the site and costs nothing monthly. */
+/* yaw: the opening view of each room, picked where the furniture is instead
+   of whichever wall the render happened to be centered on */
+const ROOMS = [
+  {id: "entry",    name: "Entry",     yaw: 105.5},
+  {id: "kitchen",  name: "Kitchen",   yaw: -13.7},
+  {id: "living",   name: "Living",    yaw: 60.1},
+  {id: "office",   name: "Office",    yaw: 30.2},
+  {id: "bedroom",  name: "Bedroom",   yaw: 68.4},
+  {id: "ensuite",  name: "Ensuite",   yaw: 101.9},
+  {id: "bathroom", name: "Bathroom",  yaw: -14.8},
+  {id: "kids",     name: "Kids room", yaw: 1.1}
+];
+const V = "20260825c";
+const box = document.getElementById("tourbox");
+let viewer = null;
+
+/* the rail */
+const rail = document.getElementById("vrRail");
+ROOMS.forEach(r => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "vr-card"; b.dataset.room = r.id;
+  b.innerHTML = `<img src="assets/vr/thumb-${r.id}.jpg?v=${V}" alt=""><span>${r.name}</span>`;
+  b.addEventListener("click", () => { if (viewer) viewer.loadScene(r.id); });
+  rail.appendChild(b);
+});
+rail.appendChild(Object.assign(document.createElement("span"), {className: "sp"}));
+
+function mark(id){
+  document.querySelectorAll(".vr-card").forEach(c =>
+    c.classList.toggle("on", c.dataset.room === id));
+  document.getElementById("vrRoomName").textContent =
+    (ROOMS.find(r => r.id === id) || {}).name || "";
+}
+
+/* start on demand: nothing downloads until someone steps inside */
 document.getElementById("tourGo").addEventListener("click", () => {
-  const box = document.getElementById("tourbox");
-  if (box.querySelector("iframe")) return;
-  const f = document.createElement("iframe");
-  f.title = "Clayton 360 tour";
-  f.src = "https://kuula.co/share/collection/7DFTN?logo=0&info=0&fs=1&vr=1&thumbs=1&inst=0";
-  f.allow = "fullscreen; xr-spatial-tracking; gyroscope; accelerometer";
-  f.allowFullscreen = true;
-  f.addEventListener("load", () => setTimeout(() => box.classList.add("playing"), 600));
-  box.insertBefore(f, box.firstChild);
+  if (viewer) return;
+  const scenes = {};
+  ROOMS.forEach(r => {
+    scenes[r.id] = {type: "equirectangular", panorama: `assets/vr/${r.id}.jpg?v=${V}`,
+                    hfov: 100, pitch: 0, yaw: r.yaw};
+  });
+  viewer = pannellum.viewer("pano", {
+    default: {firstScene: "kitchen", sceneFadeDuration: 900,
+              autoLoad: true, showControls: false,
+              autoRotate: -2.2,
+              minHfov: 55, maxHfov: 110, compass: false},
+    scenes
+  });
+  viewer.on("load", () => { box.classList.add("on"); mark(viewer.getScene()); });
+});
+
+/* fullscreen wraps the whole box, so the rail and the room name come along */
+const fsBtn = document.getElementById("vrFs");
+fsBtn.addEventListener("click", () => {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else (box.requestFullscreen || box.webkitRequestFullscreen).call(box);
+});
+document.addEventListener("fullscreenchange", () => {
+  fsBtn.innerHTML = document.fullscreenElement
+    ? "&#10005;&ensp;Exit fullscreen" : "&#x26F6;&ensp;Fullscreen";
+  if (viewer) setTimeout(() => viewer.resize(), 120);
 });
 </script>
 </body>
