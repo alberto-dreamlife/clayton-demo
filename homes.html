@@ -25,7 +25,10 @@ body{margin:0;background:var(--paper);color:var(--ink);overflow:hidden;
    site.css because this page owns its own layout and should not inherit the
    scrolling-document rules that stylesheet assumes. */
 .nav{flex:none;background:var(--paper);box-shadow:0 1px 0 var(--line);z-index:60}
-.nav-in{max-width:min(1560px,88vw);margin:0 auto;padding:16px clamp(18px,4vw,44px);
+/* Full width here, unlike the rest of the site. The selector is a tool, not a
+   column of reading: the wordmark belongs at one edge and the menu at the
+   other, and they keep travelling apart as the window grows. */
+.nav-in{max-width:none;margin:0;padding:clamp(16px,1.3vw,24px) clamp(20px,2vw,38px);
         display:flex;align-items:center;gap:26px}
 .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink);
        font-family:'Archivo',sans-serif;font-weight:500;font-size:19px;letter-spacing:.26em}
@@ -293,7 +296,7 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
   .homegrid{grid-template-columns:1fr}
 }
 </style>
-<link rel="stylesheet" href="assets/anim.css?v=20260826i">
+<link rel="stylesheet" href="assets/anim.css?v=20260826j">
 <script>
 /* Only the page transition. The selector is an application: nothing here should
    fade in on scroll, and a progress bar would be measuring a page that does not
@@ -817,6 +820,6 @@ function crumb(){
   if (state.unit) add("Home " + state.unit, null, true);
 }
 </script>
-<script src="assets/anim.js?v=20260826i" defer></script>
+<script src="assets/anim.js?v=20260826j" defer></script>
 </body>
 </html>
