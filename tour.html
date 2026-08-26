@@ -8,8 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20260825c">
-<link rel="stylesheet" href="assets/vr/pannellum.css?v=20260825c">
+<link rel="stylesheet" href="assets/site.css?v=20260826b">
+<link rel="stylesheet" href="assets/anim.css?v=20260826b">
+<link rel="stylesheet" href="assets/vr/pannellum.css?v=20260826b">
 <style>
 .pagehead{padding:clamp(44px,6vw,80px) 0 0}
 
@@ -128,6 +129,18 @@
   .vr-card img{width:74px;height:48px}
 }
 </style>
+<script>
+/* Which parts of this page the motion layer should take over. Heroes keep
+   their own entrance, so the splitter is told to leave them alone. */
+window.AX_CONFIG = {
+  heads: "h1, h2, .title",
+  skip:  ".hero-copy, .ax-skip, .lb, .vr-plan, .viewer",
+  figs:  ".frame, .am figure, .tile",
+  stats: ".stat b",
+  ups:   "[data-up]",
+  lifts: ".door, .bcard, .walk, .vr-card"
+};
+</script>
 </head>
 <body>
 <!-- shared page head and nav, spliced into each page by the build step so the
@@ -155,10 +168,12 @@
   </div>
 </nav>
 
-<header class="pagehead">
-  <div class="wrap">
-    <div class="kicker reveal">3D Tour</div>
-    <h1 class="title display reveal d1">Stand in the <i>kitchen.</i></h1>
+<header class="pagehead has-media">
+  <div class="ph-media" data-par="0.16"><img src="assets/img/Clayton_Living_fr.webp?v=20260826b" alt="The living room at Clayton"></div>
+  <div class="ph-veil"></div>
+  <div class="wrap ph-in">
+    <div class="kicker">3D Tour</div>
+    <h1 class="title display">Stand in the <i>kitchen.</i></h1>
     <p class="lead reveal d2">Eight rooms of a Clayton home, in full 360. Drag to look around,
        pinch or scroll to zoom, and pick any room from the rail under the view.</p>
   </div>
@@ -176,14 +191,14 @@
 
       <div class="vr-plan" id="vrPlan">
         <div class="vr-plan-in">
-          <img src="assets/img/Clayton_UnitD7_fr.webp?v=20260825c" alt="The home, cut open">
+          <img src="assets/img/Clayton_UnitD7_fr.webp?v=20260826b" alt="The home, cut open">
           <span id="vrDots"></span>
         </div>
         <button class="vr-plan-close" id="vrPlanClose" type="button" aria-label="Close the plan">&#10005;</button>
       </div>
 
       <button class="tour-cover" id="tourGo" type="button" aria-label="Start the 3D tour">
-        <img src="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260825c" alt="">
+        <img src="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260826b" alt="">
         <span class="go">Step inside <span class="arr">&#8594;</span></span>
         <span class="hintline">Drag to look around &#183; pick a room below the view</span>
       </button>
@@ -262,8 +277,9 @@
   </div>
 </footer>
 
-<script src="assets/site.js?v=20260825c"></script>
-<script src="assets/vr/pannellum.js?v=20260825c"></script>
+<script src="assets/site.js?v=20260826b"></script>
+<script src="assets/anim.js?v=20260826b" defer></script>
+<script src="assets/vr/pannellum.js?v=20260826b"></script>
 <script>
 /* ---------- the tour ----------
    One scene per room, defined in walking order. The panoramas live in this
@@ -280,7 +296,7 @@ const ROOMS = [
   {id: "bathroom", name: "Bathroom",  yaw: -14.8},
   {id: "kids",     name: "Kids room", yaw: 1.1}
 ];
-const V = "20260825c";
+const V = "20260826b";
 const box = document.getElementById("tourbox");
 let viewer = null;
 

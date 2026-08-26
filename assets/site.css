@@ -191,3 +191,20 @@ footer a:hover{color:#fff}
         gap:18px;color:rgba(255,255,255,.85);font-size:13.5px;align-items:baseline}
 .lb-cap b{font-family:'Archivo',sans-serif;font-weight:500;font-size:16px;margin-right:10px;color:#fff}
 .lb-count{color:rgba(255,255,255,.55);flex:none}
+
+/* ---- page headers with media ----
+   RK asked for headers that carry something behind the type instead of flat
+   paper. The picture sits in its own layer so it can drift on scroll, the veil
+   keeps the words legible over any part of any render, and the band ends in
+   the paper color so the section below joins it without a seam. */
+.pagehead.has-media{position:relative;overflow:hidden;background:var(--ink);
+  padding:calc(clamp(44px,6vw,80px) + 76px) 0 clamp(52px,6vw,86px)}
+.pagehead .ph-media{position:absolute;inset:-12% 0;z-index:0}
+.pagehead .ph-media img{width:100%;height:100%;object-fit:cover}
+.pagehead .ph-veil{position:absolute;inset:0;z-index:1;
+  background:linear-gradient(to bottom,rgba(12,20,26,.62),rgba(12,20,26,.34) 42%,var(--paper) 99%)}
+.pagehead.has-media .ph-in{position:relative;z-index:2}
+.pagehead.has-media .kicker{color:rgba(255,255,255,.78)}
+.pagehead.has-media h1{color:#fff}
+.pagehead.has-media .lead{color:rgba(255,255,255,.86);
+  text-shadow:0 1px 24px rgba(12,20,26,.5)}

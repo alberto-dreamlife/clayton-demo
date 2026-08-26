@@ -8,7 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20260825c">
+<link rel="stylesheet" href="assets/site.css?v=20260826b">
+<link rel="stylesheet" href="assets/anim.css?v=20260826b">
 <style>
 .pagehead{padding:clamp(44px,6vw,80px) 0 0}
 
@@ -47,6 +48,18 @@
 .pairbox.peopled .pb{opacity:1}
 .pairbox .pswitch{right:16px;bottom:16px}
 </style>
+<script>
+/* Which parts of this page the motion layer should take over. Heroes keep
+   their own entrance, so the splitter is told to leave them alone. */
+window.AX_CONFIG = {
+  heads: "h1, h2, .title",
+  skip:  ".hero-copy, .ax-skip, .lb, .vr-plan, .viewer",
+  figs:  ".frame, .am figure, .tile",
+  stats: ".stat b",
+  ups:   "[data-up]",
+  lifts: ".door, .bcard, .walk, .vr-card"
+};
+</script>
 </head>
 <body>
 <!-- shared page head and nav, spliced into each page by the build step so the
@@ -74,10 +87,12 @@
   </div>
 </nav>
 
-<header class="pagehead">
-  <div class="wrap">
-    <div class="kicker reveal">Amenities</div>
-    <h1 class="title display reveal d1">The building is<br>part of the <i>home.</i></h1>
+<header class="pagehead has-media">
+  <div class="ph-media" data-par="0.16"><img src="assets/img/Clayton_Lobby_fr.webp?v=20260826b" alt="The lobby at Clayton"></div>
+  <div class="ph-veil"></div>
+  <div class="wrap ph-in">
+    <div class="kicker">Amenities</div>
+    <h1 class="title display">The building is<br>part of the <i>home.</i></h1>
     <p class="lead reveal d2">Some days the second bedroom is an office. Some days the office is
        downstairs, the gym is two floors up, and dinner is on the rooftop. Everything here is
        shared by 198 homes and owned by all of them.</p>
@@ -88,8 +103,8 @@
 <section class="am" style="padding-top:clamp(30px,4vw,50px)">
   <div class="wrap grid2">
     <figure class="frame reveal" data-pair>
-      <img class="a" src="assets/img/Clayton_CoWorking_fr.webp?v=20260825c" alt="The co-working lounge">
-      <img class="b" src="assets/img/Clayton_CoWorking_fr_people.webp?v=20260825c" alt="The co-working lounge in use" loading="lazy">
+      <img class="a" src="assets/img/Clayton_CoWorking_fr.webp?v=20260826b" alt="The co-working lounge">
+      <img class="b" src="assets/img/Clayton_CoWorking_fr_people.webp?v=20260826b" alt="The co-working lounge in use" loading="lazy">
       <div class="pswitch" role="group" aria-label="Show the room with or without people">
         <button type="button" class="on" data-mode="empty">The room</button>
         <button type="button" data-mode="people">In use</button>
@@ -109,8 +124,8 @@
 <section class="am flip" style="background:#fff">
   <div class="wrap grid2">
     <figure class="frame reveal" data-pair>
-      <img class="a" src="assets/img/Clayton_Daycare_fr.webp?v=20260825c" alt="The daycare" loading="lazy">
-      <img class="b" src="assets/img/Clayton_Daycare_fr_people.webp?v=20260825c" alt="The daycare in use" loading="lazy">
+      <img class="a" src="assets/img/Clayton_Daycare_fr.webp?v=20260826b" alt="The daycare" loading="lazy">
+      <img class="b" src="assets/img/Clayton_Daycare_fr_people.webp?v=20260826b" alt="The daycare in use" loading="lazy">
       <div class="pswitch" role="group" aria-label="Show the room with or without people">
         <button type="button" class="on" data-mode="empty">The room</button>
         <button type="button" data-mode="people">In use</button>
@@ -130,8 +145,8 @@
 <section class="am">
   <div class="wrap grid2">
     <figure class="frame reveal" data-pair>
-      <img class="a" src="assets/img/Clayton_Fitness_fr.webp?v=20260825c" alt="The fitness studio" loading="lazy">
-      <img class="b" src="assets/img/Clayton_Fitness_fr_people.webp?v=20260825c" alt="The fitness studio in use" loading="lazy">
+      <img class="a" src="assets/img/Clayton_Fitness_fr.webp?v=20260826b" alt="The fitness studio" loading="lazy">
+      <img class="b" src="assets/img/Clayton_Fitness_fr_people.webp?v=20260826b" alt="The fitness studio in use" loading="lazy">
       <div class="pswitch" role="group" aria-label="Show the room with or without people">
         <button type="button" class="on" data-mode="empty">The room</button>
         <button type="button" data-mode="people">In use</button>
@@ -151,8 +166,8 @@
 <section class="am flip" style="background:#fff">
   <div class="wrap grid2">
     <figure class="frame reveal" data-pair>
-      <img class="a" src="assets/img/Clayton_GamesRoom_fr.webp?v=20260825c" alt="The games room" loading="lazy">
-      <img class="b" src="assets/img/Clayton_GamesRoom_fr_people.webp?v=20260825c" alt="The games room in use" loading="lazy">
+      <img class="a" src="assets/img/Clayton_GamesRoom_fr.webp?v=20260826b" alt="The games room" loading="lazy">
+      <img class="b" src="assets/img/Clayton_GamesRoom_fr_people.webp?v=20260826b" alt="The games room in use" loading="lazy">
       <div class="pswitch" role="group" aria-label="Show the room with or without people">
         <button type="button" class="on" data-mode="empty">The room</button>
         <button type="button" data-mode="people">In use</button>
@@ -171,8 +186,8 @@
 <section class="am">
   <div class="wrap grid2">
     <figure class="frame reveal" data-lightbox data-title="The lobby"
-            data-full="assets/img/Clayton_Lobby_fr.webp?v=20260825c">
-      <img src="assets/img/Clayton_Lobby_fr.webp?v=20260825c" alt="The lobby" loading="lazy">
+            data-full="assets/img/Clayton_Lobby_fr.webp?v=20260826b">
+      <img src="assets/img/Clayton_Lobby_fr.webp?v=20260826b" alt="The lobby" loading="lazy">
     </figure>
     <div>
       <div class="kicker reveal">The arrival</div>
@@ -187,8 +202,8 @@
 <section class="am flip" style="background:#fff">
   <div class="wrap grid2">
     <figure class="frame reveal" data-lightbox data-title="The kids room"
-            data-full="assets/img/Clayton_KidsRoom_fr.webp?v=20260825c">
-      <img src="assets/img/Clayton_KidsRoom_fr.webp?v=20260825c" alt="The kids room" loading="lazy">
+            data-full="assets/img/Clayton_KidsRoom_fr.webp?v=20260826b">
+      <img src="assets/img/Clayton_KidsRoom_fr.webp?v=20260826b" alt="The kids room" loading="lazy">
     </figure>
     <div>
       <div class="kicker reveal">Rainy days</div>
@@ -210,12 +225,12 @@
        the courtyard, and every home has a claim on both.</p>
     <div class="grid2" style="margin-top:clamp(26px,3.4vw,44px)">
       <figure class="frame reveal" style="margin:0" data-lightbox data-title="Quadra rooftop"
-              data-full="assets/img/Clayton_Rooftop_Building_A_View1_fr.webp?v=20260825c">
-        <img src="assets/img/Clayton_Rooftop_Building_A_View1_fr.webp?v=20260825c" alt="Quadra rooftop terrace" loading="lazy">
+              data-full="assets/img/Clayton_Rooftop_Building_A_View1_fr.webp?v=20260826b">
+        <img src="assets/img/Clayton_Rooftop_Building_A_View1_fr.webp?v=20260826b" alt="Quadra rooftop terrace" loading="lazy">
       </figure>
       <figure class="frame reveal d1" style="margin:0" data-lightbox data-title="Saturna rooftop"
-              data-full="assets/img/Clayton_Rooftop_Building_B_View1_fr.webp?v=20260825c">
-        <img src="assets/img/Clayton_Rooftop_Building_B_View1_fr.webp?v=20260825c" alt="Saturna rooftop terrace" loading="lazy">
+              data-full="assets/img/Clayton_Rooftop_Building_B_View1_fr.webp?v=20260826b">
+        <img src="assets/img/Clayton_Rooftop_Building_B_View1_fr.webp?v=20260826b" alt="Saturna rooftop terrace" loading="lazy">
       </figure>
     </div>
     <div class="hero-ctas reveal d2" style="margin-top:clamp(26px,3.4vw,40px)">
@@ -289,7 +304,8 @@
   </div>
 </footer>
 
-<script src="assets/site.js?v=20260825c"></script>
+<script src="assets/site.js?v=20260826b"></script>
+<script src="assets/anim.js?v=20260826b" defer></script>
 <script>
 /* The people switch. Two stacked images per figure and a crossfade between
    them, so the camera never moves and only the life appears. */

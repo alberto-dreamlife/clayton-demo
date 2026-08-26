@@ -1,0 +1,104 @@
+/* ============================================================
+   The motion layer.
+   Everything here is namespaced ax- so it can sit on top of a site's own
+   stylesheet without colliding with it. The rule throughout: nothing moves
+   until it is on screen, nothing moves twice, and the whole layer switches
+   off for anyone who asked their system for less motion.
+   Colors come from the host site through --ax-ink and --ax-accent, so the
+   same file dresses itself in each project's palette.
+   ============================================================ */
+:root{
+  --ax-ease:cubic-bezier(.19,1,.22,1);
+  --ax-ink:#111;
+  --ax-accent:#888;
+}
+
+/* ---- headline reveal ----
+   Each word rides up out of its own mask. Word level rather than line level
+   because the stagger is what reads as craft: a line sliding up is a
+   transition, a sentence assembling itself is a piece of design. */
+.ax-split{display:inline}
+.ax-w{display:inline-block;overflow:hidden;vertical-align:top;
+      padding-bottom:.16em;margin-bottom:-.14em}
+.ax-w>span{display:inline-block;transform:translateY(115%) rotate(2.5deg);
+           opacity:0;transition:transform 1.05s var(--ax-ease),opacity .7s ease;
+           transition-delay:var(--ax-d,0ms)}
+.ax-in .ax-w>span{transform:none;opacity:1}
+/* the space between words has to survive being wrapped */
+.ax-sp{display:inline-block;white-space:pre}
+
+/* ---- the rule that draws itself ----
+   A hairline under a heading that grows out from the left as the heading
+   lands. Cheap, and it makes a title feel finished. */
+.ax-rule{display:block;height:1px;background:currentColor;opacity:.28;
+         transform:scaleX(0);transform-origin:left;
+         transition:transform 1.2s var(--ax-ease) .25s}
+.ax-in .ax-rule{transform:scaleX(1)}
+
+/* ---- image reveal ----
+   A curtain in the project's own ink slides off the picture while the picture
+   itself settles back from a slight push in. Reads like a camera coming to
+   rest rather than a div appearing. */
+.ax-fig{position:relative;overflow:hidden}
+.ax-fig>img,.ax-fig>video,.ax-fig picture>img{
+  transform:scale(1.12);transition:transform 1.6s var(--ax-ease)}
+.ax-fig.ax-in>img,.ax-fig.ax-in>video,.ax-fig.ax-in picture>img{transform:none}
+.ax-fig::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
+               background:var(--ax-ink);transform-origin:right;
+               transition:transform 1.15s var(--ax-ease)}
+.ax-fig.ax-in::after{transform:scaleX(0)}
+
+/* ---- the slow drift ----
+   A hero still should never be a frozen photograph. Twenty seconds of scale
+   is invisible frame to frame and unmistakable over a scroll. */
+.ax-burns{animation:axBurns 26s ease-in-out infinite alternate}
+@keyframes axBurns{
+  from{transform:scale(1.02) translate3d(0,0,0)}
+  to{transform:scale(1.11) translate3d(-1.2%,-1%,0)}
+}
+
+/* ---- counters ---- */
+.ax-num{font-variant-numeric:tabular-nums}
+
+/* ---- lift on hover ----
+   Cards answer the cursor. The shadow moves with the card, so the whole thing
+   reads as one object rather than a rectangle with a drop shadow behind it. */
+.ax-lift{transition:transform .5s var(--ax-ease),box-shadow .5s var(--ax-ease)}
+.ax-lift:hover{transform:translateY(-6px)}
+
+/* ---- the page curtain ----
+   Leaving a page should not be a white flash. A single sheet in the project's
+   ink wipes across, the next page loads behind it, and it wipes away. */
+.ax-curtain{position:fixed;inset:0;z-index:9999;pointer-events:none;
+            background:var(--ax-ink);transform:scaleY(0);transform-origin:bottom;
+            transition:transform .55s var(--ax-ease)}
+.ax-curtain.ax-out{transform:scaleY(1);transform-origin:bottom}
+.ax-curtain.ax-enter{transform:scaleY(1);transform-origin:top}
+.ax-curtain.ax-lift-off{transform:scaleY(0);transform-origin:top}
+
+/* ---- scroll progress ----
+   One hairline at the very top. It tells you how much of the story is left
+   without occupying any of the page. */
+.ax-prog{position:fixed;top:0;left:0;height:2px;width:100%;z-index:9998;
+         background:var(--ax-accent);transform:scaleX(0);transform-origin:left;
+         will-change:transform}
+
+/* ---- generic entrance ----
+   For anything that just needs to arrive: a short rise with a stagger set on
+   the element, so a row of cards deals itself out like cards. */
+.ax-up{opacity:0;transform:translateY(26px);
+       transition:opacity .9s ease var(--ax-d,0ms),transform 1s var(--ax-ease) var(--ax-d,0ms)}
+.ax-up.ax-in{opacity:1;transform:none}
+
+/* Parallax elements are moved from script; the class only promotes the layer
+   so the compositor keeps it on its own. */
+.ax-par{will-change:transform}
+
+@media (prefers-reduced-motion:reduce){
+  .ax-w>span,.ax-up,.ax-fig>img,.ax-fig>video,.ax-fig picture>img{
+    transform:none !important;opacity:1 !important;transition:none !important}
+  .ax-fig::after{display:none}
+  .ax-burns{animation:none}
+  .ax-rule{transform:scaleX(1)}
+  .ax-curtain,.ax-prog{display:none}
+}
