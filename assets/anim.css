@@ -18,7 +18,12 @@
    because the stagger is what reads as craft: a line sliding up is a
    transition, a sentence assembling itself is a piece of design. */
 .ax-split{display:inline}
-.ax-w{display:inline-block;overflow:hidden;vertical-align:top;
+/* The !important is deliberate. A host site that styles its headline spans as
+   blocks (".ln span{display:block}" is a common line-reveal pattern) would
+   otherwise drop every word onto its own line, which is a broken page rather
+   than a missed animation. The splitter already skips those headings; this is
+   the second lock on the same door. */
+.ax-w{display:inline-block !important;overflow:hidden;vertical-align:top;
       padding-bottom:.16em;margin-bottom:-.14em}
 .ax-w>span{display:inline-block;transform:translateY(115%) rotate(2.5deg);
            opacity:0;transition:transform 1.05s var(--ax-ease),opacity .7s ease;
