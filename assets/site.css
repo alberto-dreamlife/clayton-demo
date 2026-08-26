@@ -35,16 +35,19 @@ section{padding-block:var(--band)}
 .nav{position:fixed;inset:0 0 auto 0;z-index:50;transition:background .35s ease,box-shadow .35s ease}
 .nav.solid{background:rgba(247,245,241,.92);backdrop-filter:blur(12px);
            box-shadow:0 1px 0 var(--line)}
-.nav-in{max-width:min(1560px,88vw);margin:0 auto;padding:16px clamp(18px,4vw,44px);
+.nav-in{max-width:min(1560px,88vw);margin:0 auto;
+        padding:clamp(18px,1.5vw,26px) clamp(18px,4vw,44px);
         display:flex;align-items:center;gap:26px}
 @media(max-width:900px){.nav-in{max-width:none}}
-.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:#fff;
-       font-family:'Archivo',sans-serif;font-weight:500;font-size:19px;letter-spacing:.26em}
-.brand svg{width:26px;height:26px}
+.brand{display:flex;align-items:center;gap:.55em;text-decoration:none;color:#fff;
+       font-family:'Archivo',sans-serif;font-weight:500;
+       font-size:clamp(20px,1.45vw,27px);letter-spacing:.26em}
+.brand svg{width:1.45em;height:1.45em}
 .nav.solid .brand{color:var(--ink)}
 .nav-links{display:flex;gap:4px;margin-left:auto;align-items:center}
-.nav-links a{text-decoration:none;font-size:13px;font-weight:600;color:rgba(255,255,255,.85);
-             padding:9px 13px;border-radius:999px;transition:color .2s ease,background .2s ease}
+.nav-links a{text-decoration:none;font-weight:600;color:rgba(255,255,255,.85);
+             font-size:clamp(13.5px,.95vw,16.5px);padding:.72em 1.05em;
+             border-radius:999px;transition:color .2s ease,background .2s ease}
 .nav.solid .nav-links a{color:var(--muted)}
 .nav-links a:hover{color:#fff;background:rgba(255,255,255,.14)}
 .nav.solid .nav-links a:hover{color:var(--ink);background:rgba(28,42,51,.07)}
@@ -71,10 +74,17 @@ section{padding-block:var(--band)}
 /* ---- hero ---- */
 .hero{position:relative;height:100svh;min-height:560px;overflow:hidden;background:var(--ink)}
 .hero img{width:100%;height:100%;object-fit:cover}
+/* The copy sits over whatever the render happens to show, and this one is a
+   pale building in daylight. The veil leans harder on the bottom third, where
+   the words are, and stays out of the sky. */
 .hero-veil{position:absolute;inset:0;
-           background:linear-gradient(to top,rgba(12,20,26,.72) 0%,rgba(12,20,26,.12) 45%,rgba(12,20,26,.25) 100%)}
+           background:linear-gradient(to top,rgba(12,20,26,.82) 0%,rgba(12,20,26,.55) 26%,
+                                      rgba(12,20,26,.12) 52%,rgba(12,20,26,.28) 100%)}
 .hero-copy{position:absolute;left:0;right:0;bottom:clamp(40px,8vh,90px);color:#fff}
 .hero-copy .kicker{color:rgba(255,255,255,.72)}
+/* The negative margin is set from script, per headline: a big display capital
+   carries its own side bearing, so a title left-aligned by its box looks
+   indented next to the small caps above it. See optical() in site.js. */
 .hero-copy h1{font-size:clamp(40px,7vw,132px);line-height:1;margin:14px 0 0;color:#fff}
 .hero-copy p{max-width:52ch;color:rgba(255,255,255,.85);font-size:clamp(15px,1.25vw,21px);
              line-height:1.65;margin:18px 0 0}

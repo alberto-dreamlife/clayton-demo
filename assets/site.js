@@ -111,3 +111,31 @@ window.Lightbox = Lightbox;
     n.addEventListener("click", e => { e.preventDefault(); Lightbox.open(items, idx); });
   });
 })();
+
+/* ---------- optical alignment ----------
+   A display capital carries its own side bearing: the ink of an R starts a few
+   pixels right of where the text box starts. Left-align a big headline by its
+   box and it reads as indented against the small caps sitting above it. This
+   measures the first glyph at its rendered size and pulls the heading back by
+   exactly that much, so the copy stacks on one clean edge whatever the headline
+   says and whatever the viewport does to the type size. */
+(function(){
+  var TARGETS = ".hero-copy h1, .pagehead h1";
+  function optical(el){
+    var t = (el.textContent || "").trim();
+    if (!t) return;
+    var cs = getComputedStyle(el);
+    var ctx = optical.ctx || (optical.ctx = document.createElement("canvas").getContext("2d"));
+    ctx.font = cs.fontStyle + " " + cs.fontWeight + " " + cs.fontSize + " " + cs.fontFamily;
+    var m = ctx.measureText(t[0]);
+    /* actualBoundingBoxLeft is positive leftwards, so a glyph whose ink starts
+       inside the box reports a negative value: that is the gap to close. */
+    var gap = -m.actualBoundingBoxLeft;
+    el.style.marginLeft = (gap > 0.5 ? (-gap).toFixed(1) + "px" : "");
+  }
+  function run(){ document.querySelectorAll(TARGETS).forEach(optical); }
+  /* after the webfont lands, or the measurement is of a fallback face */
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(run);
+  else addEventListener("load", run);
+  var t; addEventListener("resize", function(){ clearTimeout(t); t = setTimeout(run, 150); });
+})();
