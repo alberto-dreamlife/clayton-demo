@@ -16,9 +16,34 @@
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--paper);color:var(--ink);overflow:hidden;
-     font-family:'Inter',-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+     font-family:'Inter',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;
+     display:flex;flex-direction:column}
 
-.viewer{position:relative;height:100%;overflow:hidden}
+/* ---- the site bar ----
+   The selector is a room of the website, not a separate application, so it
+   carries the same bar as every other page. Copied here rather than pulled from
+   site.css because this page owns its own layout and should not inherit the
+   scrolling-document rules that stylesheet assumes. */
+.nav{flex:none;background:var(--paper);box-shadow:0 1px 0 var(--line);z-index:60}
+.nav-in{max-width:min(1560px,88vw);margin:0 auto;padding:16px clamp(18px,4vw,44px);
+        display:flex;align-items:center;gap:26px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink);
+       font-family:'Archivo',sans-serif;font-weight:500;font-size:19px;letter-spacing:.26em}
+.brand svg{width:26px;height:26px}
+.nav-links{display:flex;gap:4px;margin-left:auto;align-items:center}
+.nav-links a{text-decoration:none;font-size:13px;font-weight:600;color:var(--muted);
+             padding:9px 13px;border-radius:999px;transition:color .2s ease,background .2s ease}
+.nav-links a:hover{color:var(--ink);background:rgba(28,42,51,.07)}
+.nav-links a.on{color:var(--ink);background:rgba(28,42,51,.09)}
+.nav-links a.cta{background:var(--clay);color:#fff;margin-left:8px}
+.nav-links a.cta:hover{background:#A9552F;color:#fff}
+@media(max-width:900px){
+  .nav-links a{padding:8px 9px;font-size:12px}
+  .brand{font-size:16px;letter-spacing:.2em}
+}
+@media(max-width:640px){.nav-links a:not(.cta){display:none}}
+
+.viewer{position:relative;flex:1;min-height:0;overflow:hidden}
 
 /* ---- the aerial ----
    It fills the frame and stays untouched. The two buildings are named by a pin on
@@ -102,9 +127,6 @@ body{margin:0;background:var(--paper);color:var(--ink);overflow:hidden;
       font-family:'Inter',sans-serif;font-weight:600;font-size:12.5px;
       box-shadow:0 6px 20px rgba(12,20,26,.3);transition:background .2s ease}
 .back:hover{background:#fff}
-.back.exit{z-index:4;text-decoration:none;display:inline-block}
-/* the exit pill owns the top left corner, so the aerial heading steps down */
-.site .sitebar{padding-top:84px}
 .elecap{position:absolute;left:0;right:0;bottom:0;padding:70px 24px 26px;color:#fff;
         pointer-events:none;background:linear-gradient(to top,rgba(12,20,26,.85),transparent)}
 .elecap b{display:block;font-family:'Archivo',sans-serif;font-weight:500;
@@ -229,7 +251,8 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
    need the whole screen, so they stack and the picture becomes a header. */
 @media(max-width:1000px){
   .sheet img{max-height:none;width:100%}
-  body{overflow:auto}
+  body{overflow:auto;display:block}
+  .nav{position:sticky;top:0}
   .viewer{height:auto;min-height:100%}
   .site{position:relative;height:62vh}
   .split{position:relative;inset:auto;flex-direction:column;height:auto;display:none}
@@ -240,13 +263,47 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
   .homegrid{grid-template-columns:1fr}
 }
 </style>
+<link rel="stylesheet" href="assets/anim.css?v=20260826e">
+<script>
+/* Only the page transition. The selector is an application: nothing here should
+   fade in on scroll, and a progress bar would be measuring a page that does not
+   scroll. But arriving from the rest of the site should feel like changing
+   section, so the curtain stays. */
+window.AX_CONFIG = {
+  heads: ".ax-none", figs: ".ax-none", ups: ".ax-none",
+  stats: ".ax-none", lifts: ".ax-none",
+  progress: false, curtain: true
+};
+</script>
 </head>
 <body>
+<nav class="nav">
+  <div class="nav-in">
+    <a class="brand" href="index.html">
+      <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true">
+        <rect x="14" y="14" width="40" height="12" rx="1.5"/>
+        <rect x="60" y="14" width="12" height="40" rx="1.5"/>
+        <rect x="32" y="60" width="40" height="12" rx="1.5"/>
+        <rect x="14" y="32" width="12" height="40" rx="1.5"
+              fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/>
+      </svg>
+      CLAYTON
+    </a>
+    <div class="nav-links">
+      <a class="on" href="homes.html">Homes</a>
+      <a href="amenities.html">Amenities</a>
+      <a href="neighbourhood.html">Neighbourhood</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="tour.html">3D Tour</a>
+      <a class="cta" href="index.html#register">Register</a>
+    </div>
+  </div>
+</nav>
+
 <div class="viewer">
 
   <!-- the site -->
   <div class="site" id="site">
-    <a class="back exit" href="index.html">&#8592;&ensp;Back to the website</a>
     <img id="aerial" alt="Clayton from the air">
     <svg class="hits" id="hits" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
     <div id="pins"></div>
@@ -706,5 +763,6 @@ function crumb(){
   if (state.unit) add("Home " + state.unit, null, true);
 }
 </script>
+<script src="assets/anim.js?v=20260826e" defer></script>
 </body>
 </html>
