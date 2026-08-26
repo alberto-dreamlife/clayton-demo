@@ -78,6 +78,10 @@ function prepareHeads(){
     if (h.matches(skip)) return;
     if (h.dataset.axDone) return;
     if (!h.textContent.trim()) return;
+    /* A heading built for the site's own line reveal is left alone. Two
+       reasons: it already animates, and its CSS styles ".ln span" as a block,
+       which would catch the word masks and drop every word onto its own line. */
+    if (h.querySelector(".ln")) return;
     h.dataset.axDone = "1";
     STRIP.forEach(function(c){ h.classList.remove(c); });
     splitNode(h, {i: 0});
