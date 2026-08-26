@@ -91,13 +91,33 @@ body{margin:0;background:var(--paper);color:var(--ink);overflow:hidden;
    silhouette mask, the click regions, is measured in percentages of the render,
    so the moment the box stops matching the image they all drift. Letterboxing
    inside the column is what keeps them honest. */
+/* a size container, so the picture below can be measured against both of its
+   sides at once and pick whichever runs out first */
 .ele{position:relative;height:100%;background:var(--ink);
-     display:flex;flex-direction:column;justify-content:center}
-.pic{position:relative;width:100%;aspect-ratio:var(--ar,4/3);overflow:hidden}
-.pic>img{position:absolute;inset:0;width:100%;height:100%;display:block}
+     display:flex;flex-direction:column;justify-content:center;
+     container-type:size}
+/* The picture box carries the render's own ratio, because every level band and
+   unit outline is positioned in percent of it. As a flex item it was being
+   shrunk to fit the column, which squashed the box and stretched the building
+   with it: the fix is to let it size itself from whichever side runs out first,
+   height in a wide column, width in a narrow one, and letterbox against the ink
+   rather than deform. */
+.pic{position:relative;aspect-ratio:var(--ar,4/3);overflow:hidden;
+     flex:0 0 auto;margin-inline:auto;
+     /* fallback for browsers without container units: fills the width */
+     width:100%;height:auto;
+     /* the real rule: as wide as the column allows, but never wider than the
+        column's height can carry at this ratio. One expression covers a wide
+        column, a narrow one, and every step of the animation between them,
+        so the building is never stretched to fit. */
+     width:min(100cqw, calc(100cqh * var(--arn,1.3333)))}
+/* contain rather than fill: with a correct box the two are identical, and if a
+   render ever ships at an unexpected size it letterboxes instead of stretching */
+.pic>img{position:absolute;inset:0;width:100%;height:100%;display:block;
+         object-fit:contain}
 .lit{position:absolute;inset:0;clip-path:polygon(0 0,0 0,0 0);
      transition:clip-path .5s var(--ease)}
-.lit>img{position:absolute;inset:0;width:100%;height:100%;display:block;
+.lit>img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:contain;
          filter:brightness(1.16) saturate(1.06)}
 .lit::after{content:"";position:absolute;inset:0;background:rgba(255,252,246,.16)}
 .lit.masked{-webkit-mask-image:var(--sil);mask-image:var(--sil);
@@ -257,13 +277,18 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
   .site{position:relative;height:62vh}
   .split{position:relative;inset:auto;flex-direction:column;height:auto;display:none}
   .split.on{display:flex}
-  .left{flex:none;height:42vh}
+  /* on a phone the width is what is scarce, so the picture is sized by width
+     and the column takes whatever height that needs: a fixed column height
+     plus a width cap is what squashed it */
+  .left{flex:none;height:auto}
+  .ele{container-type:normal}
+  .pic{width:100%;height:auto;max-height:none}
   .split.open .left{flex-basis:auto}
   .right{flex:none;overflow:visible}
   .homegrid{grid-template-columns:1fr}
 }
 </style>
-<link rel="stylesheet" href="assets/anim.css?v=20260826f">
+<link rel="stylesheet" href="assets/anim.css?v=20260826h">
 <script>
 /* Only the page transition. The selector is an application: nothing here should
    fade in on scroll, and a progress bar would be measuring a page that does not
@@ -491,6 +516,8 @@ function build(b){
   $("eleBase").decode().then(() => {
     const i = $("eleBase");
     $("pic").style.setProperty("--ar", i.naturalWidth + " / " + i.naturalHeight);
+    /* the same ratio as a plain number, for the calc() that fits the box */
+    $("pic").style.setProperty("--arn", (i.naturalWidth / i.naturalHeight).toFixed(4));
   }).catch(() => {});
   $("lit").classList.toggle("masked", !!e.sil);
   if (e.sil) $("ele").style.setProperty("--sil", `url("${e.sil}")`);
@@ -763,6 +790,6 @@ function crumb(){
   if (state.unit) add("Home " + state.unit, null, true);
 }
 </script>
-<script src="assets/anim.js?v=20260826f" defer></script>
+<script src="assets/anim.js?v=20260826h" defer></script>
 </body>
 </html>
