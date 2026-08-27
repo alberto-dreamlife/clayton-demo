@@ -8,9 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20260827b">
-<link rel="stylesheet" href="assets/anim.css?v=20260827b">
-<link rel="stylesheet" href="assets/vr/pannellum.css?v=20260827b">
+<link rel="stylesheet" href="assets/site.css?v=20260827c">
+<link rel="stylesheet" href="assets/anim.css?v=20260827c">
+<link rel="stylesheet" href="assets/vr/pannellum.css?v=20260827c">
 <style>
 .pagehead{padding:clamp(44px,6vw,80px) 0 0}
 
@@ -28,20 +28,24 @@
 #pano .pnlm-load-box{background:rgba(28,42,51,.85);border-radius:12px;
                      font-family:'Inter',sans-serif}
 
-            text-transform:uppercase;font-size:10px}
-
-/* fullscreen, top right */
-.vr-fs{position:absolute;right:16px;top:16px;z-index:5;border:0;cursor:pointer;
-       background:rgba(255,255,255,.92);border-radius:999px;padding:9px 16px;
-       font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;color:var(--ink);
-       box-shadow:0 6px 20px rgba(12,20,26,.3);opacity:0;transition:opacity .4s ease,background .2s ease;
-       display:inline-flex;align-items:center;gap:7px}
-.vr-fs:hover{background:#fff}
+/* Bottom right, out of the plan's way, and reduced to the glyph alone. A solid
+   white pill up here competed with the render for attention every second the
+   tour was open; this reads as a control only when you look for it. */
+.vr-fs{position:absolute;right:14px;bottom:16px;z-index:6;border:0;cursor:pointer;
+       background:rgba(12,20,26,.34);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+       border-radius:999px;width:38px;height:38px;padding:0;
+       display:grid;place-items:center;font-size:16px;line-height:1;color:rgba(255,255,255,.9);
+       box-shadow:0 4px 14px rgba(12,20,26,.3);opacity:0;
+       transition:opacity .4s ease,background .2s ease,color .2s ease}
+.vr-fs:hover{background:rgba(12,20,26,.62);color:#fff}
+@media(max-width:700px){
+  .vr-fs{width:32px;height:32px;font-size:14px;right:10px;bottom:10px}
+}
 .tourbox.on .vr-fs,.tourbox.on .vr-rail{opacity:1}
 
 /* the room rail, bottom center: one card per room, ours to style */
 .vr-rail{position:absolute;left:0;right:0;bottom:0;z-index:5;display:flex;gap:8px;
-         justify-content:flex-start;padding:26px 16px 14px;overflow-x:auto;
+         justify-content:flex-start;padding:26px 60px 14px 16px;overflow-x:auto;
          scrollbar-width:none;opacity:0;transition:opacity .4s ease;
          background:linear-gradient(to top,rgba(12,20,26,.55),transparent);
          -webkit-overflow-scrolling:touch}
@@ -80,25 +84,41 @@
 
 /* ---- the floor plan, always on screen ----
    A button that opens a window makes you leave the room to find out where you
-   are. This sits in the corner instead, translucent enough to read the render
-   through it, and every room on it is a door: one tap and the viewer walks
-   there. It brightens under the cursor, because that is when precision matters.
-   Clicking the plan itself, away from a dot, opens the large version. */
-.vr-mini{position:absolute;left:16px;top:16px;z-index:6;cursor:zoom-in;
+   are. This sits in the top right corner instead, on its own white card, and
+   every room on it is a door: one tap and the viewer walks there. Clicking the
+   card away from a dot opens the large version; the chip on its corner puts it
+   away, and the Overview card in the rail brings it back. */
+/* Offset by the panel inset plus the chip height, so the card's own right edge
+   still lands 16px in from the corner and the chips clear the top. */
+.vr-mini{position:absolute;right:29px;top:37px;z-index:6;cursor:zoom-in;
          width:clamp(178px,21vw,300px);
          opacity:0;transform:translateY(-6px);
          transition:opacity .45s ease,transform .45s var(--ease)}
-.tourbox.on .vr-mini{opacity:.88;transform:none}
+.tourbox.on .vr-mini{opacity:.94;transform:none}
 .vr-mini:hover{opacity:1}
-/* No card behind it: the plan is cut out of its own white background and sits
-   straight on the render. A drop shadow does the work a panel used to do,
-   holding the edge against a bright room without boxing it in. */
-.vr-mini>img{width:100%;height:auto;display:block;pointer-events:none;
-             filter:drop-shadow(0 4px 14px rgba(12,20,26,.5))
-                    drop-shadow(0 1px 2px rgba(12,20,26,.4))}
-.vr-mini .mtag{position:absolute;left:2px;top:-6px;background:var(--clay);color:#fff;
+/* Minimised: it steps aside without unloading, so the dots keep their marked
+   room and coming back is instant. The Overview card in the rail brings it in. */
+.tourbox.on .vr-mini.off{opacity:0;transform:translateY(-10px) scale(.96);
+                         pointer-events:none;visibility:hidden}
+/* The white panel that used to be the render's own background, drawn instead as
+   a card behind the cut-out. Same reading surface, but with even margins on all
+   four sides and a corner radius the render never had. It is a pseudo-element,
+   not padding on the box, because the dots are placed in percentages and padding
+   would shift every one of them. */
+.vr-mini::before{content:"";position:absolute;inset:-13px -13px -11px;z-index:-1;
+                 background:rgba(255,255,255,.93);border-radius:16px;
+                 box-shadow:0 10px 30px rgba(12,20,26,.45),0 1px 3px rgba(12,20,26,.35)}
+.vr-mini>img{width:100%;height:auto;display:block;pointer-events:none}
+/* Both chips ride the panel's own top edge, clear of the plan itself, so
+   neither one ever covers a room. */
+.vr-mini .mtag{position:absolute;left:-7px;top:-21px;background:var(--clay);color:#fff;
                font-family:'Inter',sans-serif;font-size:9px;font-weight:700;letter-spacing:.14em;
                text-transform:uppercase;padding:3px 9px;border-radius:999px;pointer-events:none}
+.mini-min{position:absolute;right:-7px;top:-22px;z-index:2;border:0;cursor:pointer;
+          width:21px;height:21px;border-radius:999px;background:var(--ink);color:#fff;
+          display:grid;place-items:center;font-size:13px;line-height:1;
+          box-shadow:0 3px 10px rgba(12,20,26,.4);transition:background .2s ease}
+.mini-min:hover{background:var(--clay)}
 /* the dots ride smaller in here than in the full overlay */
 .vr-mini .vr-dot i{width:11px;height:11px;border-width:2px}
 .vr-mini .vr-dot::before{width:11px;height:11px}
@@ -107,7 +127,8 @@
 .vr-mini .vr-dot.on i{background:#fff;box-shadow:0 0 0 2px var(--clay),0 3px 10px rgba(12,20,26,.5)}
 .vr-mini .vr-dot.on::before{animation:none}
 @media(max-width:700px){
-  .vr-mini{width:118px;top:10px;left:10px}
+  .vr-mini{width:118px;top:29px;right:19px}
+  .vr-mini::before{inset:-9px -9px -8px;border-radius:12px}
   .vr-mini .vr-dot i{width:8px;height:8px;border-width:1.5px}
   .vr-mini .vr-dot::before{width:8px;height:8px}
 }
@@ -199,7 +220,7 @@ window.AX_CONFIG = {
 </nav>
 
 <header class="pagehead has-media">
-  <div class="ph-media" data-par="0.16"><img src="assets/img/Clayton_Living_fr.webp?v=20260827b" alt="The living room at Clayton"></div>
+  <div class="ph-media" data-par="0.16"><img src="assets/img/Clayton_Living_fr.webp?v=20260827c" alt="The living room at Clayton"></div>
   <div class="ph-veil"></div>
   <div class="wrap ph-in">
     <div class="kicker">3D Tour</div>
@@ -213,25 +234,28 @@ window.AX_CONFIG = {
   <div class="wrap">
     <div class="tourbox reveal" id="tourbox">
       <div id="pano"></div>
-      <button class="vr-fs" id="vrFs" type="button">&#x26F6;&ensp;Fullscreen</button>
+      <button class="vr-fs" id="vrFs" type="button" title="Fullscreen"
+              aria-label="View the tour fullscreen">&#x26F6;</button>
 
       <div class="vr-mini" id="vrMini" role="group" aria-label="Floor plan, jump to a room">
         <span class="mtag">The plan</span>
-        <img src="assets/img/plan-cut.webp?v=20260827b" alt="The home, cut open">
+        <button class="mini-min" id="vrMiniMin" type="button" title="Minimise the plan"
+                aria-label="Minimise the plan">&#8211;</button>
+        <img src="assets/img/plan-cut.webp?v=20260827c" alt="The home, cut open">
         <span id="miniDots"></span>
       </div>
       <div class="vr-rail" id="vrRail"><span class="sp"></span></div>
 
       <div class="vr-plan" id="vrPlan">
         <div class="vr-plan-in">
-          <img src="assets/img/plan-cut.webp?v=20260827b" alt="The home, cut open">
+          <img src="assets/img/plan-cut.webp?v=20260827c" alt="The home, cut open">
           <span id="vrDots"></span>
         </div>
         <button class="vr-plan-close" id="vrPlanClose" type="button" aria-label="Close the plan">&#10005;</button>
       </div>
 
       <button class="tour-cover" id="tourGo" type="button" aria-label="Start the 3D tour">
-        <img src="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260827b" alt="">
+        <img src="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260827c" alt="">
         <span class="go">Step inside <span class="arr">&#8594;</span></span>
         <span class="hintline">Drag to look around &#183; pick a room below the view</span>
       </button>
@@ -309,9 +333,9 @@ window.AX_CONFIG = {
   </div>
 </footer>
 
-<script src="assets/site.js?v=20260827b"></script>
-<script src="assets/anim.js?v=20260827b" defer></script>
-<script src="assets/vr/pannellum.js?v=20260827b"></script>
+<script src="assets/site.js?v=20260827c"></script>
+<script src="assets/anim.js?v=20260827c" defer></script>
+<script src="assets/vr/pannellum.js?v=20260827c"></script>
 <script>
 /* ---------- the tour ----------
    One scene per room, defined in walking order. The panoramas live in this
@@ -328,7 +352,7 @@ const ROOMS = [
   {id: "bathroom", name: "Bathroom",  yaw: -14.8},
   {id: "kids",     name: "Kids room", yaw: 1.1}
 ];
-const V = "20260827b";
+const V = "20260827c";
 const box = document.getElementById("tourbox");
 let viewer = null;
 
@@ -349,7 +373,8 @@ const rail = document.getElementById("vrRail");
 const planCard = document.createElement("button");
 planCard.type = "button"; planCard.className = "vr-card";
 planCard.innerHTML = `<img src="assets/vr/thumb-plan.jpg?v=${V}" alt=""><span>Overview</span>`;
-planCard.addEventListener("click", () => openPlan());
+planCard.classList.add("on");
+planCard.addEventListener("click", () => showMini(mini.classList.contains("off")));
 rail.appendChild(planCard);
 ROOMS.forEach(r => {
   const b = document.createElement("button");
@@ -385,7 +410,21 @@ buildDots(document.getElementById("vrDots"), closePlan);
 buildDots(document.getElementById("miniDots"), null);
 
 /* the small one is a shortcut to the large one when a dot is not the target */
-document.getElementById("vrMini").addEventListener("click", () => openPlan());
+const mini = document.getElementById("vrMini");
+mini.addEventListener("click", () => openPlan());
+
+/* Minimise and restore. The plan is useful but it is also the only thing
+   covering the render, so it has to be dismissable; the Overview card in the
+   rail stays lit while it is showing and brings it back once it is gone. */
+function showMini(show){
+  mini.classList.toggle("off", !show);
+  planCard.classList.toggle("on", show);
+}
+document.getElementById("vrMiniMin").addEventListener("click", e => {
+  /* the panel behind opens the big plan on a click */
+  e.stopPropagation();
+  showMini(false);
+});
 
 function openPlan(){
   markDots();
@@ -409,7 +448,9 @@ document.addEventListener("keydown", e => {
 });
 
 function mark(id){
-  document.querySelectorAll(".vr-card").forEach(c =>
+  /* only the room cards: the Overview card's lit state tracks the plan panel,
+     not which room you are standing in */
+  document.querySelectorAll(".vr-card[data-room]").forEach(c =>
     c.classList.toggle("on", c.dataset.room === id));
   markDots();
 }
