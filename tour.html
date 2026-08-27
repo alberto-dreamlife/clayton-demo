@@ -8,9 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20260826j">
-<link rel="stylesheet" href="assets/anim.css?v=20260826j">
-<link rel="stylesheet" href="assets/vr/pannellum.css?v=20260826j">
+<link rel="stylesheet" href="assets/site.css?v=20260826k">
+<link rel="stylesheet" href="assets/anim.css?v=20260826k">
+<link rel="stylesheet" href="assets/vr/pannellum.css?v=20260826k">
 <style>
 .pagehead{padding:clamp(44px,6vw,80px) 0 0}
 
@@ -83,6 +83,38 @@
 .tour-cover .hintline{position:absolute;left:0;right:0;bottom:18px;z-index:2;color:rgba(255,255,255,.85);
                       font-size:12.5px;font-weight:600;letter-spacing:.08em}
 .tourbox.on .tour-cover{opacity:0;visibility:hidden}
+
+/* ---- the floor plan, always on screen ----
+   A button that opens a window makes you leave the room to find out where you
+   are. This sits in the corner instead, translucent enough to read the render
+   through it, and every room on it is a door: one tap and the viewer walks
+   there. It brightens under the cursor, because that is when precision matters.
+   Clicking the plan itself, away from a dot, opens the large version. */
+.vr-mini{position:absolute;right:16px;top:66px;z-index:6;cursor:zoom-in;
+         width:clamp(168px,20vw,286px);padding:8px;border-radius:14px;
+         background:rgba(16,26,34,.34);backdrop-filter:blur(9px);
+         box-shadow:0 10px 30px rgba(12,20,26,.35);
+         opacity:0;transform:translateY(-6px);
+         transition:opacity .45s ease,transform .45s var(--ease),background .3s ease}
+.tourbox.on .vr-mini{opacity:.82;transform:none}
+.vr-mini:hover{opacity:1;background:rgba(16,26,34,.5)}
+.vr-mini>img{width:100%;height:auto;display:block;border-radius:8px;
+             opacity:.94;pointer-events:none}
+.vr-mini .mtag{position:absolute;left:14px;top:-9px;background:var(--clay);color:#fff;
+               font-family:'Inter',sans-serif;font-size:9px;font-weight:700;letter-spacing:.14em;
+               text-transform:uppercase;padding:3px 9px;border-radius:999px;pointer-events:none}
+/* the dots ride smaller in here than in the full overlay */
+.vr-mini .vr-dot i{width:11px;height:11px;border-width:2px}
+.vr-mini .vr-dot::before{width:11px;height:11px}
+.vr-mini .vr-dot span{display:none}
+.vr-mini .vr-dot:hover span{display:block;top:calc(100% + 5px);font-size:9.5px;padding:3px 8px}
+.vr-mini .vr-dot.on i{background:#fff;box-shadow:0 0 0 2px var(--clay),0 3px 10px rgba(12,20,26,.5)}
+.vr-mini .vr-dot.on::before{animation:none}
+@media(max-width:700px){
+  .vr-mini{width:118px;top:60px;right:10px;padding:5px}
+  .vr-mini .vr-dot i{width:8px;height:8px;border-width:1.5px}
+  .vr-mini .vr-dot::before{width:8px;height:8px}
+}
 
 /* ---- the floor plan overlay ----
    The dollhouse render as a map: one dot per room, click a dot and the viewer
@@ -170,7 +202,7 @@ window.AX_CONFIG = {
 </nav>
 
 <header class="pagehead has-media">
-  <div class="ph-media" data-par="0.16"><img src="assets/img/Clayton_Living_fr.webp?v=20260826j" alt="The living room at Clayton"></div>
+  <div class="ph-media" data-par="0.16"><img src="assets/img/Clayton_Living_fr.webp?v=20260826k" alt="The living room at Clayton"></div>
   <div class="ph-veil"></div>
   <div class="wrap ph-in">
     <div class="kicker">3D Tour</div>
@@ -186,20 +218,25 @@ window.AX_CONFIG = {
       <div id="pano"></div>
 
       <div class="vr-room" id="vrRoom"><em>The home</em><span id="vrRoomName"></span></div>
-      <button class="vr-fs" id="vrPlanBtn" type="button" style="right:150px">&#9635;&ensp;Floor plan</button>
       <button class="vr-fs" id="vrFs" type="button">&#x26F6;&ensp;Fullscreen</button>
+
+      <div class="vr-mini" id="vrMini" role="group" aria-label="Floor plan, jump to a room">
+        <span class="mtag">The plan</span>
+        <img src="assets/img/Clayton_UnitD7_fr.webp?v=20260826k" alt="The home, cut open">
+        <span id="miniDots"></span>
+      </div>
       <div class="vr-rail" id="vrRail"><span class="sp"></span></div>
 
       <div class="vr-plan" id="vrPlan">
         <div class="vr-plan-in">
-          <img src="assets/img/Clayton_UnitD7_fr.webp?v=20260826j" alt="The home, cut open">
+          <img src="assets/img/Clayton_UnitD7_fr.webp?v=20260826k" alt="The home, cut open">
           <span id="vrDots"></span>
         </div>
         <button class="vr-plan-close" id="vrPlanClose" type="button" aria-label="Close the plan">&#10005;</button>
       </div>
 
       <button class="tour-cover" id="tourGo" type="button" aria-label="Start the 3D tour">
-        <img src="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260826j" alt="">
+        <img src="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260826k" alt="">
         <span class="go">Step inside <span class="arr">&#8594;</span></span>
         <span class="hintline">Drag to look around &#183; pick a room below the view</span>
       </button>
@@ -277,9 +314,9 @@ window.AX_CONFIG = {
   </div>
 </footer>
 
-<script src="assets/site.js?v=20260826j"></script>
-<script src="assets/anim.js?v=20260826j" defer></script>
-<script src="assets/vr/pannellum.js?v=20260826j"></script>
+<script src="assets/site.js?v=20260826k"></script>
+<script src="assets/anim.js?v=20260826k" defer></script>
+<script src="assets/vr/pannellum.js?v=20260826k"></script>
 <script>
 /* ---------- the tour ----------
    One scene per room, defined in walking order. The panoramas live in this
@@ -296,7 +333,7 @@ const ROOMS = [
   {id: "bathroom", name: "Bathroom",  yaw: -14.8},
   {id: "kids",     name: "Kids room", yaw: 1.1}
 ];
-const V = "20260826b";
+const V = "20260826k";
 const box = document.getElementById("tourbox");
 let viewer = null;
 
@@ -323,29 +360,48 @@ ROOMS.forEach(r => {
 });
 rail.appendChild(Object.assign(document.createElement("span"), {className: "sp"}));
 
-/* the plan overlay */
+/* the plan, twice: once small and always on screen, once large on demand.
+   Same dots, same behaviour, built from one function so they cannot drift. */
 const plan = document.getElementById("vrPlan");
-const dots = document.getElementById("vrDots");
-ROOMS.forEach(r => {
-  const [x, y] = DOTS[r.id];
-  const d = document.createElement("button");
-  d.type = "button"; d.className = "vr-dot"; d.dataset.room = r.id;
-  d.style.left = x + "%"; d.style.top = y + "%";
-  d.innerHTML = `<i></i><span>${r.name}</span>`;
-  d.addEventListener("click", () => { closePlan(); if (viewer) viewer.loadScene(r.id); });
-  dots.appendChild(d);
-});
+function buildDots(host, after){
+  ROOMS.forEach(r => {
+    const [x, y] = DOTS[r.id];
+    const d = document.createElement("button");
+    d.type = "button"; d.className = "vr-dot"; d.dataset.room = r.id;
+    d.style.left = x + "%"; d.style.top = y + "%";
+    d.title = r.name;
+    d.innerHTML = `<i></i><span>${r.name}</span>`;
+    d.addEventListener("click", e => {
+      /* the panel behind opens the big plan on a click, so a dot must not
+         also count as a click on the panel */
+      e.stopPropagation();
+      if (after) after();
+      if (viewer) viewer.loadScene(r.id);
+    });
+    host.appendChild(d);
+  });
+}
+buildDots(document.getElementById("vrDots"), closePlan);
+buildDots(document.getElementById("miniDots"), null);
+
+/* the small one is a shortcut to the large one when a dot is not the target */
+document.getElementById("vrMini").addEventListener("click", () => openPlan());
+
 function openPlan(){
-  document.querySelectorAll(".vr-dot").forEach(d =>
-    d.classList.toggle("on", viewer && d.dataset.room === viewer.getScene()));
+  markDots();
   plan.classList.add("open");
   requestAnimationFrame(() => plan.classList.add("show"));
+}
+/* both plans always show where you are standing */
+function markDots(){
+  const here = viewer && viewer.getScene();
+  document.querySelectorAll(".vr-dot").forEach(d =>
+    d.classList.toggle("on", d.dataset.room === here));
 }
 function closePlan(){
   plan.classList.remove("show");
   setTimeout(() => plan.classList.remove("open"), 350);
 }
-document.getElementById("vrPlanBtn").addEventListener("click", openPlan);
 document.getElementById("vrPlanClose").addEventListener("click", closePlan);
 plan.addEventListener("click", e => { if (e.target === plan) closePlan(); });
 document.addEventListener("keydown", e => {
@@ -357,6 +413,7 @@ function mark(id){
     c.classList.toggle("on", c.dataset.room === id));
   document.getElementById("vrRoomName").textContent =
     (ROOMS.find(r => r.id === id) || {}).name || "";
+  markDots();
 }
 
 /* start on demand: nothing downloads until someone steps inside */
@@ -375,6 +432,7 @@ document.getElementById("tourGo").addEventListener("click", () => {
     scenes
   });
   viewer.on("load", () => { box.classList.add("on"); mark(viewer.getScene()); });
+  viewer.on("scenechange", id => mark(id));
 });
 
 /* fullscreen wraps the whole box, so the rail and the room name come along */
