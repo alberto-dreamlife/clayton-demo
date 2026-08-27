@@ -8,9 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20260826k">
-<link rel="stylesheet" href="assets/anim.css?v=20260826k">
-<link rel="stylesheet" href="assets/vr/pannellum.css?v=20260826k">
+<link rel="stylesheet" href="assets/site.css?v=20260827b">
+<link rel="stylesheet" href="assets/anim.css?v=20260827b">
+<link rel="stylesheet" href="assets/vr/pannellum.css?v=20260827b">
 <style>
 .pagehead{padding:clamp(44px,6vw,80px) 0 0}
 
@@ -28,12 +28,6 @@
 #pano .pnlm-load-box{background:rgba(28,42,51,.85);border-radius:12px;
                      font-family:'Inter',sans-serif}
 
-/* room name, top left */
-.vr-room{position:absolute;left:16px;top:16px;z-index:5;background:rgba(255,255,255,.92);
-         border-radius:999px;padding:9px 16px;font-size:12.5px;font-weight:700;
-         color:var(--ink);box-shadow:0 6px 20px rgba(12,20,26,.3);pointer-events:none;
-         opacity:0;transition:opacity .4s ease}
-.vr-room em{font-style:normal;color:var(--clay);margin-right:7px;letter-spacing:.1em;
             text-transform:uppercase;font-size:10px}
 
 /* fullscreen, top right */
@@ -43,7 +37,7 @@
        box-shadow:0 6px 20px rgba(12,20,26,.3);opacity:0;transition:opacity .4s ease,background .2s ease;
        display:inline-flex;align-items:center;gap:7px}
 .vr-fs:hover{background:#fff}
-.tourbox.on .vr-room,.tourbox.on .vr-fs,.tourbox.on .vr-rail{opacity:1}
+.tourbox.on .vr-fs,.tourbox.on .vr-rail{opacity:1}
 
 /* the room rail, bottom center: one card per room, ours to style */
 .vr-rail{position:absolute;left:0;right:0;bottom:0;z-index:5;display:flex;gap:8px;
@@ -90,17 +84,19 @@
    through it, and every room on it is a door: one tap and the viewer walks
    there. It brightens under the cursor, because that is when precision matters.
    Clicking the plan itself, away from a dot, opens the large version. */
-.vr-mini{position:absolute;right:16px;top:66px;z-index:6;cursor:zoom-in;
-         width:clamp(168px,20vw,286px);padding:8px;border-radius:14px;
-         background:rgba(16,26,34,.34);backdrop-filter:blur(9px);
-         box-shadow:0 10px 30px rgba(12,20,26,.35);
+.vr-mini{position:absolute;left:16px;top:16px;z-index:6;cursor:zoom-in;
+         width:clamp(178px,21vw,300px);
          opacity:0;transform:translateY(-6px);
-         transition:opacity .45s ease,transform .45s var(--ease),background .3s ease}
-.tourbox.on .vr-mini{opacity:.82;transform:none}
-.vr-mini:hover{opacity:1;background:rgba(16,26,34,.5)}
-.vr-mini>img{width:100%;height:auto;display:block;border-radius:8px;
-             opacity:.94;pointer-events:none}
-.vr-mini .mtag{position:absolute;left:14px;top:-9px;background:var(--clay);color:#fff;
+         transition:opacity .45s ease,transform .45s var(--ease)}
+.tourbox.on .vr-mini{opacity:.88;transform:none}
+.vr-mini:hover{opacity:1}
+/* No card behind it: the plan is cut out of its own white background and sits
+   straight on the render. A drop shadow does the work a panel used to do,
+   holding the edge against a bright room without boxing it in. */
+.vr-mini>img{width:100%;height:auto;display:block;pointer-events:none;
+             filter:drop-shadow(0 4px 14px rgba(12,20,26,.5))
+                    drop-shadow(0 1px 2px rgba(12,20,26,.4))}
+.vr-mini .mtag{position:absolute;left:2px;top:-6px;background:var(--clay);color:#fff;
                font-family:'Inter',sans-serif;font-size:9px;font-weight:700;letter-spacing:.14em;
                text-transform:uppercase;padding:3px 9px;border-radius:999px;pointer-events:none}
 /* the dots ride smaller in here than in the full overlay */
@@ -111,7 +107,7 @@
 .vr-mini .vr-dot.on i{background:#fff;box-shadow:0 0 0 2px var(--clay),0 3px 10px rgba(12,20,26,.5)}
 .vr-mini .vr-dot.on::before{animation:none}
 @media(max-width:700px){
-  .vr-mini{width:118px;top:60px;right:10px;padding:5px}
+  .vr-mini{width:118px;top:10px;left:10px}
   .vr-mini .vr-dot i{width:8px;height:8px;border-width:1.5px}
   .vr-mini .vr-dot::before{width:8px;height:8px}
 }
@@ -127,7 +123,8 @@
 .vr-plan.show{opacity:1}
 .vr-plan-in{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
             width:min(92%,980px)}
-.vr-plan-in img{width:100%;height:auto;display:block;border-radius:14px}
+.vr-plan-in img{width:100%;height:auto;display:block;
+                filter:drop-shadow(0 18px 44px rgba(0,0,0,.5))}
 .vr-plan-close{position:absolute;right:16px;top:16px;z-index:2;border:0;cursor:pointer;
                background:rgba(255,255,255,.92);border-radius:999px;width:40px;height:40px;
                display:grid;place-items:center;font-size:15px;color:var(--ink);
@@ -202,7 +199,7 @@ window.AX_CONFIG = {
 </nav>
 
 <header class="pagehead has-media">
-  <div class="ph-media" data-par="0.16"><img src="assets/img/Clayton_Living_fr.webp?v=20260826k" alt="The living room at Clayton"></div>
+  <div class="ph-media" data-par="0.16"><img src="assets/img/Clayton_Living_fr.webp?v=20260827b" alt="The living room at Clayton"></div>
   <div class="ph-veil"></div>
   <div class="wrap ph-in">
     <div class="kicker">3D Tour</div>
@@ -216,27 +213,25 @@ window.AX_CONFIG = {
   <div class="wrap">
     <div class="tourbox reveal" id="tourbox">
       <div id="pano"></div>
-
-      <div class="vr-room" id="vrRoom"><em>The home</em><span id="vrRoomName"></span></div>
       <button class="vr-fs" id="vrFs" type="button">&#x26F6;&ensp;Fullscreen</button>
 
       <div class="vr-mini" id="vrMini" role="group" aria-label="Floor plan, jump to a room">
         <span class="mtag">The plan</span>
-        <img src="assets/img/Clayton_UnitD7_fr.webp?v=20260826k" alt="The home, cut open">
+        <img src="assets/img/plan-cut.webp?v=20260827b" alt="The home, cut open">
         <span id="miniDots"></span>
       </div>
       <div class="vr-rail" id="vrRail"><span class="sp"></span></div>
 
       <div class="vr-plan" id="vrPlan">
         <div class="vr-plan-in">
-          <img src="assets/img/Clayton_UnitD7_fr.webp?v=20260826k" alt="The home, cut open">
+          <img src="assets/img/plan-cut.webp?v=20260827b" alt="The home, cut open">
           <span id="vrDots"></span>
         </div>
         <button class="vr-plan-close" id="vrPlanClose" type="button" aria-label="Close the plan">&#10005;</button>
       </div>
 
       <button class="tour-cover" id="tourGo" type="button" aria-label="Start the 3D tour">
-        <img src="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260826k" alt="">
+        <img src="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260827b" alt="">
         <span class="go">Step inside <span class="arr">&#8594;</span></span>
         <span class="hintline">Drag to look around &#183; pick a room below the view</span>
       </button>
@@ -314,9 +309,9 @@ window.AX_CONFIG = {
   </div>
 </footer>
 
-<script src="assets/site.js?v=20260826k"></script>
-<script src="assets/anim.js?v=20260826k" defer></script>
-<script src="assets/vr/pannellum.js?v=20260826k"></script>
+<script src="assets/site.js?v=20260827b"></script>
+<script src="assets/anim.js?v=20260827b" defer></script>
+<script src="assets/vr/pannellum.js?v=20260827b"></script>
 <script>
 /* ---------- the tour ----------
    One scene per room, defined in walking order. The panoramas live in this
@@ -333,15 +328,20 @@ const ROOMS = [
   {id: "bathroom", name: "Bathroom",  yaw: -14.8},
   {id: "kids",     name: "Kids room", yaw: 1.1}
 ];
-const V = "20260826k";
+const V = "20260827b";
 const box = document.getElementById("tourbox");
 let viewer = null;
 
 /* where each room sits on the dollhouse, in percent of the image */
 const DOTS = {
-  entry:    [30.0, 19.5], kitchen: [37.5, 29.5], living: [51.0, 39.5],
-  office:   [21.5, 38.0], bedroom: [60.5, 30.0], ensuite: [46.5, 16.0],
-  bathroom: [16.5, 26.5], kids:    [39.0, 54.5]
+  entry: [27.8, 15.9],
+  kitchen: [36.3, 27.1],
+  living: [51.6, 38.2],
+  office: [18.1, 36.6],
+  bedroom: [62.4, 27.6],
+  ensuite: [46.5, 12.0],
+  bathroom: [12.5, 23.7],
+  kids: [38.0, 55.0]
 };
 
 /* the rail: the plan first, then the rooms */
@@ -411,8 +411,6 @@ document.addEventListener("keydown", e => {
 function mark(id){
   document.querySelectorAll(".vr-card").forEach(c =>
     c.classList.toggle("on", c.dataset.room === id));
-  document.getElementById("vrRoomName").textContent =
-    (ROOMS.find(r => r.id === id) || {}).name || "";
   markDots();
 }
 
