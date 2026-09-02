@@ -47,7 +47,9 @@ section{padding-block:var(--band)}
 }
 .nav.solid{background:rgba(247,245,241,.92);backdrop-filter:blur(12px);
            box-shadow:0 1px 0 var(--line)}
-.nav-in{max-width:min(1560px,88vw);margin:0 auto;
+/* Above the panel, so the bar keeps its brand and its Register button while the
+   menu is open and the X reads as part of the same row rather than floating. */
+.nav-in{position:relative;z-index:2;max-width:min(1560px,88vw);margin:0 auto;
         padding:clamp(18px,1.5vw,26px) clamp(18px,4vw,44px);
         display:flex;align-items:center;gap:26px}
 @media(max-width:900px){.nav-in{max-width:none}}
@@ -73,14 +75,68 @@ section{padding-block:var(--band)}
 .nav.static .nav-links a{color:var(--muted)}
 .nav.static .nav-links a:hover{color:var(--ink);background:rgba(28,42,51,.07)}
 .nav.static .nav-links a.on{color:var(--ink);background:rgba(28,42,51,.09)}
-.nav.static .nav-links a.cta,{color:#fff}
+.nav.static .nav-links a.cta{color:#fff}
 
 @media(max-width:900px){
   .nav-links a{padding:8px 9px;font-size:12px}
   .brand{font-size:16px;letter-spacing:.2em}
 }
-@media(max-width:640px){
+
+/* ---- mobile menu ----
+   Below this width the five links stop fitting beside the brand, so they move
+   into a panel. Register stays in the bar: it is the one action worth a tap
+   without opening anything first. */
+.navbtn{display:none;margin-left:10px;width:40px;height:40px;padding:0;border:0;
+        background:none;cursor:pointer;position:relative;z-index:2;
+        border-radius:999px;transition:background .2s ease}
+.navbtn span{position:absolute;left:11px;width:18px;height:2px;border-radius:2px;
+             background:#fff;transition:transform .3s var(--ease),opacity .2s ease}
+.navbtn span:nth-child(1){top:16px}
+.navbtn span:nth-child(2){top:22px}
+.nav.solid .navbtn span,.nav.static .navbtn span{background:var(--ink)}
+.navbtn:hover{background:rgba(255,255,255,.14)}
+.nav.solid .navbtn:hover,.nav.static .navbtn:hover{background:rgba(28,42,51,.07)}
+/* Open: the two bars cross. Both are pinned to the same line first so the X is
+   centred rather than hinged off one of them. */
+/* Over the panel everything in the bar is on paper, including on the home page
+   where the bar is otherwise white type over the hero. */
+.nav.menu-open .navbtn span{background:var(--ink)}
+.nav.menu-open .brand{color:var(--ink)}
+.nav.menu-open .nav-links a:not(.cta){color:var(--muted)}
+.nav.menu-open .navbtn span:nth-child(1){transform:translateY(3px) rotate(45deg)}
+.nav.menu-open .navbtn span:nth-child(2){transform:translateY(-3px) rotate(-45deg)}
+
+.navmenu{position:fixed;inset:0;z-index:-1;background:var(--paper);
+         display:flex;flex-direction:column;justify-content:center;
+         padding:0 clamp(24px,7vw,48px);
+         opacity:0;visibility:hidden;
+         transition:opacity .32s ease,visibility .32s}
+.nav.menu-open .navmenu{opacity:1;visibility:visible;z-index:1}
+.navmenu a{display:block;text-decoration:none;color:var(--ink);
+           font-size:clamp(26px,8vw,40px);line-height:1.28;letter-spacing:-.01em;
+           padding:9px 0;border-bottom:1px solid var(--line);
+           opacity:0;transform:translateY(14px);
+           transition:opacity .4s ease,transform .5s var(--ease),color .2s ease}
+.navmenu a:last-child{border-bottom:0}
+.navmenu a.on{color:var(--clay)}
+.nav.menu-open .navmenu a{opacity:1;transform:none}
+/* Staggered so the list reads as it arrives instead of landing all at once. */
+.nav.menu-open .navmenu a:nth-child(1){transition-delay:.05s}
+.nav.menu-open .navmenu a:nth-child(2){transition-delay:.10s}
+.nav.menu-open .navmenu a:nth-child(3){transition-delay:.15s}
+.nav.menu-open .navmenu a:nth-child(4){transition-delay:.20s}
+.nav.menu-open .navmenu a:nth-child(5){transition-delay:.25s}
+.navmenu .m-foot{margin-top:clamp(28px,6vw,44px);font-size:13.5px;color:var(--muted);
+                 line-height:1.7;opacity:0;transition:opacity .4s ease .3s}
+.nav.menu-open .navmenu .m-foot{opacity:1}
+
+@media(max-width:760px){
   .nav-links a:not(.cta){display:none}
+  .navbtn{display:block}
+}
+@media(prefers-reduced-motion:reduce){
+  .navmenu a{transform:none}
+  .navbtn span{transition:none}
 }
 
 /* ---- hero ---- */

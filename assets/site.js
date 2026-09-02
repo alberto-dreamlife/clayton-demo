@@ -42,6 +42,34 @@
   /* A keyboard user tabbing into a hidden bar would be focusing something they
      cannot see, so bring it back. */
   nav.addEventListener("focusin", () => nav.classList.remove("away"));
+
+  /* ---- the mobile menu ----
+     Under 760px the links do not fit beside the brand, so they live in a panel.
+     Everything below is about that panel closing on every exit a person might
+     reach for, because a menu you cannot get out of is worse than no menu. */
+  const btn = nav.querySelector(".navbtn");
+  const menu = nav.querySelector(".navmenu");
+  if (!btn || !menu) return;
+
+  const setMenu = open => {
+    nav.classList.toggle("menu-open", open);
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    /* The panel covers the page, so the page behind it must not scroll away
+       under the reader's thumb. */
+    document.body.style.overflow = open ? "hidden" : "";
+    /* While it is open the bar has to stay put, whatever the last scroll
+       direction was, or the close button leaves with it. */
+    if (open) nav.classList.remove("away");
+  };
+
+  btn.addEventListener("click", () => setMenu(!nav.classList.contains("menu-open")));
+  /* A link that navigates within the page, like the register anchor, would
+     otherwise leave the panel sitting over the destination. */
+  menu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => setMenu(false)));
+  addEventListener("keydown", e => { if (e.key === "Escape") setMenu(false); });
+  /* Rotating the phone or opening the keyboard can cross the breakpoint with the
+     panel open, which would leave the page locked behind an invisible overlay. */
+  addEventListener("resize", () => { if (innerWidth > 760) setMenu(false); });
 })();
 
 /* ---------- reveal ---------- */
