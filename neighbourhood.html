@@ -8,8 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20260902b">
-<link rel="stylesheet" href="assets/anim.css?v=20260902b">
+<link rel="stylesheet" href="assets/site.css?v=20260902c">
+<link rel="stylesheet" href="assets/anim.css?v=20260902c">
 <style>
 .pagehead{padding:clamp(44px,6vw,80px) 0 0}
 
@@ -164,7 +164,7 @@ window.AX_CONFIG = {
 </nav>
 
 <header class="pagehead has-media">
-  <div class="ph-media" data-par="0.16"><img src="assets/img/Clayton_View_05_Aerial_fr.webp?v=20260902b" alt="Clayton from the air"></div>
+  <div class="ph-media" data-par="0.16"><img src="assets/img/Clayton_View_05_Aerial_fr.webp?v=20260902c" alt="Clayton from the air"></div>
   <div class="ph-veil"></div>
   <div class="wrap ph-in">
     <div class="kicker">Neighbourhood</div>
@@ -187,7 +187,7 @@ window.AX_CONFIG = {
     <!-- 01 -->
     <div class="nb nb-01">
       <div class="fig frame grow reveal">
-        <img src="assets/img/nb-01-highstreet.webp?v=20260902b"
+        <img src="assets/img/nb-01-highstreet.webp?v=20260902c"
              alt="Cafes and shops on the high street near Clayton" loading="lazy">
         <span class="cap">Clayton Crossing, five minutes on foot</span>
       </div>
@@ -209,11 +209,11 @@ window.AX_CONFIG = {
            fill up on a Friday. Close enough that dinner out does not need a plan.</p>
       </div>
       <div class="figA frame grow reveal d1">
-        <img src="assets/img/nb-02-restaurant.webp?v=20260902b"
+        <img src="assets/img/nb-02-restaurant.webp?v=20260902c"
              alt="Neighbourhood restaurant near Clayton" loading="lazy">
       </div>
       <div class="figB frame grow reveal d2">
-        <img src="assets/img/nb-03-cafe.webp?v=20260902b"
+        <img src="assets/img/nb-03-cafe.webp?v=20260902c"
              alt="Independent cafe interior near Clayton" loading="lazy">
       </div>
     </div>
@@ -221,7 +221,7 @@ window.AX_CONFIG = {
     <!-- 03 -->
     <div class="nb nb-03">
       <div class="fig frame grow reveal">
-        <img src="assets/img/nb-04-park.webp?v=20260902b"
+        <img src="assets/img/nb-04-park.webp?v=20260902c"
              alt="Clayton Park playing fields and greenbelt trails" loading="lazy">
         <div class="over">
           <div class="num">03 &middot; Outside</div>
@@ -342,8 +342,8 @@ window.AX_CONFIG = {
   </div>
 </footer>
 
-<script src="assets/site.js?v=20260902b"></script>
-<script src="assets/anim.js?v=20260902b" defer></script>
+<script src="assets/site.js?v=20260902c"></script>
+<script src="assets/anim.js?v=20260902c" defer></script>
 <script>
 /* ---------- the map ----------
    Dependency free: the survey lines land as SVG paths through a Mercator
@@ -397,9 +397,28 @@ const D = {"center":[-122.72153664363078,49.132785710355115],"roads":[{"c":[[-12
   D.roads.forEach(p => add(p.c, "none", "#D9D3C7", 1));
   D.major.forEach(p => add(p.c, "none", "#FFFFFF", 9));
   D.major.forEach(p => add(p.c, "none", "#CFC7B8", 1.4));
-  D.cycle.forEach(p => add(p.c, "none", "#9DB8A5", 1.6, "5 6"));
-  D.construction.forEach(p => add(p.c, p.c.length > 3 ? "rgba(180,138,90,.22)" : "none",
-                                  "#B48A5A", 2.4, "7 7", p.c.length > 3));
+  /* Both of these layers come straight from OSM, which splits a route into a way
+     per attribute change. Drawn raw that was 71 cycle fragments and 27 construction
+     ones, most of them under 150m, and the map read as confetti. Two filters fix it.
+
+     Trails: keep only paths long enough to be a route someone would walk, and
+     drop the stubs between them. A short dot pattern is the footpath convention
+     and stays quieter than a dash at this scale. */
+  const metres = c => { let t = 0;
+    for (let i = 0; i < c.length - 1; i++){
+      const dx = (c[i+1][0] - c[i][0]) * 111320 * Math.cos(c[i][1] * Math.PI / 180);
+      const dy = (c[i+1][1] - c[i][1]) * 110540;
+      t += Math.hypot(dx, dy);
+    } return t; };
+  D.cycle.filter(p => metres(p.c) > 220)
+         .forEach(p => add(p.c, "none", "#9DB8A5", 1.5, "1.5 6"));
+
+  /* SkyTrain: only the named alignment. The rest of what OSM files under
+     construction here is the maintenance centre and a scatter of unnamed site
+     polygons, none of which a buyer needs and all of which were being closed
+     into dashed loops by a length test that mistook long ways for rings. */
+  D.construction.filter(p => /SkyTrain Extension/i.test(p.n || ""))
+                .forEach(p => add(p.c, "none", "#B48A5A", 3.2, "11 8"));
   D.schools.forEach(p => add(p.c, "#8FB4C6", "none", 0, null, true));
 
   /* the site */
