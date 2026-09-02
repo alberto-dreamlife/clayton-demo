@@ -330,7 +330,7 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
   .right{flex:none;overflow:visible}
   .homegrid{grid-template-columns:1fr}
 }
-.mtypes,.mplateh{display:none}
+.mtypes,.msec{display:none}
 /* ---- mobile: fill the screen, and browse by home type ----
    Finding a home by hunting for a small polygon works with a cursor and not
    with a thumb, so the phone leads with the question a buyer actually arrives
@@ -356,19 +356,28 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
   .elecap{font-size:12px}
 
   .legend,.noLvl,.types{display:none}
-  .mtypes{display:block}
   .panel .sub{font-size:14px}
 
   /* Two ways in, in the order a buyer needs them: the size question first,
      the plate underneath for anyone who wants to know where a home sits. */
+  /* Three blocks, in the order the question gets narrower: which size, where
+     it sits in the floor, then the plans themselves. .mtypes is only a wrapper
+     the desktop never sees, so it steps out of the way and lets its children
+     take their own places in that sequence. */
   #pFloor{display:flex;flex-direction:column}
   #pFloor h2{order:0}
   #pFloor .sub{order:1}
-  .mtypes{order:2}
-  .mplateh{order:3;display:block;margin:30px 0 0;padding-top:22px;
-           border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+  .mtypes{display:contents}
+  #tgrid{order:2}
+  #mplateh{order:3}
   #levels{order:4}
   #floorBody{order:5}
+  #plisth{order:6}
+  #plist{order:7}
+  #pempty{order:8}
+  .msec{display:block;margin:30px 0 0;padding-top:22px;
+        border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+  .msec:empty{display:none}
 
   /* The plate keeps the drawing and loses the writing. Every unit number and
      area on it is set in container units sized for a desktop column, so at
@@ -379,8 +388,11 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
      their own outline: an outline says where one home ends and the next
      begins, which is what the numbers used to say, and it leaves the one you
      pick as the only thing filled in. */
-  .shapes polygon{fill:transparent;stroke:rgba(192,102,74,.62)}
+  .shapes polygon{fill:rgba(28,42,51,.07);stroke:rgba(192,102,74,.62)}
   .shapes polygon.on{fill:rgba(192,102,74,.42);stroke:var(--clay);stroke-width:2}
+  /* Picking a size upstairs shades those homes on the plate, so the two ways of
+     looking at the floor answer each other instead of sitting side by side. */
+  .plate-in.hot .shapes polygon:not(.on){opacity:.35}
   .plate{margin-top:14px;padding:6px}
   /* The invitation is written for a cursor and it lands on top of the back
      button here. The size cards below say the same thing better. */
@@ -396,7 +408,7 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
 
   /* One row per plan, because a plan is the thing a buyer chooses; the unit
      number only matters once they have. */
-  .plist{margin-top:20px;display:flex;flex-direction:column;gap:8px}
+  .plist{margin-top:14px;display:flex;flex-direction:column;gap:8px}
   .prow{display:flex;align-items:center;gap:13px;width:100%;text-align:left;
         border:1px solid var(--line);border-radius:14px;background:#fff;
         padding:11px 13px;cursor:pointer;font:inherit;color:inherit}
@@ -412,7 +424,7 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
   .sheet img{width:100%;max-height:none}
 }
 </style>
-<link rel="stylesheet" href="assets/anim.css?v=20260902g">
+<link rel="stylesheet" href="assets/anim.css?v=20260902h">
 <script>
 /* Only the page transition. The selector is an application: nothing here should
    fade in on scroll, and a progress bar would be measuring a page that does not
@@ -507,11 +519,12 @@ window.AX_CONFIG = {
         <section class="panel on" id="pFloor">
           <h2 id="fT"></h2>
           <p class="sub" id="fS"></p>
-          <p class="mplateh" id="mplateh">Or look at the building floor by floor.</p>
+          <p class="msec" id="mplateh">Or look at the building floor by floor.</p>
           <div class="levels" id="levels"></div>
           <div class="noLvl" id="noLvl">Click on a level to show its floorplate.</div>
           <div class="mtypes" id="mtypes">
             <div class="tgrid" id="tgrid"></div>
+            <p class="msec" id="plisth"></p>
             <div class="plist" id="plist"></div>
             <p class="pempty" id="pempty">Pick a size to see the homes.</p>
           </div>
@@ -843,6 +856,7 @@ function floor(l){
   }
 
   chips(units);
+  if (MOB.matches && state.filter) applyFilter();
   applyFilter();
   show("pFloor");
 }
@@ -937,16 +951,25 @@ function mobTypes(b){
   [...$("tgrid").children].forEach(btn =>
     btn.addEventListener("click", () => mobPlans(b, +btn.dataset.bed)));
   $("plist").innerHTML = "";
+  $("plisth").textContent = "";
   $("pempty").style.display = "";
   $("fT").textContent = NAME[b];
   $("fS").textContent = `${units.length} homes across six storeys. Pick a size to start.`;
   $("mplateh").textContent = PLATEH;
   $("floorBody").style.display = "none";
+  state.filter = null;
 }
+
+const BEDKEY = b => b === 0 ? "st" : "b" + b;
 
 function mobPlans(b, bed){
   state.mbed = bed;
   [...$("tgrid").children].forEach(x => x.classList.toggle("on", +x.dataset.bed === bed));
+  /* The plate below is showing the same building, so the size just chosen is
+     shaded on it. It is the existing desktop filter, driven from the cards
+     instead of from the chips, which are too small to hit with a thumb. */
+  state.filter = BEDKEY(bed);
+  if (state.lvl) applyFilter();
 
   /* One row per plan. The smallest unit number is the one we open, purely so the
      choice is repeatable rather than whichever happened to be first in the data. */
@@ -961,6 +984,8 @@ function mobPlans(b, bed){
 
   const rows = [...byPlan.entries()].sort((a, c) => a[1].rep.sqft - c[1].rep.sqft);
   $("pempty").style.display = "none";
+  $("plisth").textContent = (bed === 0 ? "Studio" : bed + " bedroom")
+    + ` plans, ${rows.length} to choose from.`;
   $("plist").innerHTML = rows.map(([plan, {rep, n}]) => {
     const sh = DATA.sheets[b][rep.sheet];
     return `<button class="prow" type="button" data-unit="${rep.unit}">
@@ -1068,6 +1093,6 @@ function crumb(){
   if (state.unit) add("Home " + state.unit, null, true);
 }
 </script>
-<script src="assets/anim.js?v=20260902g" defer></script>
+<script src="assets/anim.js?v=20260902h" defer></script>
 </body>
 </html>
