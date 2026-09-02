@@ -330,12 +330,13 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
   .right{flex:none;overflow:visible}
   .homegrid{grid-template-columns:1fr}
 }
-.mtypes{display:none}
+.mtypes,.mplateh{display:none}
 /* ---- mobile: fill the screen, and browse by home type ----
-   The floorplate is a precision instrument: pick a level, then find a small
-   polygon on a drawing. That works with a cursor and it does not work with a
-   thumb, so below this width the plate is replaced by the question a buyer
-   actually arrives with, which is how many bedrooms. */
+   Finding a home by hunting for a small polygon works with a cursor and not
+   with a thumb, so the phone leads with the question a buyer actually arrives
+   with, which is how many bedrooms. The plate stays underneath as the way to
+   see where a home sits in the floor, stripped of the unit numbers and the
+   areas, which at this width are unreadable anyway. */
 @media(max-width:760px){
   /* The aerial was 62vh with cream underneath it, so the first screen was
      mostly empty and the buildings were below the fold. */
@@ -344,15 +345,46 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
   .sitebar{top:auto;bottom:18px}
   .sitebar h1{font-size:26px}
   .pin{font-size:12px;padding:9px 14px}
+  /* The aerial is only faded out, which is right when the split is absolutely
+     positioned over it. Here the split is in the flow, so the faded aerial was
+     still holding a screenful of empty cream above the building. */
+  .site.gone{display:none}
 
   /* No level gets picked here, so the panel is the content from the moment a
      building is chosen rather than something the plate reveals. */
   .right{opacity:1}
   .elecap{font-size:12px}
 
-  .plate,.legend,.noLvl,.types,#levels{display:none}
+  .legend,.noLvl,.types{display:none}
   .mtypes{display:block}
   .panel .sub{font-size:14px}
+
+  /* Two ways in, in the order a buyer needs them: the size question first,
+     the plate underneath for anyone who wants to know where a home sits. */
+  #pFloor{display:flex;flex-direction:column}
+  #pFloor h2{order:0}
+  #pFloor .sub{order:1}
+  .mtypes{order:2}
+  .mplateh{order:3;display:block;margin:30px 0 0;padding-top:22px;
+           border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+  #levels{order:4}
+  #floorBody{order:5}
+
+  /* The plate keeps the drawing and loses the writing. Every unit number and
+     area on it is set in container units sized for a desktop column, so at
+     phone width they collapse into illegible specks over the walls. The
+     polygons stay, so a home is still a thing you can tap. */
+  .u{display:none}
+  /* With the writing gone the homes need to read as homes, so every one carries
+     their own outline: an outline says where one home ends and the next
+     begins, which is what the numbers used to say, and it leaves the one you
+     pick as the only thing filled in. */
+  .shapes polygon{fill:transparent;stroke:rgba(192,102,74,.62)}
+  .shapes polygon.on{fill:rgba(192,102,74,.42);stroke:var(--clay);stroke-width:2}
+  .plate{margin-top:14px;padding:6px}
+  /* The invitation is written for a cursor and it lands on top of the back
+     button here. The size cards below say the same thing better. */
+  .hint{display:none}
 
   .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
   .tcard{border:1px solid var(--line);border-radius:14px;background:#fff;
@@ -380,7 +412,7 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
   .sheet img{width:100%;max-height:none}
 }
 </style>
-<link rel="stylesheet" href="assets/anim.css?v=20260902f">
+<link rel="stylesheet" href="assets/anim.css?v=20260902g">
 <script>
 /* Only the page transition. The selector is an application: nothing here should
    fade in on scroll, and a progress bar would be measuring a page that does not
@@ -475,6 +507,7 @@ window.AX_CONFIG = {
         <section class="panel on" id="pFloor">
           <h2 id="fT"></h2>
           <p class="sub" id="fS"></p>
+          <p class="mplateh" id="mplateh">Or look at the building floor by floor.</p>
           <div class="levels" id="levels"></div>
           <div class="noLvl" id="noLvl">Click on a level to show its floorplate.</div>
           <div class="mtypes" id="mtypes">
@@ -721,8 +754,13 @@ function unfloor(){
   [...$("levels").children].forEach(x => x.classList.remove("on"));
   $("noLvl").classList.add("show");
   $("floorBody").style.display = "none";
-  $("fT").textContent = NAME[state.b];
-  $("fS").textContent = "Pick a level on the building, or from the list.";
+  /* On a phone the heading belongs to the panel as a whole, which opens on the
+     size question, so closing a level must not leave it announcing a level. */
+  if (MOB.matches) $("mplateh").textContent = PLATEH;
+  else {
+    $("fT").textContent = NAME[state.b];
+    $("fS").textContent = "Pick a level on the building, or from the list.";
+  }
   show("pFloor");
 }
 
@@ -743,9 +781,16 @@ function floor(l){
 
   const units = d.levels[String(l)];
   const sizes = units.map(u => u.sqft);
-  $("fT").textContent = "Level " + l;
-  $("fS").textContent = `${units.length} homes, from ${fmt(Math.min(...sizes))} to `
-    + `${fmt(Math.max(...sizes))} sq ft. Hover a home to pick it out of the floor, click it for the plan.`;
+  if (MOB.matches){
+    /* The heading up there is the panel's, not the level's, and there is no
+       hovering on a phone. The line under the level buttons carries the count. */
+    $("mplateh").textContent = `Level ${l}: ${units.length} homes, `
+      + `${fmt(Math.min(...sizes))} to ${fmt(Math.max(...sizes))} sq ft. Tap one on the plan.`;
+  } else {
+    $("fT").textContent = "Level " + l;
+    $("fS").textContent = `${units.length} homes, from ${fmt(Math.min(...sizes))} to `
+      + `${fmt(Math.max(...sizes))} sq ft. Hover a home to pick it out of the floor, click it for the plan.`;
+  }
 
   const pin = $("pin"), svg = $("shapes");
   [...pin.querySelectorAll(".u")].forEach(n => n.remove());
@@ -870,6 +915,7 @@ function mark(unit, on){
 })();
 
 const MOB = matchMedia("(max-width:760px)");
+const PLATEH = "Or look at the building floor by floor.";
 const BEDLABEL = b => b === 0 ? "Studio" : b === 1 ? "1 bedroom" : b + " bedrooms";
 
 function mobUnits(b){
@@ -894,6 +940,8 @@ function mobTypes(b){
   $("pempty").style.display = "";
   $("fT").textContent = NAME[b];
   $("fS").textContent = `${units.length} homes across six storeys. Pick a size to start.`;
+  $("mplateh").textContent = PLATEH;
+  $("floorBody").style.display = "none";
 }
 
 function mobPlans(b, bed){
@@ -926,10 +974,11 @@ function mobPlans(b, bed){
     const t = btn.dataset.unit, lv = +t[0];
     const u = DATA.plates[b].levels[String(lv)].find(x => x.unit === t);
     if (!u) return;
-    /* home() reads state.lvl for the key plan and the back button, so it has to
-       match the unit we are opening even though no level was ever picked here. */
-    state.lvl = lv;
-    lightBand(lv);
+    /* Open the level the home is on before the home itself, so the plate sitting
+       under the list is the floor this plan belongs to and not whatever was last
+       looked at. floor() would toggle the level shut if it were already the open
+       one, hence the reset. */
+    if (state.lvl !== lv){ state.lvl = null; floor(lv); }
     home(u);
   }));
 }
@@ -980,7 +1029,10 @@ function show(id){
   /* the back button names where it takes you, which is what makes it obvious */
   const up = $("up"), t = $("upT");
   if (id === "pHome" && MOB.matches){
-    t.textContent = "Back to homes"; up.classList.add("show");
+    /* The way back has to name where it goes, and on a phone a home can be
+       reached either from the size list or straight off the plate. */
+    t.textContent = state.mbed != null ? "Back to homes" : "Back to level " + state.lvl;
+    up.classList.add("show");
     up.onclick = () => { show("pFloor"); if (state.mbed != null) mobPlans(state.b, state.mbed); }; }
   else if (id === "pHome"){ t.textContent = "Back to level " + state.lvl; up.classList.add("show");
     up.onclick = () => floor(state.lvl); }
@@ -1016,6 +1068,6 @@ function crumb(){
   if (state.unit) add("Home " + state.unit, null, true);
 }
 </script>
-<script src="assets/anim.js?v=20260902f" defer></script>
+<script src="assets/anim.js?v=20260902g" defer></script>
 </body>
 </html>
