@@ -4,10 +4,44 @@
 /* ---------- nav ---------- */
 (() => {
   const nav = document.querySelector(".nav");
-  if (!nav || nav.classList.contains("static")) return;
-  const onScroll = () => nav.classList.toggle("solid", window.scrollY > 40);
-  onScroll();
+  if (!nav) return;
+  /* Inner pages mark the bar .static: they have no hero for it to float over, so
+     it is painted solid from the start. That only settles how it looks, not
+     whether it gets out of the way, so the hide behaviour runs on every page and
+     only the background toggle is skipped. */
+  const floats = !nav.classList.contains("static");
+
+  const SOLID = 40;   /* past this the bar needs a background to stay readable */
+  const HIDE  = 140;  /* above this it is still part of the hero, so it stays */
+  const SLOP  = 6;    /* a trackpad never gives you a clean zero, so ignore jitter */
+
+  let last = 0, queued = false;
+
+  const frame = () => {
+    queued = false;
+    /* Overscroll bounce reports negative values at the top and runs past the
+       document at the bottom. Either one looks like a direction change and
+       would flick the bar in and out at the ends of the page. */
+    const max = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+    const y = Math.min(Math.max(0, scrollY), max);
+
+    if (floats) nav.classList.toggle("solid", y > SOLID);
+
+    const moved = y - last;
+    if (Math.abs(moved) > SLOP) {
+      nav.classList.toggle("away", moved > 0 && y > HIDE);
+      last = y;
+    }
+    /* Near the top it is always visible, whatever the last direction was. */
+    if (y <= HIDE) nav.classList.remove("away");
+  };
+
+  const onScroll = () => { if (!queued) { queued = true; requestAnimationFrame(frame); } };
+  frame();
   addEventListener("scroll", onScroll, { passive: true });
+  /* A keyboard user tabbing into a hidden bar would be focusing something they
+     cannot see, so bring it back. */
+  nav.addEventListener("focusin", () => nav.classList.remove("away"));
 })();
 
 /* ---------- reveal ---------- */

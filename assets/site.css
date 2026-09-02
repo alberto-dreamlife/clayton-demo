@@ -32,7 +32,19 @@ section{padding-block:var(--band)}
 
 /* ---- nav ----
    Transparent over the hero, paper below it. One bar for the whole site. */
-.nav{position:fixed;inset:0 0 auto 0;z-index:50;transition:background .35s ease,box-shadow .35s ease}
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;
+      transition:background .35s ease,box-shadow .35s ease,transform .4s var(--ease)}
+/* Out of the way going down, back on the way up. A fixed bar costs the top of
+   every screen for the whole visit, and on a site that is mostly full-bleed
+   renders that is the part worth giving back. Scrolling up is what looking for
+   the menu looks like, so that is the gesture that returns it. */
+.nav.away{transform:translateY(-100%)}
+@media(prefers-reduced-motion:reduce){
+  /* Sliding chrome is exactly what this preference is asking us not to do, and
+     snapping it away without the motion is worse than leaving it. */
+  .nav{transition:background .35s ease,box-shadow .35s ease}
+  .nav.away{transform:none}
+}
 .nav.solid{background:rgba(247,245,241,.92);backdrop-filter:blur(12px);
            box-shadow:0 1px 0 var(--line)}
 .nav-in{max-width:min(1560px,88vw);margin:0 auto;
