@@ -44,7 +44,42 @@ body{margin:0;background:var(--paper);color:var(--ink);overflow:hidden;
   .nav-links a{padding:8px 9px;font-size:12px}
   .brand{font-size:16px;letter-spacing:.2em}
 }
-@media(max-width:640px){.nav-links a:not(.cta){display:none}}
+/* ---- mobile menu ----
+   This page owns its own layout and does not load site.css, so it carries its
+   own copy of the menu rather than inheriting one. Same breakpoint and same
+   behaviour as the rest of the site, because a selector that navigates
+   differently from every other page is its own kind of dead end. */
+.navbtn{display:none;margin-left:10px;width:40px;height:40px;padding:0;border:0;
+        background:none;cursor:pointer;position:relative;z-index:2;border-radius:999px}
+.navbtn span{position:absolute;left:11px;width:18px;height:2px;border-radius:2px;
+             background:var(--ink);transition:transform .3s var(--ease)}
+.navbtn span:nth-child(1){top:16px}
+.navbtn span:nth-child(2){top:22px}
+.nav.menu-open .navbtn span:nth-child(1){transform:translateY(3px) rotate(45deg)}
+.nav.menu-open .navbtn span:nth-child(2){transform:translateY(-3px) rotate(-45deg)}
+.nav-in{position:relative;z-index:2}
+.navmenu{position:fixed;inset:0;z-index:-1;background:var(--paper);
+         display:flex;flex-direction:column;justify-content:center;
+         padding:0 clamp(24px,7vw,48px);opacity:0;visibility:hidden;
+         transition:opacity .32s ease,visibility .32s}
+.nav.menu-open .navmenu{opacity:1;visibility:visible;z-index:1}
+.navmenu a{display:block;text-decoration:none;color:var(--ink);
+           font-size:clamp(26px,8vw,40px);line-height:1.28;padding:9px 0;
+           border-bottom:1px solid var(--line);opacity:0;transform:translateY(14px);
+           transition:opacity .4s ease,transform .5s var(--ease)}
+.navmenu a:last-child{border-bottom:0}
+.navmenu a.on{color:var(--clay)}
+.nav.menu-open .navmenu a{opacity:1;transform:none}
+.nav.menu-open .navmenu a:nth-child(1){transition-delay:.05s}
+.nav.menu-open .navmenu a:nth-child(2){transition-delay:.10s}
+.nav.menu-open .navmenu a:nth-child(3){transition-delay:.15s}
+.nav.menu-open .navmenu a:nth-child(4){transition-delay:.20s}
+.nav.menu-open .navmenu a:nth-child(5){transition-delay:.25s}
+@media(max-width:760px){
+  .nav-links a:not(.cta){display:none}
+  .navbtn{display:block}
+}
+@media(prefers-reduced-motion:reduce){.navmenu a{transform:none}.navbtn span{transition:none}}
 
 .viewer{position:relative;flex:1;min-height:0;overflow:hidden}
 
@@ -295,8 +330,57 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
   .right{flex:none;overflow:visible}
   .homegrid{grid-template-columns:1fr}
 }
+.mtypes{display:none}
+/* ---- mobile: fill the screen, and browse by home type ----
+   The floorplate is a precision instrument: pick a level, then find a small
+   polygon on a drawing. That works with a cursor and it does not work with a
+   thumb, so below this width the plate is replaced by the question a buyer
+   actually arrives with, which is how many bedrooms. */
+@media(max-width:760px){
+  /* The aerial was 62vh with cream underneath it, so the first screen was
+     mostly empty and the buildings were below the fold. */
+  .site{height:calc(100svh - 62px);min-height:420px}
+  /* Pins were colliding with the title, so the title moves to the foot. */
+  .sitebar{top:auto;bottom:18px}
+  .sitebar h1{font-size:26px}
+  .pin{font-size:12px;padding:9px 14px}
+
+  /* No level gets picked here, so the panel is the content from the moment a
+     building is chosen rather than something the plate reveals. */
+  .right{opacity:1}
+  .elecap{font-size:12px}
+
+  .plate,.legend,.noLvl,.types,#levels{display:none}
+  .mtypes{display:block}
+  .panel .sub{font-size:14px}
+
+  .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
+  .tcard{border:1px solid var(--line);border-radius:14px;background:#fff;
+         padding:15px 14px;text-align:left;cursor:pointer;
+         font:inherit;color:inherit;transition:border-color .2s ease,background .2s ease}
+  .tcard b{display:block;font-size:16px;letter-spacing:-.01em}
+  .tcard span{display:block;margin-top:3px;font-size:12px;color:var(--muted)}
+  .tcard.on{border-color:var(--clay);background:rgba(192,102,74,.06)}
+
+  /* One row per plan, because a plan is the thing a buyer chooses; the unit
+     number only matters once they have. */
+  .plist{margin-top:20px;display:flex;flex-direction:column;gap:8px}
+  .prow{display:flex;align-items:center;gap:13px;width:100%;text-align:left;
+        border:1px solid var(--line);border-radius:14px;background:#fff;
+        padding:11px 13px;cursor:pointer;font:inherit;color:inherit}
+  .prow img{width:64px;height:64px;object-fit:contain;flex:none;
+            background:var(--paper);border-radius:9px}
+  .prow .pm b{display:block;font-size:15px}
+  .prow .pm span{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45}
+  .prow .pgo{margin-left:auto;color:var(--clay);font-size:17px;flex:none}
+  .pempty{margin-top:18px;color:var(--muted);font-size:14px}
+
+  /* The detail sheet is the destination, so it gets the room. */
+  .homegrid{gap:18px}
+  .sheet img{width:100%;max-height:none}
+}
 </style>
-<link rel="stylesheet" href="assets/anim.css?v=20260902e">
+<link rel="stylesheet" href="assets/anim.css?v=20260902f">
 <script>
 /* Only the page transition. The selector is an application: nothing here should
    fade in on scroll, and a progress bar would be measuring a page that does not
@@ -330,6 +414,15 @@ window.AX_CONFIG = {
       <a href="tour.html">3D Tour</a>
       <a class="cta" href="index.html#register">Register</a>
     </div>
+    <button class="navbtn" id="navBtn" type="button"
+            aria-expanded="false" aria-controls="navMenu" aria-label="Menu"><span></span><span></span></button>
+  </div>
+  <div class="navmenu" id="navMenu">
+    <a class="on" href="homes.html">Homes</a>
+    <a href="amenities.html">Amenities</a>
+    <a href="neighbourhood.html">Neighbourhood</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="tour.html">3D Tour</a>
   </div>
 </nav>
 
@@ -384,6 +477,11 @@ window.AX_CONFIG = {
           <p class="sub" id="fS"></p>
           <div class="levels" id="levels"></div>
           <div class="noLvl" id="noLvl">Click on a level to show its floorplate.</div>
+          <div class="mtypes" id="mtypes">
+            <div class="tgrid" id="tgrid"></div>
+            <div class="plist" id="plist"></div>
+            <p class="pempty" id="pempty">Pick a size to see the homes.</p>
+          </div>
           <div id="floorBody">
           <div class="types"><span class="tl">Show only</span><span id="types" style="display:contents"></span><button class="tclear" id="tclear" type="button">Clear&ensp;&#10005;</button></div>
           <div class="plate">
@@ -551,6 +649,14 @@ function build(b){
   if (e.sil) $("ele").style.setProperty("--sil", `url("${e.sil}")`);
   $("eleT").textContent = NAME[b];
   $("eleS").textContent = SUB[b];
+  if (MOB.matches){
+    mobTypes(b);
+    /* The elevation is worth its full height, so rather than shrinking it the
+       page moves down to where the choosing happens. Waiting a frame lets the
+       panel exist before we measure where it is. */
+    requestAnimationFrame(() => setTimeout(() =>
+      $("right").scrollIntoView({behavior: "smooth", block: "start"}), 260));
+  }
 
   const all = [];
   for (let l = 1; l <= 6; l++) all.push(...d.levels[String(l)]);
@@ -741,6 +847,93 @@ function mark(unit, on){
 }
 
 /* ---------- the home ---------- */
+/* ---------- mobile: browse by home type ----------
+   Same data as the floorplate, asked the other way round. The plate answers
+   "what is on level 4"; a phone user is asking "what does a two bedroom look
+   like", so this groups the building's homes by bedroom count and then by plan,
+   because the plan is the thing being chosen. The unit number only starts to
+   matter once they have picked one, which is where the existing detail panel
+   takes over unchanged. */
+/* the same menu behaviour as every other page, kept short because this page has
+   no scrolling bar to coordinate with */
+(() => {
+  const nav = document.querySelector(".nav"), btn = nav.querySelector(".navbtn"),
+        menu = nav.querySelector(".navmenu");
+  if (!btn) return;
+  const set = open => { nav.classList.toggle("menu-open", open);
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    document.body.style.overflow = open ? "hidden" : ""; };
+  btn.addEventListener("click", () => set(!nav.classList.contains("menu-open")));
+  menu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => set(false)));
+  addEventListener("keydown", e => { if (e.key === "Escape") set(false); });
+  addEventListener("resize", () => { if (innerWidth > 760) set(false); });
+})();
+
+const MOB = matchMedia("(max-width:760px)");
+const BEDLABEL = b => b === 0 ? "Studio" : b === 1 ? "1 bedroom" : b + " bedrooms";
+
+function mobUnits(b){
+  const out = [];
+  for (let l = 1; l <= 6; l++) out.push(...DATA.plates[b].levels[String(l)]);
+  return out;
+}
+
+function mobTypes(b){
+  const units = mobUnits(b);
+  const beds = [...new Set(units.map(u => u.beds))].sort((x, y) => x - y);
+  state.mbed = null;
+  $("tgrid").innerHTML = beds.map(n => {
+    const set = units.filter(u => u.beds === n);
+    const plans = new Set(set.map(u => u.plan)).size;
+    return `<button class="tcard" type="button" data-bed="${n}"><b>${BEDLABEL(n)}</b>
+            <span>${set.length} homes &middot; ${plans} layout${plans > 1 ? "s" : ""}</span></button>`;
+  }).join("");
+  [...$("tgrid").children].forEach(btn =>
+    btn.addEventListener("click", () => mobPlans(b, +btn.dataset.bed)));
+  $("plist").innerHTML = "";
+  $("pempty").style.display = "";
+  $("fT").textContent = NAME[b];
+  $("fS").textContent = `${units.length} homes across six storeys. Pick a size to start.`;
+}
+
+function mobPlans(b, bed){
+  state.mbed = bed;
+  [...$("tgrid").children].forEach(x => x.classList.toggle("on", +x.dataset.bed === bed));
+
+  /* One row per plan. The smallest unit number is the one we open, purely so the
+     choice is repeatable rather than whichever happened to be first in the data. */
+  const byPlan = new Map();
+  mobUnits(b).filter(u => u.beds === bed).forEach(u => {
+    const k = u.plan;
+    if (!byPlan.has(k) || u.unit < byPlan.get(k).rep.unit) {
+      byPlan.set(k, {rep: u, n: (byPlan.get(k) || {n: 0}).n});
+    }
+    byPlan.get(k).n++;
+  });
+
+  const rows = [...byPlan.entries()].sort((a, c) => a[1].rep.sqft - c[1].rep.sqft);
+  $("pempty").style.display = "none";
+  $("plist").innerHTML = rows.map(([plan, {rep, n}]) => {
+    const sh = DATA.sheets[b][rep.sheet];
+    return `<button class="prow" type="button" data-unit="${rep.unit}">
+      <img src="${A("assets/" + sh.img)}" alt="" loading="lazy">
+      <span class="pm"><b>Plan ${plan} &middot; ${fmt(sh.total)} sq ft</b>
+      <span>${(sh.kind || rep.kind).replace(/\s+/g, " ")}<br>${n} home${n > 1 ? "s" : ""} in the building</span></span>
+      <span class="pgo">&#8250;</span></button>`;
+  }).join("");
+
+  [...$("plist").children].forEach(btn => btn.addEventListener("click", () => {
+    const t = btn.dataset.unit, lv = +t[0];
+    const u = DATA.plates[b].levels[String(lv)].find(x => x.unit === t);
+    if (!u) return;
+    /* home() reads state.lvl for the key plan and the back button, so it has to
+       match the unit we are opening even though no level was ever picked here. */
+    state.lvl = lv;
+    lightBand(lv);
+    home(u);
+  }));
+}
+
 function home(u){
   state.unit = u.unit;
   const b = state.b, s = DATA.sheets[b][u.sheet];
@@ -786,7 +979,10 @@ function show(id){
   crumb();
   /* the back button names where it takes you, which is what makes it obvious */
   const up = $("up"), t = $("upT");
-  if (id === "pHome"){ t.textContent = "Back to level " + state.lvl; up.classList.add("show");
+  if (id === "pHome" && MOB.matches){
+    t.textContent = "Back to homes"; up.classList.add("show");
+    up.onclick = () => { show("pFloor"); if (state.mbed != null) mobPlans(state.b, state.mbed); }; }
+  else if (id === "pHome"){ t.textContent = "Back to level " + state.lvl; up.classList.add("show");
     up.onclick = () => floor(state.lvl); }
   else if (state.lvl){ t.textContent = "All of Clayton"; up.classList.add("show");
     up.onclick = leave; }
@@ -820,6 +1016,6 @@ function crumb(){
   if (state.unit) add("Home " + state.unit, null, true);
 }
 </script>
-<script src="assets/anim.js?v=20260902e" defer></script>
+<script src="assets/anim.js?v=20260902f" defer></script>
 </body>
 </html>
