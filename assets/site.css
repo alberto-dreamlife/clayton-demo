@@ -211,8 +211,21 @@ footer a:hover{color:#fff}
   padding:calc(clamp(44px,6vw,80px) + 76px) 0 clamp(52px,6vw,86px)}
 .pagehead .ph-media{position:absolute;inset:-12% 0;z-index:0}
 .pagehead .ph-media img{width:100%;height:100%;object-fit:cover}
+/* The veil used to fade the whole frame down into the paper colour, which meant
+   the bottom half of a render dissolved into cream. These are the best images on
+   the site, so it now darkens only the left column where the copy actually sits
+   and leaves the rest of the frame untouched. The second layer is a short fade
+   at the very bottom edge, enough to avoid a hard cut into the page and no more. */
 .pagehead .ph-veil{position:absolute;inset:0;z-index:1;
-  background:linear-gradient(to bottom,rgba(12,20,26,.62),rgba(12,20,26,.34) 42%,var(--paper) 99%)}
+  background:linear-gradient(to top,var(--paper) 0%,rgba(247,245,241,0) 13%),
+             linear-gradient(100deg,rgba(12,20,26,.74) 0%,rgba(12,20,26,.52) 32%,
+                             rgba(12,20,26,.16) 58%,rgba(12,20,26,0) 76%)}
+@media(max-width:860px){
+  /* Narrow enough that the copy runs the full width, so the scrim has to as well. */
+  .pagehead .ph-veil{background:linear-gradient(to top,var(--paper) 0%,rgba(247,245,241,0) 10%),
+                                linear-gradient(to bottom,rgba(12,20,26,.30) 0%,rgba(12,20,26,.62) 55%,
+                                                rgba(12,20,26,.70) 100%)}
+}
 .pagehead.has-media .ph-in{position:relative;z-index:2}
 .pagehead.has-media .kicker{color:rgba(255,255,255,.78)}
 .pagehead.has-media h1{color:#fff}

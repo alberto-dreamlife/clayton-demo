@@ -8,8 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20260902a">
-<link rel="stylesheet" href="assets/anim.css?v=20260902a">
+<link rel="stylesheet" href="assets/site.css?v=20260902b">
+<link rel="stylesheet" href="assets/anim.css?v=20260902b">
 <style>
 .pagehead{padding:clamp(44px,6vw,80px) 0 0}
 
@@ -164,7 +164,7 @@ window.AX_CONFIG = {
 </nav>
 
 <header class="pagehead has-media">
-  <div class="ph-media" data-par="0.16"><img src="assets/img/Clayton_View_05_Aerial_fr.webp?v=20260902a" alt="Clayton from the air"></div>
+  <div class="ph-media" data-par="0.16"><img src="assets/img/Clayton_View_05_Aerial_fr.webp?v=20260902b" alt="Clayton from the air"></div>
   <div class="ph-veil"></div>
   <div class="wrap ph-in">
     <div class="kicker">Neighbourhood</div>
@@ -175,7 +175,75 @@ window.AX_CONFIG = {
   </div>
 </header>
 
-<section style="padding-top:clamp(10px,1.6vw,20px)">
+<!-- ============ NEIGHBOURHOOD STORY ============
+     Straight under the header, before the map. The aerial has just shown the
+     buyer where this is, so the next thing he wants is what it feels like; the
+     map is the reference he comes back to once he is interested. -->
+<section>
+  <div class="wrap">
+    <div class="kicker reveal">Around the corner</div>
+    <h2 class="title display reveal d1">A neighbourhood that<br>already <i>works.</i></h2>
+
+    <!-- 01 -->
+    <div class="nb nb-01">
+      <div class="fig frame grow reveal">
+        <img src="assets/img/nb-01-highstreet.webp?v=20260902b"
+             alt="Cafes and shops on the high street near Clayton" loading="lazy">
+        <span class="cap">Clayton Crossing, five minutes on foot</span>
+      </div>
+      <div class="txt reveal d1">
+        <div class="num">01 &middot; Local life</div>
+        <h3 class="display">Coffee, groceries<br>and a short walk</h3>
+        <p>The shops at Clayton Crossing and along Fraser Highway cover the everyday: a proper
+           coffee in the morning, groceries on the way home, a pharmacy and a barber you never
+           have to drive to.</p>
+      </div>
+    </div>
+
+    <!-- 02 -->
+    <div class="nb nb-02">
+      <div class="txt reveal">
+        <div class="num">02 &middot; Evenings</div>
+        <h3 class="display">Somewhere to<br>eat nearby</h3>
+        <p>Family restaurants, a pub with a patio and the kind of small independent kitchens that
+           fill up on a Friday. Close enough that dinner out does not need a plan.</p>
+      </div>
+      <div class="figA frame grow reveal d1">
+        <img src="assets/img/nb-02-restaurant.webp?v=20260902b"
+             alt="Neighbourhood restaurant near Clayton" loading="lazy">
+      </div>
+      <div class="figB frame grow reveal d2">
+        <img src="assets/img/nb-03-cafe.webp?v=20260902b"
+             alt="Independent cafe interior near Clayton" loading="lazy">
+      </div>
+    </div>
+
+    <!-- 03 -->
+    <div class="nb nb-03">
+      <div class="fig frame grow reveal">
+        <img src="assets/img/nb-04-park.webp?v=20260902b"
+             alt="Clayton Park playing fields and greenbelt trails" loading="lazy">
+        <div class="over">
+          <div class="num">03 &middot; Outside</div>
+          <h3 class="display">Parks on every side</h3>
+          <p>Clayton Park's fields to the northeast, Provinceton's playground to the southwest,
+             and greenbelt trails threading between them. The kind of green you use on a Tuesday,
+             not just on a long weekend.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- quick facts -->
+    <div class="facts">
+      <div class="fact reveal"><b>5</b><span>Minutes on foot to the shops at Clayton Crossing</span></div>
+      <div class="fact reveal d1"><b>3</b><span>Schools inside a fifteen minute walk</span></div>
+      <div class="fact reveal d2"><b>2</b><span>Neighbourhood parks within a few streets</span></div>
+      <div class="fact reveal d3"><b>2029</b><span>Surrey Langley SkyTrain opening on Fraser Highway</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
   <div class="wrap">
     <div class="mapwrap reveal" id="mapwrap">
       <div class="mapin" id="mapin">
@@ -210,72 +278,6 @@ window.AX_CONFIG = {
   </div>
 </section>
 
-<!-- ============ NEIGHBOURHOOD STORY ============
-     The map answers where, this answers what it is like. Placed after the map
-     because a buyer orients first and imagines second. -->
-<section>
-  <div class="wrap">
-    <div class="kicker reveal">Around the corner</div>
-    <h2 class="title display reveal d1">A neighbourhood that<br>already <i>works.</i></h2>
-
-    <!-- 01 -->
-    <div class="nb nb-01">
-      <div class="fig frame grow reveal">
-        <img src="assets/img/nb-01-highstreet.webp?v=20260902a"
-             alt="Cafes and shops on the high street near Clayton" loading="lazy">
-        <span class="cap">Clayton Crossing, five minutes on foot</span>
-      </div>
-      <div class="txt reveal d1">
-        <div class="num">01 &middot; Local life</div>
-        <h3 class="display">Coffee, groceries<br>and a short walk</h3>
-        <p>The shops at Clayton Crossing and along Fraser Highway cover the everyday: a proper
-           coffee in the morning, groceries on the way home, a pharmacy and a barber you never
-           have to drive to.</p>
-      </div>
-    </div>
-
-    <!-- 02 -->
-    <div class="nb nb-02">
-      <div class="txt reveal">
-        <div class="num">02 &middot; Evenings</div>
-        <h3 class="display">Somewhere to<br>eat nearby</h3>
-        <p>Family restaurants, a pub with a patio and the kind of small independent kitchens that
-           fill up on a Friday. Close enough that dinner out does not need a plan.</p>
-      </div>
-      <div class="figA frame grow reveal d1">
-        <img src="assets/img/nb-02-restaurant.webp?v=20260902a"
-             alt="Neighbourhood restaurant near Clayton" loading="lazy">
-      </div>
-      <div class="figB frame grow reveal d2">
-        <img src="assets/img/nb-03-cafe.webp?v=20260902a"
-             alt="Independent cafe interior near Clayton" loading="lazy">
-      </div>
-    </div>
-
-    <!-- 03 -->
-    <div class="nb nb-03">
-      <div class="fig frame grow reveal">
-        <img src="assets/img/nb-04-park.webp?v=20260902a"
-             alt="Clayton Park playing fields and greenbelt trails" loading="lazy">
-        <div class="over">
-          <div class="num">03 &middot; Outside</div>
-          <h3 class="display">Parks on every side</h3>
-          <p>Clayton Park's fields to the northeast, Provinceton's playground to the southwest,
-             and greenbelt trails threading between them. The kind of green you use on a Tuesday,
-             not just on a long weekend.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- quick facts -->
-    <div class="facts">
-      <div class="fact reveal"><b>5</b><span>Minutes on foot to the shops at Clayton Crossing</span></div>
-      <div class="fact reveal d1"><b>3</b><span>Schools inside a fifteen minute walk</span></div>
-      <div class="fact reveal d2"><b>2</b><span>Neighbourhood parks within a few streets</span></div>
-      <div class="fact reveal d3"><b>2029</b><span>Surrey Langley SkyTrain opening on Fraser Highway</span></div>
-    </div>
-  </div>
-</section>
 
 <footer>
   <div class="wrap f-top">
@@ -340,8 +342,8 @@ window.AX_CONFIG = {
   </div>
 </footer>
 
-<script src="assets/site.js?v=20260902a"></script>
-<script src="assets/anim.js?v=20260902a" defer></script>
+<script src="assets/site.js?v=20260902b"></script>
+<script src="assets/anim.js?v=20260902b" defer></script>
 <script>
 /* ---------- the map ----------
    Dependency free: the survey lines land as SVG paths through a Mercator
