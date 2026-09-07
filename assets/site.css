@@ -895,3 +895,13 @@ footer a:hover{color:#fff}
 .ff-map svg path{transition:stroke .4s}
 @media(max-width:1000px){.f-find{grid-template-columns:1fr 1fr}.ff-say{grid-column:1/-1}}
 @media(max-width:600px){.f-find{grid-template-columns:1fr}}
+
+/* ---------- living renders ---------- */
+/* A clip sits over its still and fades away when it ends; the still is what remains. */
+[data-clip]{position:relative}
+.clipv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:1;
+  opacity:0;pointer-events:none;transition:opacity .9s ease,transform 1.8s var(--ease)}
+.clipv.live{opacity:1}
+.clipv.done{opacity:0}
+.plate:hover .pic .clipv{transform:scale(1.05)}
+.pagehead .ph-media .clipv{object-position:center}
