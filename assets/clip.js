@@ -36,11 +36,15 @@
        network never flashes a black rectangle where the render was. */
     v.addEventListener("playing", function(){ v.classList.add("live"); }, {once:true});
 
-    v.addEventListener("ended", function(){
+    var settled = false;
+    function settle(){
+      if (settled) return;
+      settled = true;
       v.classList.remove("live"); v.classList.add("done");
       /* Once faded, release the decoder; the still has the frame from here on. */
-      setTimeout(function(){ v.removeAttribute("src"); v.load(); }, 1200);
-    });
+      setTimeout(function(){ v.pause(); v.removeAttribute("src"); v.load(); }, 1200);
+    }
+    v.addEventListener("ended", settle);
     v.addEventListener("error", function(){ v.remove(); });
 
     /* Two rings: fetch when the frame is a screen away, play when a third of it
@@ -63,7 +67,15 @@
       });
     }, {threshold:0.35});
     here.observe(frame);
+    return settle;
   }
 
-  frames.forEach(arm);
+  var settle = [];
+  frames.forEach(function(f){ settle.push(arm(f)); });
+
+  /* Interiors lets the reader flip the whole page between Dawn and Dusk. If
+     that happens while a clip is still playing, the clip is what they are
+     looking at, so it steps aside at once and the chosen scheme shows through. */
+  new MutationObserver(function(){ settle.forEach(function(fn){ fn(); }); })
+    .observe(document.documentElement, {attributes:true, attributeFilter:["data-scheme"]});
 })();
