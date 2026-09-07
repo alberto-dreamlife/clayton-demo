@@ -23,6 +23,11 @@
     v.preload = "none";
     v.setAttribute("aria-hidden","true"); v.tabIndex = -1;
     v.src = frame.getAttribute("data-clip");
+    /* The clip has to crop exactly like the still under it, or the handoff
+       jumps. Some pages anchor their header image to the bottom edge, so the
+       framing is read from the image rather than assumed. */
+    var still = frame.querySelector("img");
+    if (still) v.style.objectPosition = getComputedStyle(still).objectPosition;
     frame.appendChild(v);
 
     var played = false;
