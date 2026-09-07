@@ -4,9 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Clayton, find your home</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/site.css?v=20260907a">
 <style>
 :root{
   --ink:#1C2A33; --sky:#8FB4C6; --sand:#D8CDBE; --clay:#C0664A; --paper:#F7F5F1;
@@ -15,97 +14,75 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;background:var(--paper);color:var(--ink);overflow:hidden;
-     font-family:'Inter',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;
-     display:flex;flex-direction:column}
+/* v3: an ordinary document again. The selector fills the first screen and the
+   footer waits below it, on one continuous ground. */
+html,body{height:auto}
+body{margin:0;background:var(--sand);color:var(--ink);overflow:auto;
+     font-family:var(--fb);-webkit-font-smoothing:antialiased;display:block}
 
-/* ---- the site bar ----
-   The selector is a room of the website, not a separate application, so it
-   carries the same bar as every other page. Copied here rather than pulled from
-   site.css because this page owns its own layout and should not inherit the
-   scrolling-document rules that stylesheet assumes. */
-.nav{flex:none;background:var(--paper);box-shadow:0 1px 0 var(--line);z-index:60}
-/* Full width here, unlike the rest of the site. The selector is a tool, not a
-   column of reading: the wordmark belongs at one edge and the menu at the
-   other, and they keep travelling apart as the window grows. */
-.nav-in{max-width:none;margin:0;padding:clamp(16px,1.3vw,24px) clamp(20px,2vw,38px);
-        display:flex;align-items:center;gap:26px}
-.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink);
-       font-family:'Archivo',sans-serif;font-weight:500;font-size:19px;letter-spacing:.26em}
-.brand svg{width:26px;height:26px}
-.nav-links{display:flex;gap:4px;margin-left:auto;align-items:center}
-.nav-links a{text-decoration:none;font-size:13px;font-weight:600;color:var(--muted);
-             padding:9px 13px;border-radius:999px;transition:color .2s ease,background .2s ease}
-.nav-links a:hover{color:var(--ink);background:rgba(28,42,51,.07)}
-.nav-links a.on{color:var(--ink);background:rgba(28,42,51,.09)}
-.nav-links a.cta{background:var(--clay);color:#fff;margin-left:8px}
-.nav-links a.cta:hover{background:#A9552F;color:#fff}
-@media(max-width:900px){
-  .nav-links a{padding:8px 9px;font-size:12px}
-  .brand{font-size:16px;letter-spacing:.2em}
-}
-/* ---- mobile menu ----
-   This page owns its own layout and does not load site.css, so it carries its
-   own copy of the menu rather than inheriting one. Same breakpoint and same
-   behaviour as the rest of the site, because a selector that navigates
-   differently from every other page is its own kind of dead end. */
-.navbtn{display:none;margin-left:10px;width:40px;height:40px;padding:0;border:0;
-        background:none;cursor:pointer;position:relative;z-index:2;border-radius:999px}
-.navbtn span{position:absolute;left:11px;width:18px;height:2px;border-radius:2px;
-             background:var(--ink);transition:transform .3s var(--ease)}
-.navbtn span:nth-child(1){top:16px}
-.navbtn span:nth-child(2){top:22px}
-.nav.menu-open .navbtn span:nth-child(1){transform:translateY(3px) rotate(45deg)}
-.nav.menu-open .navbtn span:nth-child(2){transform:translateY(-3px) rotate(-45deg)}
-.nav-in{position:relative;z-index:2}
-.navmenu{position:fixed;inset:0;z-index:-1;background:var(--paper);
-         display:flex;flex-direction:column;justify-content:center;
-         padding:0 clamp(24px,7vw,48px);opacity:0;visibility:hidden;
-         transition:opacity .32s ease,visibility .32s}
-.nav.menu-open .navmenu{opacity:1;visibility:visible;z-index:1}
-.navmenu a{display:block;text-decoration:none;color:var(--ink);
-           font-size:clamp(26px,8vw,40px);line-height:1.28;padding:9px 0;
-           border-bottom:1px solid var(--line);opacity:0;transform:translateY(14px);
-           transition:opacity .4s ease,transform .5s var(--ease)}
-.navmenu a:last-child{border-bottom:0}
-.navmenu a.on{color:var(--clay)}
-.nav.menu-open .navmenu a{opacity:1;transform:none}
-.nav.menu-open .navmenu a:nth-child(1){transition-delay:.05s}
-.nav.menu-open .navmenu a:nth-child(2){transition-delay:.10s}
-.nav.menu-open .navmenu a:nth-child(3){transition-delay:.15s}
-.nav.menu-open .navmenu a:nth-child(4){transition-delay:.20s}
-.nav.menu-open .navmenu a:nth-child(5){transition-delay:.25s}
-@media(max-width:760px){
-  .nav-links a:not(.cta){display:none}
-  .navbtn{display:block}
-}
-@media(prefers-reduced-motion:reduce){.navmenu a{transform:none}.navbtn span{transition:none}}
+/* the bar, the menu and the register popup come from site.css. This page
+   is a fixed-height tool, so the bar is a flex row at the top instead of a
+   sticky one, and the document rules in site.css are switched off below. */
+.nav{position:relative;background:transparent !important;box-shadow:none !important;backdrop-filter:none !important}
+.nav.away{transform:none !important}
+.nav.solid{background:transparent;box-shadow:none;backdrop-filter:none}
+/* the row keeps the site-wide width and padding, so the mark and Menu land
+   exactly where they do on every other page */
+.nav .brand,.nav.solid .brand{color:var(--ink)}
+.nav .navbtn,.nav.solid .navbtn{color:#fff;background:var(--ink)}
+.nav.solid .nav-in{padding-top:clamp(18px,1.5vw,26px);padding-bottom:clamp(18px,1.5vw,26px)}
+.nav .navreg{display:none !important}
+body{padding-top:0}
+/* the wordmark keeps its home-page size here, and Register stays out of the
+   bar: this page is the thing you register from, not a place to leave it */
+.nav .brand,.nav.solid .brand{font-size:clamp(22px,2.1vw,38px)}
+body{background:var(--sand)}
+:root{--pad:clamp(14px,1.8vw,28px)}
+section{padding-block:0;position:static}
+html{scroll-behavior:auto}
 
-.viewer{position:relative;flex:1;min-height:0;overflow:hidden}
+
+.viewer{position:relative;min-height:calc(100svh - 96px);overflow:visible}
 
 /* ---- the aerial ----
    It fills the frame and stays untouched. The two buildings are named by a pin on
    the roof and the whole massing under it is the target, so nothing is painted
    over the render to tell you where to click. */
-.site{position:absolute;inset:0;transition:transform .75s var(--ease),opacity .55s ease;
-      transform-origin:50% 50%}
+.viewer{background:var(--sand)}
+/* v2: every picture on this page lives in one rounded box floating on the
+   sand, and the box is what moves between states: the aerial, then the
+   building, then the building beside its floorplate. */
+.site{position:absolute;left:var(--pad);top:0;right:var(--pad);bottom:var(--pad);border-radius:22px;overflow:hidden;
+      box-shadow:0 30px 80px rgba(28,42,51,.22);z-index:2;
+      transition:left .85s var(--ease),top .85s var(--ease),width .85s var(--ease),height .85s var(--ease),opacity .45s ease .35s}
 .site img{width:100%;height:100%;object-fit:cover;display:block}
 .site.gone{opacity:0;pointer-events:none}
+/* the rollover: the rest of the site dims around the building under the
+   cursor, the pin turns clay and says what a click does */
+.spot{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .45s ease;
+  background:radial-gradient(circle clamp(220px,26vw,420px) at var(--x,50%) var(--y,50%),transparent 0%,rgba(12,20,26,.08) 55%,rgba(12,20,26,.5) 100%)}
+.spot.on{opacity:1}
 .hits{position:absolute;inset:0;width:100%;height:100%}
-.hits polygon{fill:transparent;cursor:pointer}
+.hits polygon{fill:transparent;stroke:transparent;stroke-width:2;vector-effect:non-scaling-stroke;cursor:pointer;
+  transition:fill .35s ease,stroke .35s ease}
+/* the building you are over lights up, so it is obvious the render is the control */
+.hits polygon:hover,.hits polygon.hot{fill:transparent;stroke:transparent}
 .pin{position:absolute;transform:translate(-50%,-50%);border:0;cursor:pointer;
-     background:rgba(255,255,255,.94);color:var(--ink);border-radius:999px;padding:11px 18px;
-     font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;white-space:nowrap;
+     background:rgba(247,245,241,.96);color:var(--ink);border-radius:8px;padding:11px 18px;
+     font-family:var(--fb);font-weight:600;font-size:13.5px;white-space:nowrap;
      box-shadow:0 8px 24px rgba(12,20,26,.34);
      transition:transform .3s var(--ease),opacity .3s ease,box-shadow .3s ease}
 .pin i{font-style:normal;display:block;font-size:10.5px;font-weight:700;letter-spacing:.14em;
        text-transform:uppercase;color:var(--muted);margin-bottom:1px}
-.pin.hot{transform:translate(-50%,-50%) scale(1.07);box-shadow:0 12px 32px rgba(12,20,26,.44)}
+.pin.hot{background:var(--clay);color:#fff;box-shadow:0 12px 32px rgba(192,102,74,.45)}
+.pin.hot i{color:rgba(255,255,255,.75)}
+.pin em{display:block;font-style:normal;font-size:11px;font-weight:600;color:rgba(255,255,255,.9);
+  max-height:0;overflow:hidden;opacity:0;transition:max-height .4s var(--ease),opacity .3s,margin .4s var(--ease)}
+.pin.hot em{max-height:2em;opacity:1;margin-top:4px}
 .pin.dim{opacity:.45}
 .pin.future{background:rgba(255,255,255,.7);cursor:default;font-weight:500}
-.sitebar{position:absolute;left:0;right:0;top:0;padding:26px 32px;color:#fff;pointer-events:none;
-         background:linear-gradient(to bottom,rgba(12,20,26,.55),transparent)}
-.sitebar h1{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.6vw,34px);
+.sitebar{display:none}
+.sitebar h1{font-family:var(--fd);font-weight:500;font-size:clamp(22px,2.6vw,34px);
             margin:0;line-height:1.1}
 .sitebar p{margin:6px 0 0;font-size:14px;color:rgba(255,255,255,.82)}
 
@@ -115,12 +92,14 @@ body{margin:0;background:var(--paper);color:var(--ink);overflow:hidden;
    The two columns are flex bases, which animate, so the aerial can open into the
    split instead of cutting to it. */
 .split{position:absolute;inset:0;display:flex;opacity:0;pointer-events:none;
-       transition:opacity .5s ease;background:var(--paper)}
+       transition:opacity .3s ease;background:transparent}
+.split.on{transition-delay:.4s;position:relative;inset:auto;min-height:calc(100svh - 96px)}
 .split.on{opacity:1;pointer-events:auto}
-.left{flex:0 0 100%;min-width:0;position:relative;overflow:hidden;
-      transition:flex-basis .7s var(--ease)}
+.left{flex:0 0 100%;min-width:0;position:sticky;top:0;align-self:flex-start;overflow:visible;z-index:2;
+      padding:0 0 var(--pad) var(--pad);transition:flex-basis .8s var(--ease)}
+.split:not(.open) .left{padding-right:var(--pad)}
 .split.open .left{flex-basis:44%}
-.right{flex:1 1 0;min-width:0;overflow-y:auto;overflow-x:hidden;
+.right{flex:1 1 0;min-width:0;overflow:visible;
        opacity:0;transition:opacity .45s ease .25s}
 .split.open .right{opacity:1}
 
@@ -131,24 +110,21 @@ body{margin:0;background:var(--paper);color:var(--ink);overflow:hidden;
    inside the column is what keeps them honest. */
 /* a size container, so the picture below can be measured against both of its
    sides at once and pick whichever runs out first */
-.ele{position:relative;height:100%;background:var(--ink);
-     display:flex;flex-direction:column;justify-content:center;
-     container-type:size}
+.ele{position:relative;background:transparent;
+     display:flex;flex-direction:column;justify-content:flex-start;gap:14px}
 /* The picture box carries the render's own ratio, because every level band and
    unit outline is positioned in percent of it. As a flex item it was being
    shrunk to fit the column, which squashed the box and stretched the building
    with it: the fix is to let it size itself from whichever side runs out first,
    height in a wide column, width in a narrow one, and letterbox against the ink
    rather than deform. */
-.pic{position:relative;aspect-ratio:var(--ar,4/3);overflow:hidden;
-     flex:0 0 auto;margin-inline:auto;
-     /* fallback for browsers without container units: fills the width */
-     width:100%;height:auto;
-     /* the real rule: as wide as the column allows, but never wider than the
-        column's height can carry at this ratio. One expression covers a wide
-        column, a narrow one, and every step of the animation between them,
-        so the building is never stretched to fit. */
-     width:min(100cqw, calc(100cqh * var(--arn,1.3333)))}
+.pic{position:relative;aspect-ratio:var(--ar,4/3);overflow:hidden;border-radius:22px;
+     background:var(--ink);box-shadow:0 30px 80px rgba(28,42,51,.22);
+     flex:0 0 auto;margin:0;width:var(--pw,100%);height:var(--ph,auto);
+     transition:width .8s var(--ease),height .8s var(--ease)}
+/* alone on the screen the box sits centred; beside the plate it sits left */
+.split:not(.open) .ele{align-items:center}
+.split.open .ele{align-items:flex-start}
 /* contain rather than fill: with a correct box the two are identical, and if a
    render ever ships at an unexpected size it letterboxes instead of stretching */
 .pic>img{position:absolute;inset:0;width:100%;height:100%;display:block;
@@ -157,25 +133,37 @@ body{margin:0;background:var(--paper);color:var(--ink);overflow:hidden;
      transition:clip-path .5s var(--ease)}
 .lit>img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:contain;
          filter:brightness(1.16) saturate(1.06)}
-.lit::after{content:"";position:absolute;inset:0;background:rgba(255,252,246,.16)}
+.lit::after{content:"";position:absolute;inset:0;background:rgba(192,102,74,.3)}
 .lit.masked{-webkit-mask-image:var(--sil);mask-image:var(--sil);
             -webkit-mask-size:100% 100%;mask-size:100% 100%}
 .edge-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;filter:blur(2.5px)}
 .edge{fill:none;stroke:rgba(255,255,255,.8);stroke-width:7;vector-effect:non-scaling-stroke;
       transition:opacity .3s ease}
 .bands{position:absolute;inset:0;width:100%;height:100%}
-.bands polygon{fill:transparent;cursor:pointer;transition:fill .25s ease}
-.bands polygon:hover{fill:rgba(255,255,255,.10)}
+.bands polygon{fill:transparent;cursor:pointer;stroke:transparent;stroke-width:2;vector-effect:non-scaling-stroke;
+  transition:fill .25s ease,stroke .25s ease}
+.bands polygon:hover,.bands polygon.demo{fill:rgba(192,102,74,.42);stroke:rgba(255,255,255,.9)}
 
 /* The invitation. It sits over the fullscreen building and leaves with the
    first click on a level, because once the panel is open the rail explains
    itself. */
-.hint{position:absolute;top:20px;left:50%;transform:translateX(-50%);z-index:3;
-      background:rgba(255,255,255,.94);color:var(--ink);border-radius:999px;
-      padding:12px 22px;font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;
+.hint{position:absolute;bottom:16px;right:16px;z-index:3;display:flex;align-items:center;gap:12px;
+      background:rgba(247,245,241,.94);color:var(--ink);border-radius:8px;
+      padding:12px 22px;font-family:var(--fb);font-weight:600;font-size:13.5px;
       box-shadow:0 8px 24px rgba(12,20,26,.34);pointer-events:none;white-space:nowrap;
       transition:opacity .3s ease,transform .3s ease}
-.split.open .hint{opacity:0;transform:translate(-50%,-8px)}
+.split.open .hint{opacity:0}
+.lvltag{position:absolute;z-index:4;pointer-events:none;opacity:0;transform:translate(-50%,-130%);
+  background:var(--ink);color:#fff;border-radius:8px;padding:10px 14px;white-space:nowrap;
+  font-family:var(--fb);font-weight:600;font-size:13px;box-shadow:0 10px 30px rgba(12,20,26,.35);
+  transition:opacity .2s ease}
+.lvltag b{font-family:var(--fd);font-weight:500;font-size:17px;display:block;line-height:1.05;letter-spacing:-.01em}
+.lvltag span{display:block;font-size:11px;color:rgba(255,255,255,.7);margin-top:2px}
+.lvltag.on{opacity:1}
+.hint i{width:26px;height:16px;border-radius:3px;border:2px solid var(--clay);position:relative;display:block}
+.hint i::after{content:"";position:absolute;left:2px;right:2px;top:2px;height:3px;background:var(--clay);border-radius:1px;
+  animation:hintfloor 2.2s var(--ease) infinite}
+@keyframes hintfloor{0%{top:2px;opacity:0}15%{opacity:1}50%{top:7px}85%{opacity:1}100%{top:12px;opacity:0}}
 .noLvl{margin-top:18px;background:#fff;border:1px dashed rgba(28,42,51,.28);border-radius:16px;
        padding:clamp(30px,4vw,54px);text-align:center;color:var(--muted);
        font-size:14.5px;line-height:1.6;display:none}
@@ -184,33 +172,46 @@ body{margin:0;background:var(--paper);color:var(--ink);overflow:hidden;
    where the CLAYTON wordmark sits, so this button and the caption below line up
    with it whenever the wordmark falls over the render, and hug the render's own
    edge when it does not. */
-.back{position:absolute;top:20px;left:var(--uiL,20px);z-index:3;border:0;border-radius:999px;cursor:pointer;
-      background:rgba(255,255,255,.92);color:var(--ink);padding:10px 16px;
-      font-family:'Inter',sans-serif;font-weight:600;font-size:12.5px;
-      box-shadow:0 6px 20px rgba(12,20,26,.3);transition:background .2s ease}
-.back:hover{background:#fff}
-.elecap{position:absolute;left:0;right:0;bottom:0;z-index:3;color:#fff;
-        padding:70px 24px 26px;padding-left:var(--uiL,24px);
-        pointer-events:none;background:linear-gradient(to top,rgba(12,20,26,.78),transparent)}
-.elecap b{display:block;font-family:'Archivo',sans-serif;font-weight:500;
-          font-size:clamp(20px,2.2vw,30px)}
-.elecap span{display:block;margin-top:4px;font-size:13px;color:rgba(255,255,255,.78);line-height:1.5}
-.stats{display:flex;gap:22px;margin-top:14px;pointer-events:none}
-.stats div{color:#fff}
-.stats dt{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-          color:rgba(255,255,255,.6)}
-.stats dd{margin:2px 0 0;font-family:'Archivo',sans-serif;font-size:19px;font-weight:500}
+.tools{position:absolute;left:16px;right:16px;top:16px;z-index:4;display:flex;justify-content:space-between;align-items:center;gap:8px;
+  pointer-events:none}
+.tools>*{pointer-events:auto}
+.back{border:0;border-radius:8px;cursor:pointer;background:rgba(247,245,241,.94);color:var(--ink);padding:11px 14px;box-shadow:0 6px 20px rgba(12,20,26,.25);
+      font-family:var(--fb);font-weight:600;font-size:12.5px;transition:background .2s ease,color .2s}
+.back:hover{background:var(--clay);color:#fff}
+/* the other building is one click away, from inside this one */
+.bsw{display:flex;border-radius:8px;overflow:hidden;background:rgba(247,245,241,.94);box-shadow:0 6px 20px rgba(12,20,26,.25)}
+.bsw button{border:0;background:transparent;cursor:pointer;padding:11px 14px;font-family:var(--fb);font-weight:600;font-size:12.5px;color:var(--muted);
+  display:flex;align-items:center;gap:8px;transition:background .25s,color .25s}
+.bsw button i{font-style:normal;font-family:var(--fd);font-weight:600;font-size:11px;letter-spacing:.1em;width:20px;height:20px;border-radius:5px;
+  display:grid;place-items:center;background:rgba(28,42,51,.1);color:var(--ink);transition:background .25s,color .25s}
+.bsw button:hover{color:var(--ink)}
+.bsw button.on{background:var(--ink);color:#fff}
+.bsw button.on i{background:var(--clay);color:#fff}
+.elecap{display:none;flex:none;color:var(--ink);width:var(--pw,100%);gap:12px;grid-template-columns:1fr;
+  transition:width .8s var(--ease);animation:rise .5s var(--ease) both}
+.split.open .elecap{display:grid}
+.elecap .bcard{background:var(--paper);border-radius:14px;padding:18px 20px}
+.elecap b{display:block;font-family:var(--fd);font-weight:500;letter-spacing:-.02em;font-size:clamp(22px,2vw,30px);line-height:1.05}
+.elecap span{display:block;margin-top:6px;font-size:13.5px;color:var(--muted);line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0}
+.stats div{background:var(--paper);border-radius:12px;padding:14px 16px;color:var(--ink);transition:background .3s}
+.stats div:hover{background:#fff}
+.stats dt{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.stats dd{margin:4px 0 0;font-family:var(--fd);font-size:clamp(17px,1.5vw,24px);font-weight:500;letter-spacing:-.02em}
+@media(max-width:1300px){.stats{grid-template-columns:1fr 1fr}}
 
 /* ---- right column ---- */
-.pad{padding:clamp(18px,2vw,30px) clamp(18px,2.2vw,34px) 60px}
+.pad{padding:0 var(--pad) 60px clamp(18px,2.2vw,34px)}
 /* One button that always goes up a step, sitting where you are reading. The
    breadcrumb still jumps anywhere, but the back button is what the thumb finds. */
 .upbar{display:flex;align-items:center;gap:14px}
-.up{border:1px solid var(--line);background:#fff;border-radius:999px;cursor:pointer;
-    font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--ink);
+.upbar:empty{display:none}
+.crumb{display:none !important}
+.up{border:1px solid var(--line);background:var(--paper);border-radius:8px;cursor:pointer;
+    font-family:var(--fb);font-size:13px;font-weight:600;color:var(--ink);
     padding:10px 18px 10px 14px;display:none;align-items:center;gap:7px;
     transition:border-color .2s ease,color .2s ease,transform .2s ease}
-.up:hover{border-color:var(--clay);color:var(--clay);transform:translateX(-2px)}
+.up:hover{border-color:var(--clay);color:var(--clay)}
 .up.show{display:inline-flex}
 .crumb{display:flex;align-items:center;gap:9px;font-size:11.5px;font-weight:700;
        letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
@@ -218,8 +219,12 @@ body{margin:0;background:var(--paper);color:var(--ink);overflow:hidden;
               letter-spacing:inherit;color:var(--muted)}
 .crumb button:hover{color:var(--clay)}
 .crumb b{color:var(--ink);font-weight:700}
-h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,32px);
-   line-height:1.1;margin:10px 0 0}
+/* the level, in its own card: the heading and its line side by side */
+.lvlcard{display:grid;grid-template-columns:1fr;gap:6px;background:var(--paper);border-radius:14px;padding:18px 22px;margin-bottom:14px}
+.lvlcard h2{margin:0}
+.lvlcard .sub{margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:none}
+h2{font-family:var(--fd);font-weight:500;font-size:clamp(24px,2.6vw,36px);letter-spacing:-.02em;
+   line-height:1.05;margin:4px 0 0}
 .sub{color:var(--muted);font-size:14.5px;line-height:1.6;margin:8px 0 0;max-width:62ch}
 
 /* ---- the type legend ----
@@ -228,11 +233,11 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
    bedrooms" works across the whole building, not one plate at a time. It sits in
    its own labelled band so it reads as a control, not as leftover buttons. */
 .types{display:flex;align-items:center;gap:8px;margin-top:14px;flex-wrap:wrap;
-       background:#fff;border:1px solid var(--line);border-radius:13px;padding:10px 14px}
+       background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
 .types .tl{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
            color:var(--muted);margin-right:4px}
-.tchip{border:1.5px solid var(--line);background:var(--paper);border-radius:999px;cursor:pointer;
-       font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--ink);
+.tchip{border:1.5px solid var(--line);background:var(--paper);border-radius:7px;cursor:pointer;
+       font-family:var(--fb);font-size:13px;font-weight:600;color:var(--ink);
        padding:9px 16px;transition:all .2s ease;display:inline-flex;align-items:center;gap:7px}
 .tchip:hover{border-color:var(--clay);color:var(--clay)}
 .tchip i{font-style:normal;font-weight:700;font-size:11px;min-width:20px;height:20px;
@@ -240,33 +245,33 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
          background:rgba(28,42,51,.08);color:var(--muted);padding:0 5px}
 .tchip.on{background:var(--clay);border-color:var(--clay);color:#fff}
 .tchip.on i{background:rgba(255,255,255,.22);color:#fff}
-.tclear{border:0;background:transparent;cursor:pointer;font-family:'Inter',sans-serif;
+.tclear{border:0;background:transparent;cursor:pointer;font-family:var(--fb);
         font-size:12px;font-weight:600;color:var(--muted);padding:6px 4px;display:none}
 .tclear.show{display:inline}
 .tclear:hover{color:var(--clay)}
 
 .levels{display:flex;gap:7px;margin-top:18px;flex-wrap:wrap}
-.lv{flex:1 1 0;min-width:82px;border:1px solid var(--line);background:#fff;border-radius:11px;
-    padding:10px 12px;cursor:pointer;text-align:left;font-family:'Inter',sans-serif;
+.lv{flex:1 1 0;min-width:82px;border:1px solid var(--line);background:var(--paper);border-radius:8px;
+    padding:10px 12px;cursor:pointer;text-align:left;font-family:var(--fb);
     transition:border-color .2s ease,background .2s ease,transform .2s ease}
-.lv:hover{border-color:rgba(28,42,51,.34);transform:translateY(-1px)}
-.lv.on{background:var(--ink);border-color:var(--ink);color:#fff}
-.lv b{display:block;font-family:'Archivo',sans-serif;font-weight:500;font-size:15.5px}
+.lv:hover{border-color:var(--clay)}
+.lv.on{background:var(--clay);border-color:var(--clay);color:#fff}
+.lv b{display:block;font-family:var(--fd);font-weight:500;font-size:15.5px}
 .lv em{display:block;font-style:normal;font-size:11.5px;color:var(--muted);margin-top:1px}
 .lv.on em{color:rgba(255,255,255,.66)}
 
 .plate{position:relative;margin-top:16px;background:#fff;border:1px solid var(--line);
-       border-radius:16px;padding:clamp(8px,1vw,16px)}
+       border-radius:14px;padding:clamp(8px,1vw,16px)}
 .plate-in{position:relative;container-type:inline-size}
 .plate-in img{display:block;width:100%;height:auto}
 .u{position:absolute;border:0;background:transparent;padding:0;cursor:pointer;
-   font-family:'Inter',sans-serif;line-height:1.2;color:var(--ink);display:flex;
+   font-family:var(--fb);line-height:1.2;color:var(--ink);display:flex;
    flex-direction:column;align-items:flex-end;text-align:right;white-space:nowrap;
    transition:transform .2s ease,opacity .2s ease}
-.u i{font-style:normal;font-family:'Archivo',sans-serif;font-weight:600;
-     font-size:clamp(8px,1.41cqw,24px);line-height:1.16}
-.u i span{font-weight:400;color:var(--muted)}
-.u em{font-style:normal;font-size:clamp(6px,.8cqw,14px);line-height:1.25;color:var(--muted)}
+.u i{font-style:normal;font-family:var(--fd);font-weight:600;color:var(--ink);
+     font-size:clamp(8px,1.41cqw,24px);line-height:1.16;text-shadow:0 0 5px #fff,0 0 2px #fff}
+.u i span{font-weight:500;color:rgba(28,42,51,.8)}
+.u em{font-style:normal;font-size:clamp(6px,.8cqw,14px);line-height:1.25;color:rgba(28,42,51,.85);font-weight:600;text-shadow:0 0 5px #fff,0 0 2px #fff}
 .u.on{transform:scale(1.06)}
 .u.on i{color:var(--clay)}
 .plate-in.hot .u:not(.on){opacity:.3}
@@ -278,11 +283,20 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
 
 /* ---- the home, in the same right column ---- */
 .panel{display:none}
+/* the home: one paper card holds the heading, the plan, the facts, the key and the note */
+#pHome{background:var(--paper);border-radius:16px;padding:clamp(18px,2vw,30px)}
+#pHome .lvlcard{background:transparent;padding:0 0 18px;margin-bottom:0;border-bottom:1px solid var(--line)}
+#pHome .sheet{background:transparent;border:0;padding:0;margin-top:22px}
+#pHome .key{background:#fff;border-color:transparent}
+#pHome .note{border-top:1px solid var(--line);padding-top:16px;max-width:none}
+.upbar{margin-bottom:0}
+.upbar:has(.up.show){margin-bottom:14px}
+.ele{padding-bottom:var(--pad)}
 .panel.on{display:block;animation:rise .4s var(--ease) both}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .homegrid{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:26px;margin-top:16px;
           align-items:start}
-.sheet{background:#fff;border:1px solid var(--line);border-radius:16px;padding:clamp(12px,1.6vw,26px)}
+.sheet{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:clamp(12px,1.6vw,26px)}
 /* The whole plan fits the window with no scrolling: the sheet is capped at what
    is left of the viewport under the heading, and lets the drawing keep its own
    proportions inside that. Tall plans get narrower rather than running off the
@@ -294,7 +308,7 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
            border-bottom:1px solid var(--line)}
 .facts dt{color:var(--muted);font-size:13px}
 .facts dd{margin:0;font-weight:600;font-size:14px;text-align:right}
-.key{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:11px}
+.key{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px}
 .key .kt{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
          color:var(--muted);margin-bottom:7px}
 .key-in{position:relative}
@@ -314,16 +328,16 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
    need the whole screen, so they stack and the picture becomes a header. */
 @media(max-width:1000px){
   .sheet img{max-height:none;width:100%}
-  body{overflow:auto;display:block}
-  .nav{position:sticky;top:0}
-  .viewer{height:auto;min-height:100%}
-  .site{position:relative;height:62vh}
+  .viewer{height:auto;min-height:0}
+  .site{position:relative;height:62vh;inset:auto;width:auto !important;left:auto !important;top:auto !important;margin:0 var(--pad) var(--pad)}
+  .left{padding:0 var(--pad)}
+  .tools,.elecap,.pic{width:100% !important}
   .split{position:relative;inset:auto;flex-direction:column;height:auto;display:none}
   .split.on{display:flex}
   /* on a phone the width is what is scarce, so the picture is sized by width
      and the column takes whatever height that needs: a fixed column height
      plus a width cap is what squashed it */
-  .left{flex:none;height:auto}
+  .left{flex:none;height:auto;position:relative;align-self:stretch;width:100%}
   .ele{container-type:normal}
   .pic{width:100%;height:auto;max-height:none}
   .split.open .left{flex-basis:auto}
@@ -340,7 +354,7 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
 @media(max-width:760px){
   /* The aerial was 62vh with cream underneath it, so the first screen was
      mostly empty and the buildings were below the fold. */
-  .site{height:calc(100svh - 62px);min-height:420px}
+  .site{height:calc(100svh - 120px);min-height:420px}
   /* Pins were colliding with the title, so the title moves to the foot. */
   .sitebar{top:auto;bottom:18px}
   .sitebar h1{font-size:26px}
@@ -355,8 +369,12 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
   .right{opacity:1}
   .elecap{font-size:12px}
 
-  .legend,.noLvl,.types{display:none}
+  .legend,.noLvl,.types,.pempty,#floorBody .note,.lvltag,.elecap{display:none !important}
   .panel .sub{font-size:14px}
+  .lvlcard{padding:16px 18px;margin-bottom:8px}
+  .lvlcard .sub{white-space:normal}
+  @media(max-width:440px){.bsw button span{display:none}.bsw button{padding:9px 10px}.bsw button i{width:20px;height:20px;font-size:10px}}
+  .lvlcard h2{font-size:24px}
 
   /* Two ways in, in the order a buyer needs them: the size question first,
      the plate underneath for anyone who wants to know where a home sits. */
@@ -365,9 +383,10 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
      the desktop never sees, so it steps out of the way and lets its children
      take their own places in that sequence. */
   #pFloor{display:flex;flex-direction:column}
-  #pFloor h2{order:0}
-  #pFloor .sub{order:1}
+  #pFloor .lvlcard{order:0;grid-template-columns:1fr}
+
   .mtypes{display:contents}
+  #tgridh{order:1;margin-top:8px}
   #tgrid{order:2}
   #mplateh{order:3}
   #levels{order:4}
@@ -375,9 +394,27 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
   #plisth{order:6}
   #plist{order:7}
   #pempty{order:8}
-  .msec{display:block;margin:30px 0 0;padding-top:22px;
-        border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+  .msec{display:block;margin:22px 0 0;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
   .msec:empty{display:none}
+  /* the levels run in one row you can thumb across */
+  .levels{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;margin-top:10px;padding-bottom:6px;scrollbar-width:none;
+    -webkit-overflow-scrolling:touch}
+  .levels::-webkit-scrollbar{display:none}
+  .lv{flex:0 0 auto;min-width:104px;padding:12px 14px}
+  .tools{left:10px;right:10px;top:10px;flex-wrap:wrap;justify-content:flex-start;gap:6px}
+  .bsw{margin-left:auto}
+  .bsw button{padding:9px 8px;font-size:11.5px;gap:5px}
+  .bsw button i{width:16px;height:16px;font-size:9px}
+  #pHome{padding:16px}
+  #pHome .lvlcard{padding:0 0 12px}
+  #pHome .sheet{margin-top:14px}
+  #pHome .sheet img{max-height:60svh;width:auto;max-width:100%;margin:0 auto}
+  .homegrid{gap:14px}
+  .bsw button i{width:18px;height:18px;font-size:10px}
+  .back{padding:10px 11px;font-size:12px}
+  .pad{padding-top:18px}
+  .split.on{min-height:0}
+  .left{position:relative}
 
   /* The plate keeps the drawing and loses the writing. Every unit number and
      area on it is set in container units sized for a desktop column, so at
@@ -398,8 +435,8 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
      button here. The size cards below say the same thing better. */
   .hint{display:none}
 
-  .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
-  .tcard{border:1px solid var(--line);border-radius:14px;background:#fff;
+  .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+  .tcard{border:1px solid var(--line);border-radius:12px;background:var(--paper);
          padding:15px 14px;text-align:left;cursor:pointer;
          font:inherit;color:inherit;transition:border-color .2s ease,background .2s ease}
   .tcard b{display:block;font-size:16px;letter-spacing:-.01em}
@@ -408,9 +445,9 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
 
   /* One row per plan, because a plan is the thing a buyer chooses; the unit
      number only matters once they have. */
-  .plist{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+  .plist{margin-top:10px;display:flex;flex-direction:column;gap:8px}
   .prow{display:flex;align-items:center;gap:13px;width:100%;text-align:left;
-        border:1px solid var(--line);border-radius:14px;background:#fff;
+        border:1px solid var(--line);border-radius:12px;background:var(--paper);
         padding:11px 13px;cursor:pointer;font:inherit;color:inherit}
   .prow img{width:64px;height:64px;object-fit:contain;flex:none;
             background:var(--paper);border-radius:9px}
@@ -423,8 +460,9 @@ h2{font-family:'Archivo',sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,3
   .homegrid{gap:18px}
   .sheet img{width:100%;max-height:none}
 }
+
 </style>
-<link rel="stylesheet" href="assets/anim.css?v=20260902h">
+<link rel="stylesheet" href="assets/anim.css?v=20260907a">
 <script>
 /* Only the page transition. The selector is an application: nothing here should
    fade in on scroll, and a progress bar would be measuring a page that does not
@@ -437,38 +475,50 @@ window.AX_CONFIG = {
 };
 </script>
 </head>
-<body>
+<body id="top">
+<div class="grain" aria-hidden="true"></div>
 <nav class="nav">
   <div class="nav-in">
     <a class="brand" href="index.html">
-      <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true">
+      <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true"><g transform="rotate(180 43 43)">
         <rect x="14" y="14" width="40" height="12" rx="1.5"/>
         <rect x="60" y="14" width="12" height="40" rx="1.5"/>
         <rect x="32" y="60" width="40" height="12" rx="1.5"/>
         <rect x="14" y="32" width="12" height="40" rx="1.5"
-              fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/>
+              fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/></g>
       </svg>
       CLAYTON
     </a>
-    <div class="nav-links">
-      <a class="on" href="homes.html">Homes</a>
-      <a href="amenities.html">Amenities</a>
-      <a href="neighbourhood.html">Neighbourhood</a>
-      <a href="gallery.html">Gallery</a>
-      <a href="tour.html">3D Tour</a>
-      <a class="cta" href="index.html#register">Register</a>
+    <div class="nav-acts">
+      <button class="navreg" type="button" data-register>Register</button>
+      <button class="navbtn" id="navBtn" type="button"
+              aria-expanded="false" aria-controls="navMenu" aria-label="Menu">
+        <span class="lbl"><span class="l-open">Menu</span><span class="l-close">Close</span></span>
+        <span class="ico"><span></span><span></span></span>
+      </button>
     </div>
-    <button class="navbtn" id="navBtn" type="button"
-            aria-expanded="false" aria-controls="navMenu" aria-label="Menu"><span></span><span></span></button>
-  </div>
-  <div class="navmenu" id="navMenu">
-    <a class="on" href="homes.html">Homes</a>
-    <a href="amenities.html">Amenities</a>
-    <a href="neighbourhood.html">Neighbourhood</a>
-    <a href="gallery.html">Gallery</a>
-    <a href="tour.html">3D Tour</a>
   </div>
 </nav>
+
+<!-- the menu lives outside the bar: the bar carries a blur and a transform,
+     and either one would pin a fixed panel to the bar's own box -->
+<div class="navmenu" id="navMenu" aria-hidden="true">
+  <div class="nm-links">
+    <a class="nm on" href="homes.html" data-img="assets/img/Clayton_View_04_Straight_fr.webp?v=20260907a">Homes</a>
+    <a class="nm" href="interiors.html" data-img="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260907a">Interiors</a>
+    <a class="nm" href="tour.html" data-img="assets/img/Clayton_Living_fr.webp?v=20260907a">3D Tour</a>
+    <a class="nm" href="amenities.html" data-img="assets/img/Clayton_CoWorking_fr_people.webp?v=20260907a">Amenities</a>
+    <a class="nm" href="neighbourhood.html" data-img="assets/img/Clayton_View_05_Aerial_fr_Crop.webp?v=20260907a">Neighbourhood</a>
+    <a class="nm" href="gallery.html" data-img="assets/img/Clayton_Rooftop_Building_A_View1_fr.webp?v=20260907a">Gallery</a>
+    <a class="nm" href="team.html" data-img="assets/img/Clayton_Lobby_fr.webp?v=20260907a">Team</a>
+    <p class="nm-foot">Presentation Centre &nbsp;&middot;&nbsp; #30 &ndash; 2411 160 Street, South Surrey<br>Open daily 12&ndash;5pm, closed Fridays &nbsp;&middot;&nbsp; 604.243.5439</p>
+  </div>
+  <aside class="nm-side">
+    <div class="nm-pic"><img src="assets/img/Clayton_Courtyard_fr.webp?v=20260907a" alt=""><img src="" alt=""></div>
+    <button class="nm-reg" type="button" data-register><span>Register for first access</span><b>&#8594;</b></button>
+  </aside>
+</div>
+
 
 <div class="viewer">
 
@@ -476,20 +526,23 @@ window.AX_CONFIG = {
   <div class="site" id="site">
     <img id="aerial" alt="Clayton from the air">
     <svg class="hits" id="hits" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+    <div class="spot" id="spot"></div>
     <div id="pins"></div>
-    <div class="sitebar">
-      <h1>Clayton</h1>
-      <p>Two buildings released. Pick one.</p>
-    </div>
   </div>
 
   <!-- the building -->
   <div class="split" id="split">
     <div class="left">
-      <div class="hint" id="hint"></div>
       <div class="ele" id="ele">
         <div class="pic" id="pic">
           <img id="eleBase" alt="">
+          <div class="tools">
+            <button class="back" id="back">&#8592;&ensp;All of Clayton</button>
+            <div class="bsw" id="bsw">
+              <button type="button" data-b="A"><i>A</i><span>Quadra</span></button>
+              <button type="button" data-b="B"><i>B</i><span>Saturna</span></button>
+            </div>
+          </div>
           <div class="lit" id="lit">
             <img id="eleLit" alt="">
             <svg class="edge-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -497,14 +550,12 @@ window.AX_CONFIG = {
             </svg>
           </div>
           <svg class="bands" id="bands" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
-          <!-- Both of these ride on the picture rather than beside it, so the
-               letterbox bands either side stay empty. -->
-          <button class="back" id="back">&#8592;&ensp;Aerial</button>
-          <div class="elecap">
-            <b id="eleT"></b>
-            <span id="eleS"></span>
-            <dl class="stats" id="stats"></dl>
-          </div>
+          <div class="hint" id="hint"><i></i><span id="hintT"></span></div>
+          <div class="lvltag" id="lvltag"></div>
+        </div>
+        <div class="elecap">
+          <div class="bcard"><b id="eleT"></b><span id="eleS"></span></div>
+          <dl class="stats" id="stats"></dl>
         </div>
       </div>
     </div>
@@ -513,16 +564,15 @@ window.AX_CONFIG = {
       <div class="pad">
         <div class="upbar">
           <button class="up" id="up" type="button">&#8592; <span id="upT"></span></button>
-          <nav class="crumb" id="crumb"></nav>
         </div>
 
         <section class="panel on" id="pFloor">
-          <h2 id="fT"></h2>
-          <p class="sub" id="fS"></p>
-          <p class="msec" id="mplateh">Or look at the building floor by floor.</p>
+          <div class="lvlcard"><h2 id="fT"></h2><p class="sub" id="fS"></p></div>
+          <p class="msec" id="mplateh">Or floor by floor</p>
           <div class="levels" id="levels"></div>
           <div class="noLvl" id="noLvl">Click on a level to show its floorplate.</div>
           <div class="mtypes" id="mtypes">
+            <p class="msec" id="tgridh">By size</p>
             <div class="tgrid" id="tgrid"></div>
             <p class="msec" id="plisth"></p>
             <div class="plist" id="plist"></div>
@@ -546,8 +596,7 @@ window.AX_CONFIG = {
         </section>
 
         <section class="panel" id="pHome">
-          <h2 id="hT"></h2>
-          <p class="sub" id="hK"></p>
+          <div class="lvlcard"><h2 id="hT"></h2><p class="sub" id="hK"></p></div>
           <div class="homegrid">
             <div class="sheet"><img id="homeImg" alt=""></div>
             <div>
@@ -573,6 +622,151 @@ window.AX_CONFIG = {
   </div>
 </div>
 
+
+<footer class="jn jn-step-l jn-lip tex-sheet" style="--jc:#182530;--jl:var(--sky)">
+  <div class="wrap">
+    <div class="f-head">
+      <a class="brand" href="index.html">
+        <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true"><g transform="rotate(180 43 43)">
+          <rect x="14" y="14" width="40" height="12" rx="1.5"/>
+          <rect x="60" y="14" width="12" height="40" rx="1.5"/>
+          <rect x="32" y="60" width="40" height="12" rx="1.5"/>
+          <rect x="14" y="32" width="12" height="40" rx="1.5"
+                fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/></g>
+        </svg>
+        CLAYTON
+      </a>
+      <nav class="f-nav" aria-label="Footer">
+        <a href="homes.html">Homes</a>
+        <a href="interiors.html">Interiors</a>
+        <a href="tour.html">3D Tour</a>
+        <a href="amenities.html">Amenities</a>
+        <a href="neighbourhood.html">Neighbourhood</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="team.html">Team</a>
+      </nav>
+    </div>
+
+
+    <!-- where to find it: two drawn maps, the presentation centre and the site -->
+    <div class="f-find">
+      <div class="ff-say">
+        <h3>Come and <i>see it.</i></h3>
+        <div class="ff-hours">
+          <div><small>Open daily</small><b>12 &ndash; 5</b></div>
+          <div><small>Closed</small><b>Fridays</b></div>
+        </div>
+        <a class="ff-line" href="tel:6042435439">604.243.5439</a>
+        <a class="ff-line" href="mailto:hello@liveclayton.ca">hello@liveclayton.ca</a>
+        <button class="btn btn-clay" type="button" data-register><span class="tx">Book an appointment</span><span class="arr">&#8594;</span></button>
+      </div>
+
+      <a class="ff-map" href="https://www.google.com/maps/search/?api=1&query=%2330+-+2411+160+Street+Surrey+BC+V3Z+0C8" target="_blank" rel="noopener">
+        <div class="ff-head"><small>Presentation centre</small><b>#30 &ndash; 2411 160 Street, South Surrey</b></div>
+        <svg viewBox="0 0 440 320" role="img" aria-label="Map to the presentation centre at 160 Street and 24 Avenue">
+          <g fill="none" stroke="rgba(255,255,255,.9)" stroke-width="6" stroke-linecap="round">
+            <path d="M20 140 L210 300"/>
+            <path d="M95 30 L250 300"/>
+            <path d="M285 40 V300"/>
+            <path d="M10 220 H430"/>
+          </g>
+          <g fill="rgba(255,255,255,.9)" font-family="Manrope,Inter,sans-serif" font-weight="700" font-size="14">
+            <text transform="translate(66 178) rotate(41)">King George Blvd</text>
+            <text transform="translate(138 84) rotate(61)">Highway 99</text>
+            <text transform="translate(304 84) rotate(-90)">160 St</text>
+            <text x="318" y="252">24 Ave</text>
+          </g>
+          <g transform="translate(236 178)">
+            <rect x="-15" y="-11" width="30" height="22" rx="4" fill="#fff"/>
+            <text x="0" y="5" text-anchor="middle" font-family="Manrope,Inter,sans-serif" font-weight="800" font-size="12" fill="#1C2A33">99</text>
+          </g>
+          <path d="M268 200 l12 -22 l12 22 z" fill="#C0664A"/>
+          <g fill="#fff" font-family="Manrope,Inter,sans-serif" font-weight="700" font-size="13">
+            <text x="300" y="124">Clayton</text><text x="300" y="142">presentation</text><text x="300" y="160">centre</text>
+          </g>
+        </svg>
+      </a>
+
+      <a class="ff-map" href="https://www.google.com/maps/search/?api=1&query=18088+72+Avenue+Surrey+BC" target="_blank" rel="noopener">
+        <div class="ff-head"><small>The site</small><b>18088 72 Avenue, Surrey</b></div>
+        <svg viewBox="0 0 440 320" role="img" aria-label="Map to the site at 72 Avenue and 184 Street">
+          <g fill="none" stroke="rgba(255,255,255,.9)" stroke-width="6" stroke-linecap="round">
+            <path d="M90 20 V300"/>
+            <path d="M380 20 V300"/>
+            <path d="M20 90 L410 300"/>
+            <path d="M222 178 H412"/>
+          </g>
+          <g fill="rgba(255,255,255,.9)" font-family="Manrope,Inter,sans-serif" font-weight="700" font-size="14">
+            <text transform="translate(206 218) rotate(28)">Fraser Hwy</text>
+            <text transform="translate(400 132) rotate(-90)">184 St</text>
+            <text x="308" y="208">72 Ave</text>
+          </g>
+          <g transform="translate(90 240)">
+            <rect x="-15" y="-11" width="30" height="22" rx="4" fill="#fff"/>
+            <text x="0" y="5" text-anchor="middle" font-family="Manrope,Inter,sans-serif" font-weight="800" font-size="12" fill="#1C2A33">15</text>
+          </g>
+          <path d="M290 178 l14 -24 l14 24 z" fill="#C0664A"/>
+          <g transform="translate(196 104)" fill="#fff">
+            <g transform="scale(.42)"><g transform="rotate(180 43 43)"><rect x="14" y="14" width="40" height="12" rx="1.5"/><rect x="60" y="14" width="12" height="40" rx="1.5"/><rect x="32" y="60" width="40" height="12" rx="1.5"/><rect x="14" y="32" width="12" height="40" rx="1.5" fill="none" stroke="#fff" stroke-width="2.4" opacity=".55"/></g></g>
+            <text x="46" y="27" font-family="Bricolage,Archivo,sans-serif" font-weight="600" font-size="17" letter-spacing="3.5">CLAYTON</text>
+          </g>
+        </svg>
+      </a>
+    </div>
+
+    <!-- the title block: the footer drawn the way an architect's sheet ends,
+         a ruled block of labelled cells along the bottom edge -->
+    <div class="tblock">
+      <div class="tb-cell tb-wide">
+        <small>Project</small>
+        <b>Ahead of <i>the line.</i></b>
+        <p>198 homes in two buildings at West Clayton, Surrey. Studios to three bedrooms, minutes from three schools, the parks and the SkyTrain now under construction.</p>
+      </div>
+      <div class="tb-cell tb-pc">
+        <small>Presentation centre</small>
+        <span class="nw">#30 &ndash; 2411 160 Street, South Surrey</span>
+        <span class="nw">Open daily 12&ndash;5pm, closed Fridays</span>
+        <a href="tel:6042435439">604.243.5439</a>
+        <a href="mailto:hello@liveclayton.ca">hello@liveclayton.ca</a>
+      </div>
+      <div class="tb-cell tb-bl">
+        <small>The buildings</small>
+        <a class="nw" href="homes.html">Quadra &middot; A &middot; 115 homes</a>
+        <a class="nw" href="homes.html">Saturna &middot; B &middot; 83 homes</a>
+        <span>Six storeys each, one courtyard</span>
+      </div>
+      <div class="tb-cell tb-reg">
+        <small>Registration</small>
+        <span class="f-now"><i></i>Open now</span>
+        <button class="btn btn-clay" type="button" data-register><span class="tx">Register</span><span class="arr">&#8594;</span></button>
+      </div>
+
+      <a class="tb-cell tb-credit tb-c1" href="https://dreamlife.org" target="_blank" rel="noopener">
+        <small>Renderings</small>
+        <img class="mk dl" src="assets/logos/dreamlife-white.svg" alt="Dreamlife" width="387" height="87">
+        <em>dreamlife.org &#8599;</em>
+      </a>
+      <a class="tb-cell tb-credit tb-c2" href="https://twinlines.ca" target="_blank" rel="noopener">
+        <small>2D floor plans</small>
+        <img class="mk tl" src="assets/logos/twinlines-white.png" alt="TwinLines Studio" width="820" height="225">
+        <em>twinlines.ca &#8599;</em>
+      </a>
+      <div class="tb-cell tb-meta tb-m1"><small>The homes</small><b>Studios to three bedrooms</b></div>
+      <div class="tb-cell tb-meta tb-m2"><small>Issue</small><b>2026</b></div>
+      <div class="tb-cell tb-meta tb-m3"><small>Scale</small><b>NTS</b></div>
+      <div class="tb-cell tb-meta tb-top"><a class="totop" href="#top"><small>Back to top</small><b>&#8593;</b></a></div>
+    </div>
+
+    <div class="f-legal">
+      <p>Renderings are artistic representations and may differ from the finished buildings.
+         Dimensions and areas are approximate. The developer reserves the right to modify plans,
+         specifications and features without notice. This is not an offering for sale; any such
+         offering may only be made with a disclosure statement. E.&amp;O.E.</p>
+      <p class="f-copy">&copy; 2026 Clayton &nbsp;&#183;&nbsp; Website by Dreamlife</p>
+    </div>
+  </div>
+</footer>
+
 <script>
 const SIL_A = "data:image/png;base64,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7QrojGDFbOhQWGm3lufuLqw22g9GXFmhUB0cqCaxfGhXr14Br0ds/9Gv2Lh7+e5GaC5eO3f6/N16CCFJq6PbB0emxnvTkA9NDts5BuiUYLUb9UY7tNfvX/3yn7+61wpZqTbx9oHRgeFaMYaYFTIXBoEOmRKGmGftEEJ7cGSoPHynFYsDI1MHdvYUsjQG6xiAjhphPRxohdbytRvL7ZjX+mp95TRaGgp0arBCCK16vRVCkqVpYmAFdHawQvvBRUL33QCdHyyAN8kaKkCwAAQLECwAwQIQLECwAAQLQLAAwQIQLADBAgQLQLAABAsQLADBAhAsQLAABAtAsADBAhAsAMECBAtAsAAECxAsAMECBMshAAQLQLAAwQIQLADBAgQLQLAABAsQLADBAhAsQLAABAtAsADBAhAsAMECBAtAsAAECxAsAMECECxAsAAEC0CwAMECECxAsAAEC0CwAMECECwAwQIEC0CwAAQLECwAwQIQLECwAAQLQLAAwQIQLADBAgQLQLAABAsQLADBAhAsQLAABAtAsADBAhAsQLAABAtAsADBAhAsAMECBAtAsAAECxAsAMECECxAsAAEC0CwAMECECwAwQIEC0CwAAQLECwAwQIQLECwAAQLQLAAwQIQLECwAAQLQLAAwQIQLADBAgQLQLAABAsQLADBAhAsQLAABAtAsADBAhAsAMECBAtAsAAECxAsAMECECxAsAAEC0CwAMECECxAsAAEC0CwAMECECwAwQIEC0CwAAQLECwAwQIQLECwAAQLQLAAwQIQLADBAgQLQLAABAsQLADBAhAsQLAABAtAsADBAhAsQLAABAtAsADBAhAsAMECBAtAsAAECxAsAMECECxAsAAEC0CwAMECECwAwQIEC0CwAAQLECwAwQIQLECwAAQLQLAAwQIQLECwAAQLQLAAwQIQLADBAgQLQLAABAsQLADBAhAsQLAABAtAsADBAhAsAMECBAtAsAAECxAsAMECECxAsAAEC0CwAMECECxAsAAEC0CwAMECECwAwQIEC0CwAAQLECwAwQIQLECwAAQLQLAAwQIQLADBAgQLQLAABAsQLADBAhAsQLAABAtAsADBAhAsQLAABAtAsADBAhAsAMECBAtAsAAECxAsAMECECxAsAAEC0CwAMECECwAwQIEC0CwAAQLECwAwQIQLECwAAQLECyHABAsAMECBAtAsAAECxAsAMECECxAsAAEC0CwAMEC6AT/BxwHDLGkRL6YAAAAAElFTkSuQmCC";
 const SIL_B = "data:image/png;base64,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IFgAggUIFoBgAQgWIFgAggUIliEABAtAsADBAhAsAMECBAtAsAAECxAsAMECECxAsAAEC0CwAMECECwAwQIEC0CwAAQLECwAwQIQLECwAAQLQLAAwQIQLECwAAQLQLAAwQIQLADBAgQLQLAABAsQLADBAhAsQLAABAtAsADBAhAsAMECBAtAsAAECxAsAMECECxAsAAEC0CwAMECECxAsAAEC0CwAMECECwAwQIEC0CwAAQLECwAwQIQLECwAAQLQLAAwQIQLADBAgQLQLAABAsQLADBAhAsQLAABAtAsADBAhAsQLAABAtAsADBAhAsAMECBAtAsAAECxAsAMECECxAsAAEC0CwAMECECwAwQIEC0CwAAQLECwAwQIQLECwAAQLQLAAwQIQLECwAAQLQLAAwQIQLADBAgQLQLAABAsQLADBAhAsQLAABAtAsADBAhAsAMECBAtAsAAECxAsAMECECxAsAAEC0CwAMECECxAsAAEC0CwAMECECwAwQIEC0CwAAQLECwAwQIQLECwAAQLQLAAwQIQLADBAgQLQLAABAsQLADBAhAsQLAABAtAsADBAhAsQLAABAtAsADBAhAsAMECBAtAsAAECxAsAMECECxAsAAEC0CwAMECECwAwQIEC0CwAAQLECwAwQIQLECwAAQLQLAAwQIQLECwAAQLQLAAwQIQLADBAgQLQLAABAsQLADBAhAsQLAABAtAsADBAhAsAMECBAtAsAAECxAsAMECECxAsAAEC0CwAMECECxAsAAEC0CwAMECECwAwQIEC0CwAAQLECwAwQIQLECwAAQLQLAAwQIQLADBAgQLQLAABAsQLADBAhAsQLAABAsQLEMACBaAYAGCBSBYAIIFCBaAYAEIFiBYAIIFIFiAYAEIFoBgAYIFIFgAggUIFoBgAQgWIFgAggUgWIBgAQgWgGABggUgWIBgAQgWgGABggUgWACCBQgWgGABCBYgWACCBSBYgGABCBaAYAGCBSBYAIIFCBaAYAEIFiBYAIIFIFiAYAEIFoBgAYIFIFiAYAEIFoBgAYIFIFgAggUIFoBgAQgWIFgAggUgWIBgAQgWgGABggUgWACCBQgWgGABCBYgWACCBSBYgGABCBaAYAGCBSBYgGABCBaAYAGCBSBYAIIFCBaAYAEIFiBYAIIFIFiAYAEIFoBgAYIFIFgAggUIFoBgAQgWIFgAggUgWIBgAQgWgGABggUgWIBgAQgWgGABggUgWACCBQgWgGABCBYgWACCBSBYgGABCBaAYAGCBSBYAIIFCBaAYAEIFiBYAIIFIFiAYAEIFoBgAYIFIFiAYAEIFoBgAYIFIFgAggUIFoBgAQgWIFgAggUgWIBgAQgWgGABggUgWACCBQgWgGABCBYgWACCBSBYgGABCBaAYAGCBSBYgGABCBaAYAGCBSBYAIIFCBaAYAEIFiBYAIIFIFiAYAEIFoBgAYIFIFgAggUIFoBgAQgWIFgAggUgWIBgAQgWgGABggUgWIBgAQgWgGABggUgWACCBQgWgGABCBYgWACCBSBYgGABCBbAJP4/eLHmmJohgVcAAAAASUVORK5CYII=";
@@ -594,6 +788,23 @@ const $ = id => document.getElementById(id);
 const fmt = n => n.toLocaleString("en-US");
 const state = {b: null, lvl: null, unit: null, filter: null};
 $("aerial").src = A("assets/aerial.webp");
+/* homes.html?b=A&l=6&u=607 opens straight onto a home: the tour page uses it
+   to land you on the floor the tour home is built on */
+addEventListener("load", () => {
+  const q = new URLSearchParams(location.search);
+  const b = q.get("b"), l = +q.get("l"), u = q.get("u");
+  if (!b || !DATA.plates[b]) return;
+  setTimeout(() => {
+    enter(b);
+    if (l) setTimeout(() => {
+      floor(l);
+      if (u) setTimeout(() => {
+        const unit = DATA.plates[b].levels[String(l)].find(x => x.unit === u);
+        if (unit) home(unit);
+      }, 700);
+    }, 900);
+  }, 400);
+});
 
 /* ---------- lining the overlay up with the wordmark ----------
    The render is centred and letterboxed, so where its left edge lands moves
@@ -601,6 +812,44 @@ $("aerial").src = A("assets/aerial.webp");
    monitor it sits inside it. Measuring both each time is the only way to both
    line up with the wordmark and keep the dark bands clear, so the overlay is
    offset by whichever of the two is further right. */
+/* The box is as wide as the column allows, but never taller than what is
+   left under the tool row and above the caption. Worked out here rather than
+   in CSS so the same number drives the box, the tool row and the caption, and
+   so the width can be animated between the full column and the narrow one. */
+function fitPic(){
+  const ele = $("ele"), pic = $("pic"), split = $("split"), left = document.querySelector(".left");
+  if (!ele || MOB.matches || innerWidth <= 1000) { ele && ele.style.removeProperty("--pw"); return; }
+  const cs = getComputedStyle(left);
+  const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+  const colW = (split.classList.contains("open") ? split.clientWidth * 0.44 : split.clientWidth) - padX;
+  const cap = document.querySelector(".elecap");
+  const capH = split.classList.contains("open") ? (cap.offsetHeight || 150) + 14 : 0;
+  const nav = document.querySelector(".nav").offsetHeight;
+  const pad = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--pad")) || 20;
+  const h = innerHeight - nav - pad - capH;
+  const arn = parseFloat(getComputedStyle(pic).getPropertyValue("--arn")) || 1.3333;
+  const w = Math.max(200, Math.min(colW, h * arn));
+  ele.style.setProperty("--pw", Math.round(w) + "px");
+  ele.style.setProperty("--ph", Math.round(w / arn) + "px");
+}
+/* where the aerial box sits when it is the whole screen, and where it goes
+   when it hands over to the elevation: the same rectangle the elevation box
+   will occupy, so the two read as one box changing its picture */
+function siteHome(){
+  const site = $("site"), v = $("site").parentElement, cs = getComputedStyle(document.documentElement);
+  const pad = parseFloat(cs.getPropertyValue("--pad")) || 20;
+  const nav = document.querySelector(".nav").offsetHeight;
+  site.style.left = pad + "px"; site.style.top = "0px";
+  site.style.width = (v.clientWidth - pad * 2) + "px"; site.style.height = (innerHeight - nav - pad) + "px";
+}
+function siteTo(){
+  const site = $("site"), v = site.parentElement, r = $("pic").getBoundingClientRect(), vr = v.getBoundingClientRect();
+  site.style.left = (r.left - vr.left) + "px"; site.style.top = (r.top - vr.top) + "px";
+  site.style.width = r.width + "px"; site.style.height = r.height + "px";
+}
+addEventListener("resize", () => { if (!state.b && !MOB.matches && innerWidth > 1000) siteHome(); });
+addEventListener("resize", fitPic);
+
 function uiAlign(){
   var pic = $("pic"), brand = document.querySelector(".brand");
   if (!pic || !brand) return;
@@ -627,7 +876,7 @@ addEventListener("resize", uiAlign);
     p.className = "pin"; p.id = "pin" + b;
     p.style.left = DATA.pins[b][0] + "%";
     p.style.top = DATA.pins[b][1] + "%";
-    p.innerHTML = `<i>Building ${b}</i>${NAME[b]}`;
+    p.innerHTML = `<i>Building ${b}</i>${NAME[b]}<em>See the homes &#8594;</em>`;
     p.addEventListener("click", () => enter(b));
     p.addEventListener("pointerenter", () => mark(b, true));
     p.addEventListener("pointerleave", () => mark(b, false));
@@ -642,6 +891,10 @@ addEventListener("resize", uiAlign);
   function mark(b, on){
     $("pin" + b).classList.toggle("hot", on);
     $("pin" + (b === "A" ? "B" : "A")).classList.toggle("dim", on);
+    const sp = $("spot");
+    sp.style.setProperty("--x", DATA.pins[b][0] + "%");
+    sp.style.setProperty("--y", DATA.pins[b][1] + "%");
+    sp.classList.toggle("on", on);
   }
 })();
 
@@ -650,32 +903,51 @@ addEventListener("resize", uiAlign);
    while it fades and the elevation arrives already in the same place on screen.
    That is the whole trick: two pictures of one building, moving as one. */
 function enter(b){
-  const pts = DATA.aerial[b];
-  const cx = pts.reduce((a, p) => a + p[0], 0) / pts.length;
-  const cy = pts.reduce((a, p) => a + p[1], 0) / pts.length;
-  const site = $("site");
-  site.style.transformOrigin = `${cx}% ${cy}%`;
-  site.style.transform = "scale(2.15)";
-  site.classList.add("gone");
-
   build(b);
-  /* The building arrives alone, filling the window. The right panel earns its
-     place with the first click on a level, so the render gets its moment and the
-     invitation on top explains what to do with it. */
-  setTimeout(() => $("split").classList.add("on"), 180);
+  /* the aerial box travels to where the elevation box is, then the elevation
+     comes up underneath it as it goes */
+  const go = () => {
+    fitPic();
+    requestAnimationFrame(() => {
+      if (!MOB.matches && innerWidth > 1000) siteTo();
+      $("site").classList.add("gone");
+      $("split").classList.add("on");
+      demoFloors();
+    });
+  };
+  const img = $("eleBase");
+  if (img.complete && img.naturalWidth) go(); else img.decode().then(go).catch(go);
+}
+/* the sweep: each level lights in turn, top to bottom, once, so the render
+   announces that its floors are the controls */
+function demoFloors(){
+  const polys = [...$("bands").querySelectorAll("polygon")].sort((a, b) => +b.dataset.n - +a.dataset.n);
+  polys.forEach((g, k) => {
+    setTimeout(() => g.classList.add("demo"), 900 + k * 220);
+    setTimeout(() => g.classList.remove("demo"), 900 + k * 220 + 380);
+  });
 }
 
 function leave(){
   const split = $("split");
   split.classList.remove("open");
   $("hint").style.display = "";
-  setTimeout(() => split.classList.remove("on"), 320);
   const site = $("site");
-  site.classList.remove("gone");
-  site.style.transform = "scale(1)";
+  /* the aerial comes back at the elevation's size and grows to the screen */
+  siteTo(); site.classList.remove("gone");
+  requestAnimationFrame(() => requestAnimationFrame(() => { if (!MOB.matches && innerWidth > 1000) siteHome(); }));
+  setTimeout(() => split.classList.remove("on"), 250);
   state.b = state.lvl = state.unit = null;
 }
 $("back").addEventListener("click", leave);
+/* the building switch, inside the building */
+$("bsw").querySelectorAll("button").forEach(x => x.addEventListener("click", () => {
+  if (x.dataset.b === state.b) return;
+  const wasOpen = $("split").classList.contains("open");
+  build(x.dataset.b);
+  /* inside the split, arrive on the top floor rather than on nothing */
+  if (wasOpen) { state.lvl = null; floor(6); }
+}));
 
 /* ---------- the building ---------- */
 function build(b){
@@ -689,19 +961,21 @@ function build(b){
     $("pic").style.setProperty("--ar", i.naturalWidth + " / " + i.naturalHeight);
     /* the same ratio as a plain number, for the calc() that fits the box */
     $("pic").style.setProperty("--arn", (i.naturalWidth / i.naturalHeight).toFixed(4));
-    uiAlign();
+    uiAlign(); fitPic();
   }).catch(() => {});
   $("lit").classList.toggle("masked", !!e.sil);
   if (e.sil) $("ele").style.setProperty("--sil", `url("${e.sil}")`);
   $("eleT").textContent = NAME[b];
   $("eleS").textContent = SUB[b];
+  $("bsw").querySelectorAll("button").forEach(x => x.classList.toggle("on", x.dataset.b === b));
+  /* the box arrives fresh each time the building changes */
+
   if (MOB.matches){
     mobTypes(b);
     /* The elevation is worth its full height, so rather than shrinking it the
        page moves down to where the choosing happens. Waiting a frame lets the
        panel exist before we measure where it is. */
-    requestAnimationFrame(() => setTimeout(() =>
-      $("right").scrollIntoView({behavior: "smooth", block: "start"}), 260));
+    /* v3: no scroll; the choosing sits right under the elevation */
   }
 
   const all = [];
@@ -728,7 +1002,20 @@ function build(b){
     Object.keys(e.bands).forEach(n => {
       const g = document.createElementNS("http://www.w3.org/2000/svg","polygon");
       g.setAttribute("points", e.bands[n].map(p => p.join(",")).join(" "));
+      g.dataset.n = n;
       g.addEventListener("click", () => floor(+n));
+      /* the tag: which level this is, and how many homes, riding with the cursor */
+      const tag = $("lvltag"), count = d.levels[String(n)] ? d.levels[String(n)].length : 0;
+      g.addEventListener("pointerenter", ev => {
+        if (ev.pointerType === "touch") return;
+        tag.innerHTML = `<b>Level ${n}</b><span>${count} homes &middot; click to open</span>`;
+        tag.classList.add("on");
+      });
+      g.addEventListener("pointermove", ev => {
+        const r = $("pic").getBoundingClientRect();
+        tag.style.left = (ev.clientX - r.left) + "px"; tag.style.top = (ev.clientY - r.top) + "px";
+      });
+      g.addEventListener("pointerleave", () => tag.classList.remove("on"));
       bands.appendChild(g);
     });
   }
@@ -743,7 +1030,7 @@ function build(b){
     rail.appendChild(btn);
   }
   state.lvl = null;
-  $("hint").textContent = "Click a level on the building";
+  $("hintT").textContent = "Roll over a level, click to open it";
   lightBand(null);
 }
 
@@ -762,6 +1049,7 @@ function lightBand(l){
    clears, the panel stays, and the message asks for the next pick. */
 function unfloor(){
   setTimeout(uiAlign, 780);
+  requestAnimationFrame(fitPic);
   state.lvl = null; state.unit = null;
   lightBand(null);
   [...$("levels").children].forEach(x => x.classList.remove("on"));
@@ -781,7 +1069,7 @@ function floor(l){
   setTimeout(uiAlign, 780);
   if (l === state.lvl && !state.unit) return unfloor();
   state.lvl = l; state.unit = null;
-  $("split").classList.add("open");
+  $("split").classList.add("open"); requestAnimationFrame(() => requestAnimationFrame(fitPic));
   $("noLvl").classList.remove("show");
   $("floorBody").style.display = "";
   lightBand(l);
@@ -797,12 +1085,12 @@ function floor(l){
   if (MOB.matches){
     /* The heading up there is the panel's, not the level's, and there is no
        hovering on a phone. The line under the level buttons carries the count. */
-    $("mplateh").textContent = `Level ${l}: ${units.length} homes, `
-      + `${fmt(Math.min(...sizes))} to ${fmt(Math.max(...sizes))} sq ft. Tap one on the plan.`;
+    $("mplateh").textContent = `Level ${l} · ${units.length} homes · tap a home on the plan`;
+    /* bring the plate up under the thumb */
+    setTimeout(() => $("floorBody").scrollIntoView({behavior: "smooth", block: "start"}), 120);
   } else {
     $("fT").textContent = "Level " + l;
-    $("fS").textContent = `${units.length} homes, from ${fmt(Math.min(...sizes))} to `
-      + `${fmt(Math.max(...sizes))} sq ft. Hover a home to pick it out of the floor, click it for the plan.`;
+    $("fS").textContent = `${units.length} homes, ${fmt(Math.min(...sizes))} to ${fmt(Math.max(...sizes))} sq ft. Hover a home, click it for the plan.`;
   }
 
   const pin = $("pin"), svg = $("shapes");
@@ -913,23 +1201,69 @@ function mark(unit, on){
    because the plan is the thing being chosen. The unit number only starts to
    matter once they have picked one, which is where the existing detail panel
    takes over unchanged. */
-/* the same menu behaviour as every other page, kept short because this page has
-   no scrolling bar to coordinate with */
+/* the menu, the same code as site.js, since this page does not load it */
 (() => {
-  const nav = document.querySelector(".nav"), btn = nav.querySelector(".navbtn"),
-        menu = nav.querySelector(".navmenu");
-  if (!btn) return;
-  const set = open => { nav.classList.toggle("menu-open", open);
+  const nav = document.querySelector(".nav"); if (!nav) return;
+  const btn = nav.querySelector(".navbtn");
+  const menu = document.getElementById("navMenu");
+  if (!btn || !menu) return;
+
+  const setMenu = open => {
+    nav.classList.toggle("menu-open", open);
+    menu.classList.toggle("open", open);
+    document.body.classList.toggle("menu-open", open);
     btn.setAttribute("aria-expanded", open ? "true" : "false");
-    document.body.style.overflow = open ? "hidden" : ""; };
-  btn.addEventListener("click", () => set(!nav.classList.contains("menu-open")));
-  menu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => set(false)));
-  addEventListener("keydown", e => { if (e.key === "Escape") set(false); });
-  addEventListener("resize", () => { if (innerWidth > 760) set(false); });
+    menu.setAttribute("aria-hidden", open ? "false" : "true");
+    document.documentElement.classList.toggle("lock", open);
+    if (open) nav.classList.remove("away");
+  };
+  btn.addEventListener("click", () => setMenu(!nav.classList.contains("menu-open")));
+  menu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => setMenu(false)));
+  addEventListener("keydown", e => { if (e.key === "Escape") setMenu(false); });
+
+  /* rolling over a page name brings up its picture on the right, on a
+     crossfade: two stacked images, the spare one loads the next picture and
+     is faded in over the current one. */
+  const pics = menu.querySelectorAll(".nm-pic img");
+  if (pics.length === 2) {
+    let front = 0, seq = 0;
+    const swap = src => {
+      if (!src || pics[front].getAttribute("src") === src) return;
+      const id = ++seq, back = pics[1 - front];
+      back.src = src;
+      const go = () => {
+        if (id !== seq) return;            /* a newer rollover won */
+        back.classList.add("on"); pics[front].classList.remove("on");
+        front = 1 - front;
+      };
+      (back.decode ? back.decode() : Promise.resolve()).then(go, go);
+    };
+    pics[0].classList.add("on");
+    menu.querySelectorAll(".nm[data-img]").forEach(a => {
+      a.addEventListener("mouseenter", () => swap(a.dataset.img));
+      a.addEventListener("focus", () => swap(a.dataset.img));
+    });
+  }
+})();
+
+/* reveal on scroll for the band under the selector, the same as site.js */
+(() => {
+  const els = [...document.querySelectorAll(".reveal")];
+  if (!els.length) return;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  els.forEach(el => io.observe(el));
 })();
 
 const MOB = matchMedia("(max-width:760px)");
-const PLATEH = "Or look at the building floor by floor.";
+MOB.addEventListener("change", () => {
+  if (!state.b) return;
+  const b = state.b; build(b);
+  if (MOB.matches) { $("split").classList.add("on"); } else unfloor();
+});
+if (!MOB.matches && innerWidth > 1000) siteHome();
+const PLATEH = "Or floor by floor";
 const BEDLABEL = b => b === 0 ? "Studio" : b === 1 ? "1 bedroom" : b + " bedrooms";
 
 function mobUnits(b){
@@ -954,7 +1288,8 @@ function mobTypes(b){
   $("plisth").textContent = "";
   $("pempty").style.display = "";
   $("fT").textContent = NAME[b];
-  $("fS").textContent = `${units.length} homes across six storeys. Pick a size to start.`;
+  $("fS").textContent = `${units.length} homes over six storeys. Start with a size, or tap a level.`;
+  $("tgrid").insertAdjacentHTML("beforebegin", "");
   $("mplateh").textContent = PLATEH;
   $("floorBody").style.display = "none";
   state.filter = null;
@@ -1050,7 +1385,6 @@ function home(u){
 function show(id){
   ["pFloor","pHome"].forEach(p => $(p).classList.toggle("on", p === id));
   $("right").scrollTop = 0;
-  crumb();
   /* the back button names where it takes you, which is what makes it obvious */
   const up = $("up"), t = $("upT");
   if (id === "pHome" && MOB.matches){
@@ -1061,8 +1395,7 @@ function show(id){
     up.onclick = () => { show("pFloor"); if (state.mbed != null) mobPlans(state.b, state.mbed); }; }
   else if (id === "pHome"){ t.textContent = "Back to level " + state.lvl; up.classList.add("show");
     up.onclick = () => floor(state.lvl); }
-  else if (state.lvl){ t.textContent = "All of Clayton"; up.classList.add("show");
-    up.onclick = leave; }
+  else if (state.lvl){ up.classList.remove("show"); }
   else {
     /* with nothing selected the big back button on the render already says
        All of Clayton, and two identical buttons is one too many */
@@ -1078,21 +1411,8 @@ document.addEventListener("keydown", e => {
   else leave();
 });
 
-function crumb(){
-  const c = $("crumb");
-  c.innerHTML = "";
-  const add = (text, fn, cur) => {
-    if (c.children.length){ const s = document.createElement("span"); s.textContent = "/"; c.appendChild(s); }
-    if (cur){ const b = document.createElement("b"); b.textContent = text; c.appendChild(b); return; }
-    const b = document.createElement("button"); b.textContent = text;
-    b.addEventListener("click", fn); c.appendChild(b);
-  };
-  add("The site", leave, false);
-  add(NAME[state.b], unfloor, !state.lvl);
-  if (state.lvl) add("Level " + state.lvl, () => floor(state.lvl), !state.unit);
-  if (state.unit) add("Home " + state.unit, null, true);
-}
 </script>
-<script src="assets/anim.js?v=20260902h" defer></script>
+<script src="assets/register.js?v=20260907a" defer></script>
+<script src="assets/anim.js?v=20260907a" defer></script>
 </body>
 </html>

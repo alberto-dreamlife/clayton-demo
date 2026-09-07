@@ -5,14 +5,31 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>3D Tour | Clayton</title>
 <meta name="description" content="Walk a Clayton home in 360: kitchen, living, bedrooms, ensuite and the office.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20260902h">
-<link rel="stylesheet" href="assets/anim.css?v=20260902h">
-<link rel="stylesheet" href="assets/vr/pannellum.css?v=20260902h">
+<link rel="preload" href="assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/site.css?v=20260907a">
+<link rel="stylesheet" href="assets/anim.css?v=20260907a">
+<link rel="stylesheet" href="assets/vr/pannellum.css?v=20260907a">
 <style>
 .pagehead{padding:clamp(44px,6vw,80px) 0 0}
+/* the header runs to the top of the page under the floating bar, is a third
+   taller than the other pages, and the tour box rides up over its foot */
+.pagehead.has-media{overflow:hidden;padding:calc(clamp(44px,6vw,80px) + 120px) 0 clamp(190px,21vw,260px) !important;min-height:min(74svh,720px)}
+/* the render hangs from the foot of the header, so the room is what shows, and
+   the foot fades into the paper the way the other page heads do */
+.pagehead .ph-media{inset:0 !important}
+.pagehead .ph-media img{object-position:center bottom !important}
+.pagehead .ph-veil{background:linear-gradient(to top,var(--paper) 0%,rgba(247,245,241,0) 22%),
+  linear-gradient(100deg,rgba(12,20,26,.74) 0%,rgba(12,20,26,.52) 32%,rgba(12,20,26,.16) 58%,rgba(12,20,26,0) 76%) !important}
+/* On a wide screen the box takes a fixed height and the full width of the
+   column; the ratio rule below must not turn that height into a width. */
+@media(min-width:1000px){.tourbox{aspect-ratio:auto !important;width:100%;height:clamp(600px,78vh,900px)}}
+.tour-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-top:22px}
+.tour-foot .tips{margin:0}
+.tour-foot .hero-ctas{margin:0 !important}
+.pagehead.has-media .lead{max-width:52ch}
+.tour-sec{padding-top:0 !important;display:flow-root}
+.tourbox{margin-top:calc(-1 * clamp(130px,15vw,200px)) !important;z-index:3}
 
 /* ---- the viewer ----
    Our own player: Pannellum renders the panoramas and everything around it is
@@ -22,24 +39,29 @@
          box-shadow:0 22px 54px rgba(28,42,51,.16);aspect-ratio:16/9;
          margin-top:clamp(24px,3vw,40px)}
 .tourbox:fullscreen{aspect-ratio:auto;border-radius:0}
+.vr-fs .i-close{display:none}
+.tourbox:fullscreen .vr-fs .i-open,.tourbox.is-fs .vr-fs .i-open{display:none}
+.tourbox:fullscreen .vr-fs .i-close,.tourbox.is-fs .vr-fs .i-close{display:block}
+.tourbox:fullscreen .vr-fs,.tourbox.is-fs .vr-fs{width:52px;height:52px}
 #pano{position:absolute;inset:0}
 /* the library's own chrome stays out of the picture */
 #pano .pnlm-about-msg,#pano .pnlm-controls-container{display:none !important}
 #pano .pnlm-load-box{background:rgba(28,42,51,.85);border-radius:12px;
-                     font-family:'Inter',sans-serif}
+                     font-family:var(--fb)}
 
 /* Bottom right, out of the plan's way, and reduced to the glyph alone. A solid
    white pill up here competed with the render for attention every second the
    tour was open; this reads as a control only when you look for it. */
-.vr-fs{position:absolute;right:14px;bottom:16px;z-index:6;border:0;cursor:pointer;
-       background:rgba(12,20,26,.34);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
-       border-radius:999px;width:38px;height:38px;padding:0;
-       display:grid;place-items:center;font-size:16px;line-height:1;color:rgba(255,255,255,.9);
+.vr-fs{position:absolute;right:16px;bottom:18px;z-index:6;border:0;cursor:pointer;
+       background:rgba(12,20,26,.5);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+       border-radius:8px;width:48px;height:48px;padding:0;
+       display:grid;place-items:center;line-height:0;color:#fff;
        box-shadow:0 4px 14px rgba(12,20,26,.3);opacity:0;
        transition:opacity .4s ease,background .2s ease,color .2s ease}
 .vr-fs:hover{background:rgba(12,20,26,.62);color:#fff}
 @media(max-width:700px){
-  .vr-fs{width:32px;height:32px;font-size:14px;right:10px;bottom:10px}
+  .vr-fs{width:42px;height:42px;right:12px;top:12px;bottom:auto}
+  .vr-fs svg{width:18px;height:18px}
 }
 .tourbox.on .vr-fs,.tourbox.on .vr-rail{opacity:1}
 
@@ -60,7 +82,7 @@
 .vr-card img{width:92px;height:60px;object-fit:cover;border-radius:10px;display:block;
              box-shadow:0 6px 18px rgba(12,20,26,.4);border:2.5px solid transparent;
              transition:border-color .25s ease}
-.vr-card span{display:block;margin-top:5px;font-family:'Inter',sans-serif;font-size:10.5px;
+.vr-card span{display:block;margin-top:5px;font-family:var(--fb);font-size:10.5px;
               font-weight:700;color:rgba(255,255,255,.85);letter-spacing:.04em;
               white-space:nowrap;text-shadow:0 1px 6px rgba(12,20,26,.6)}
 .vr-card.on img{border-color:var(--clay)}
@@ -76,13 +98,15 @@
 .tour-cover .go{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;
                 display:inline-flex;align-items:center;gap:.6em;
                 background:var(--clay);color:#fff;border-radius:999px;
-                padding:1.05em 2em;font-family:'Inter',sans-serif;font-weight:600;
+                padding:1.05em 2em;font-family:var(--fb);font-weight:600;
                 font-size:clamp(14px,1.05vw,18px);box-shadow:0 14px 40px rgba(12,20,26,.45);
                 transition:background .25s ease,transform .25s var(--ease)}
-.tour-cover:hover .go{background:#A9552F;transform:translate(-50%,-50%) translateY(-2px)}
+
 .tour-cover .hintline{position:absolute;left:0;right:0;bottom:18px;z-index:2;color:rgba(255,255,255,.85);
                       font-size:12.5px;font-weight:600;letter-spacing:.08em}
 .tourbox.on .tour-cover{opacity:0;visibility:hidden}
+.tour-cover.busy .vrbtn .disc b{animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.4}}
 
 /* ---- the floor plan, always on screen ----
    A button that opens a window makes you leave the room to find out where you
@@ -114,7 +138,7 @@
 /* Both chips ride the panel's own top edge, clear of the plan itself, so
    neither one ever covers a room. */
 .vr-mini .mtag{position:absolute;left:-6px;top:-19px;background:var(--clay);color:#fff;
-               font-family:'Inter',sans-serif;font-size:9px;font-weight:700;letter-spacing:.14em;
+               font-family:var(--fb);font-size:9px;font-weight:700;letter-spacing:.14em;
                text-transform:uppercase;padding:3px 9px;border-radius:999px;pointer-events:none}
 .mini-min{position:absolute;right:-6px;top:-19px;z-index:2;border:0;cursor:pointer;
           width:21px;height:21px;border-radius:999px;background:var(--ink);color:#fff;
@@ -124,11 +148,11 @@
 /* The way back. It takes the corner the plan just left, so the control lives
    where the thing it restores used to be, and it is the same quiet dark chip as
    the fullscreen button rather than a second white card fighting the render. */
-.vr-show{position:absolute;right:14px;top:16px;z-index:6;border:0;cursor:pointer;
-         background:rgba(12,20,26,.34);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
-         border-radius:999px;padding:8px 15px 8px 12px;
+.vr-show{position:absolute;right:16px;top:18px;z-index:6;border:0;cursor:pointer;
+         background:rgba(12,20,26,.5);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+         border-radius:8px;height:48px;padding:0 16px 0 14px;
          display:inline-flex;align-items:center;gap:7px;
-         font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;letter-spacing:.05em;
+         font-family:var(--fb);font-size:11.5px;font-weight:600;letter-spacing:.05em;
          color:rgba(255,255,255,.9);box-shadow:0 4px 14px rgba(12,20,26,.3);
          opacity:0;pointer-events:none;visibility:hidden;
          transition:opacity .35s ease,background .2s ease,color .2s ease}
@@ -136,7 +160,9 @@
 .tourbox.on.plan-off .vr-show{opacity:1;pointer-events:auto;visibility:visible}
 .vr-show:hover{background:rgba(12,20,26,.62);color:#fff}
 @media(max-width:700px){
-  .vr-show{right:10px;top:10px;font-size:10.5px;padding:7px 12px 7px 10px}
+  .vr-show{right:auto;left:12px;top:12px;height:42px;border-radius:8px;font-size:11px;padding:0 14px 0 12px}
+  .pagehead.has-media{padding-bottom:clamp(90px,24vw,130px) !important;min-height:0}
+  .tourbox{margin-top:-90px !important}
 }
 /* the dots ride smaller in here than in the full overlay */
 .vr-mini .vr-dot i{width:9px;height:9px;border-width:1.8px}
@@ -146,7 +172,10 @@
 .vr-mini .vr-dot.on i{background:#fff;box-shadow:0 0 0 2px var(--clay),0 3px 10px rgba(12,20,26,.5)}
 .vr-mini .vr-dot.on::before{animation:none}
 @media(max-width:700px){
-  .vr-mini{width:83px;top:26px;right:18px}
+  /* on a phone the plan is bigger and takes the left corner; fullscreen takes the right */
+  .vr-mini{width:min(46vw,190px);top:30px;right:auto;left:18px}
+  .vr-mini .mtag{left:-4px}
+  .mini-min{right:-6px}
   .vr-mini::before{inset:-8px -8px -6px;border-radius:10px}
   .vr-mini .vr-dot i{width:7px;height:7px;border-width:1.4px}
   .vr-mini .vr-dot::before{width:7px;height:7px}
@@ -180,7 +209,7 @@
 @keyframes pulse{0%{transform:scale(1);opacity:.8}70%{transform:scale(2.6);opacity:0}100%{opacity:0}}
 .vr-dot span{position:absolute;top:calc(100% + 7px);left:50%;transform:translateX(-50%);
              background:rgba(255,255,255,.94);color:var(--ink);border-radius:999px;
-             padding:4px 11px;font-family:'Inter',sans-serif;font-size:10.5px;font-weight:700;
+             padding:4px 11px;font-family:var(--fb);font-size:10.5px;font-weight:700;
              white-space:nowrap;box-shadow:0 4px 14px rgba(12,20,26,.35);
              transition:background .2s ease,color .2s ease}
 .vr-dot:hover i{transform:scale(1.25)}
@@ -203,54 +232,64 @@
    their own entrance, so the splitter is told to leave them alone. */
 window.AX_CONFIG = {
   heads: "h1, h2, .title",
-  skip:  ".hero-copy, .ax-skip, .lb, .vr-plan, .viewer",
+  skip:  ".hero-copy, .ax-skip, .lb, .vr-plan, .viewer, .rg-step legend, .regm h2, .navmenu",
   figs:  ".frame, .am figure, .tile",
   stats: ".stat b",
   ups:   "[data-up]",
-  lifts: ".door, .bcard, .walk, .vr-card",
+  lifts: ".ax-none",
   curtain: false
 };
 </script>
 </head>
-<body>
+<body id="top">
+<div class="grain" aria-hidden="true"></div>
 <!-- shared page head and nav, spliced into each page by the build step so the
      markup stays identical everywhere without a template engine -->
-<nav class="nav static">
+<nav class="nav">
   <div class="nav-in">
     <a class="brand" href="index.html">
-      <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true">
+      <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true"><g transform="rotate(180 43 43)">
         <rect x="14" y="14" width="40" height="12" rx="1.5"/>
         <rect x="60" y="14" width="12" height="40" rx="1.5"/>
         <rect x="32" y="60" width="40" height="12" rx="1.5"/>
         <rect x="14" y="32" width="12" height="40" rx="1.5"
-              fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/>
+              fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/></g>
       </svg>
       CLAYTON
     </a>
-    <div class="nav-links">
-      <a href="homes.html">Homes</a>
-      <a href="amenities.html">Amenities</a>
-      <a href="neighbourhood.html">Neighbourhood</a>
-      <a href="gallery.html">Gallery</a>
-      <a href="tour.html">3D Tour</a>
-      <a class="cta" href="index.html#register">Register</a>
+    <div class="nav-acts">
+      <button class="navreg" type="button" data-register>Register</button>
+      <button class="navbtn" id="navBtn" type="button"
+              aria-expanded="false" aria-controls="navMenu" aria-label="Menu">
+        <span class="lbl"><span class="l-open">Menu</span><span class="l-close">Close</span></span>
+        <span class="ico"><span></span><span></span></span>
+      </button>
     </div>
-    <button class="navbtn" id="navBtn" type="button"
-            aria-expanded="false" aria-controls="navMenu" aria-label="Menu"><span></span><span></span></button>
-  </div>
-  <div class="navmenu" id="navMenu">
-    <a href="homes.html">Homes</a>
-    <a href="amenities.html">Amenities</a>
-    <a href="neighbourhood.html">Neighbourhood</a>
-    <a href="gallery.html">Gallery</a>
-    <a href="tour.html">3D Tour</a>
-    <p class="m-foot">Presentation Centre<br>184 Street &amp; 72 Avenue, Surrey<br>
-       Open daily 12&ndash;5pm, closed Fridays</p>
   </div>
 </nav>
 
-<header class="pagehead has-media">
-  <div class="ph-media" data-par="0.16"><img src="assets/img/Clayton_Living_fr.webp?v=20260902h" alt="The living room at Clayton"></div>
+<!-- the menu lives outside the bar: the bar carries a blur and a transform,
+     and either one would pin a fixed panel to the bar's own box -->
+<div class="navmenu" id="navMenu" aria-hidden="true">
+  <div class="nm-links">
+    <a class="nm" href="homes.html" data-img="assets/img/Clayton_View_04_Straight_fr.webp?v=20260907a">Homes</a>
+    <a class="nm" href="interiors.html" data-img="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260907a">Interiors</a>
+    <a class="nm on" href="tour.html" data-img="assets/img/Clayton_Living_fr.webp?v=20260907a">3D Tour</a>
+    <a class="nm" href="amenities.html" data-img="assets/img/Clayton_CoWorking_fr_people.webp?v=20260907a">Amenities</a>
+    <a class="nm" href="neighbourhood.html" data-img="assets/img/Clayton_View_05_Aerial_fr_Crop.webp?v=20260907a">Neighbourhood</a>
+    <a class="nm" href="gallery.html" data-img="assets/img/Clayton_Rooftop_Building_A_View1_fr.webp?v=20260907a">Gallery</a>
+    <a class="nm" href="team.html" data-img="assets/img/Clayton_Lobby_fr.webp?v=20260907a">Team</a>
+    <p class="nm-foot">Presentation Centre &nbsp;&middot;&nbsp; #30 &ndash; 2411 160 Street, South Surrey<br>Open daily 12&ndash;5pm, closed Fridays &nbsp;&middot;&nbsp; 604.243.5439</p>
+  </div>
+  <aside class="nm-side">
+    <div class="nm-pic"><img src="assets/img/Clayton_Courtyard_fr.webp?v=20260907a" alt=""><img src="" alt=""></div>
+    <button class="nm-reg" type="button" data-register><span>Register for first access</span><b>&#8594;</b></button>
+  </aside>
+</div>
+
+
+<header class="pagehead has-media leave">
+  <div class="ph-media" data-par="0.16"><img src="assets/img/Clayton_Living_fr.webp?v=20260907a" alt="The living room at Clayton"></div>
   <div class="ph-veil"></div>
   <div class="wrap ph-in">
     <div class="kicker">3D Tour</div>
@@ -260,12 +299,14 @@ window.AX_CONFIG = {
   </div>
 </header>
 
-<section style="padding-top:clamp(10px,1.6vw,20px)">
+<section class="tour-sec jn jn-step-l tex-plate leave" style="--jc:var(--paper)">
   <div class="wrap">
     <div class="tourbox reveal" id="tourbox">
       <div id="pano"></div>
-      <button class="vr-fs" id="vrFs" type="button" title="Fullscreen"
-              aria-label="View the tour fullscreen">&#x26F6;</button>
+      <button class="vr-fs" id="vrFs" type="button" title="Fullscreen" aria-label="View the tour fullscreen">
+        <svg class="i-open" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+        <svg class="i-close" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
 
       <button class="vr-show" id="vrMiniShow" type="button" aria-label="Show the floor plan">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -277,101 +318,253 @@ window.AX_CONFIG = {
         <span class="mtag">The plan</span>
         <button class="mini-min" id="vrMiniMin" type="button" title="Minimise the plan"
                 aria-label="Minimise the plan">&#8211;</button>
-        <img src="assets/img/plan-cut.webp?v=20260902h" alt="The home, cut open">
+        <img src="assets/img/plan-cut.webp?v=20260907a" alt="The home, cut open">
         <span id="miniDots"></span>
       </div>
       <div class="vr-rail" id="vrRail"><span class="sp"></span></div>
 
       <div class="vr-plan" id="vrPlan">
         <div class="vr-plan-in">
-          <img src="assets/img/plan-cut.webp?v=20260902h" alt="The home, cut open">
+          <img src="assets/img/plan-cut.webp?v=20260907a" alt="The home, cut open">
           <span id="vrDots"></span>
         </div>
         <button class="vr-plan-close" id="vrPlanClose" type="button" aria-label="Close the plan">&#10005;</button>
       </div>
 
       <button class="tour-cover" id="tourGo" type="button" aria-label="Start the 3D tour">
-        <img src="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260902h" alt="">
-        <span class="go">Step inside <span class="arr">&#8594;</span></span>
+        <img src="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260907a" alt="">
+        <span class="vrbtn"><span class="disc"><b>360&deg;</b></span><span class="lbl">Enter the 3D tour</span></span>
         <span class="hintline">Drag to look around &#183; pick a room below the view</span>
       </button>
     </div>
 
+    <div class="tour-foot">
     <p class="tips reveal d2">The finishes shown are the Dawn scheme; the same rooms in Dusk are
        in the <a href="gallery.html">gallery</a>, and the full specification lives in
-       <a href="features.html" target="_blank" rel="noopener">Features and Finishes</a>.</p>
+       <a href="features.html" target="_blank" rel="noopener">Features and Finishes</a>. This is plan C1,
+       a three bedroom of 983 sq ft, built on levels three to six of Quadra.</p>
     <div class="hero-ctas reveal d3" style="margin-top:26px">
-      <a class="btn btn-clay" href="homes.html">Find this home on a floor <span class="arr">&#8594;</span></a>
+      <a class="btn btn-clay" href="homes.html?b=A&l=6&u=607"><span class="tx">Find this home on a floor</span><span class="arr">&#8594;</span></a>
+    </div>
     </div>
   </div>
 </section>
 
-<footer>
-  <div class="wrap f-top">
-    <div class="f-brand">
+
+<!-- ============ WHERE TO NEXT ============
+     Three plates that change their picture under the cursor: the kitchen
+     goes from Dawn to Dusk, the co-working room fills with people, and the
+     aerial gives way to a floorplate. -->
+<section class="jn jn-step-r tex-dots leave" style="--jc:var(--paper)">
+  <div class="wrap">
+    <div class="kicker reveal">Keep going</div>
+    <h2 class="title display reveal d1">Now that you have<br>seen <i>inside.</i></h2>
+    <div class="xfs">
+      <a class="xf wide reveal" href="interiors.html">
+        <span class="pic">
+          <img src="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260907a" alt="The kitchen in Dawn" loading="lazy">
+          <img class="b" src="assets/img/Clayton_Kitchen_Dark_fr_upd.webp?v=20260907a" alt="" loading="lazy">
+          <span class="tag"><span class="a">Dawn</span><span class="b">Dusk</span></span>
+          <span class="go"><span>&#8594;</span></span>
+        </span>
+        <span class="say"><i>Interiors</i><b>The rooms you just walked through, in both schemes</b>
+          <p>Drag a line between Dawn and Dusk, rest on the materials, and read the kitchen point by point.</p></span>
+      </a>
+      <a class="xf reveal" href="amenities.html">
+        <span class="pic">
+          <img src="assets/img/Clayton_CoWorking_fr.webp?v=20260907a" alt="The co-working lounge" loading="lazy">
+          <img class="b" src="assets/img/Clayton_CoWorking_fr_people.webp?v=20260907a" alt="" loading="lazy">
+          <span class="tag"><span class="a">The room</span><span class="b">In use</span></span>
+          <span class="go"><span>&#8594;</span></span>
+        </span>
+        <span class="say"><i>Amenities</i><b>Downstairs, and up on the roof</b>
+          <p>Co-working, a daycare, the gym, the games room and two rooftop terraces, shared by 198 homes.</p></span>
+      </a>
+      <a class="xf reveal d1" href="homes.html">
+        <span class="pic">
+          <img src="assets/img/Clayton_View_05_Aerial_fr_Crop.webp?v=20260907a" alt="Clayton from the air" loading="lazy">
+          <img class="b" src="assets/img/Clayton_View_01_Corner_Hero_fr_tree.webp?v=20260907a" alt="" loading="lazy">
+          <span class="tag"><span class="a">The site</span><span class="b">Quadra, on the corner</span></span>
+          <span class="go"><span>&#8594;</span></span>
+        </span>
+        <span class="say"><i>Homes</i><b>Find this home, and the other 197</b>
+          <p>Pick a building, light up a floor, and open the plan. Every home in the release is on the selector.</p></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="reg2 jn jn-step-r jn-lip tex-rib leave" id="register" style="--jc:var(--ink);--jl:var(--sky)">
+  <div class="reg2-art" aria-hidden="true">
+    <svg class="reg2-mark" viewBox="0 0 86 86"><g transform="rotate(180 43 43)" fill="currentColor">
+      <rect x="14" y="14" width="40" height="12" rx="1.5"/><rect x="60" y="14" width="12" height="40" rx="1.5"/>
+      <rect x="32" y="60" width="40" height="12" rx="1.5"/>
+      <rect x="14" y="32" width="12" height="40" rx="1.5" fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/></g></svg>
+    <div class="reg2-glow"></div>
+  </div>
+  <div class="wrap reg2-in">
+    <div class="reg2-say">
+      <div class="kicker">Register</div>
+      <h2 class="display">Be first<br>through <i>the door.</i></h2>
+      <ol class="reg2-why">
+        <li><b>01</b><span>Plans and pricing before they are public</span></li>
+        <li><b>02</b><span>A private preview at the presentation centre</span></li>
+        <li><b>03</b><span>Your place in the line, kept in the order you arrived</span></li>
+      </ol>
+      <a class="reg2-mail" href="mailto:hello@liveclayton.ca">hello@liveclayton.ca</a>
+    </div>
+    <div class="rg-mount" data-register-form></div>
+  </div>
+</section>
+
+<footer class="jn jn-step-l jn-lip tex-sheet" style="--jc:#182530;--jl:var(--sky)">
+  <div class="wrap">
+    <div class="f-head">
       <a class="brand" href="index.html">
-        <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true">
+        <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true"><g transform="rotate(180 43 43)">
           <rect x="14" y="14" width="40" height="12" rx="1.5"/>
           <rect x="60" y="14" width="12" height="40" rx="1.5"/>
           <rect x="32" y="60" width="40" height="12" rx="1.5"/>
           <rect x="14" y="32" width="12" height="40" rx="1.5"
-                fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/>
+                fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/></g>
         </svg>
         CLAYTON
       </a>
-      <p>198 homes in two buildings at West Clayton, Surrey. Studios to three bedrooms,
-         minutes from three schools, the parks and the SkyTrain now under construction.</p>
-    </div>
-    <nav class="f-cols" aria-label="Footer">
-      <div>
-        <h4>Explore</h4>
+      <nav class="f-nav" aria-label="Footer">
         <a href="homes.html">Homes</a>
+        <a href="interiors.html">Interiors</a>
+        <a href="tour.html">3D Tour</a>
         <a href="amenities.html">Amenities</a>
         <a href="neighbourhood.html">Neighbourhood</a>
         <a href="gallery.html">Gallery</a>
-        <a href="tour.html">3D Tour</a>
-        <a href="features.html" target="_blank" rel="noopener">Features and Finishes</a>
+        <a href="team.html">Team</a>
+      </nav>
+    </div>
+
+
+    <!-- where to find it: two drawn maps, the presentation centre and the site -->
+    <div class="f-find">
+      <div class="ff-say">
+        <h3>Come and <i>see it.</i></h3>
+        <div class="ff-hours">
+          <div><small>Open daily</small><b>12 &ndash; 5</b></div>
+          <div><small>Closed</small><b>Fridays</b></div>
+        </div>
+        <a class="ff-line" href="tel:6042435439">604.243.5439</a>
+        <a class="ff-line" href="mailto:hello@liveclayton.ca">hello@liveclayton.ca</a>
+        <button class="btn btn-clay" type="button" data-register><span class="tx">Book an appointment</span><span class="arr">&#8594;</span></button>
       </div>
-      <div>
-        <h4>Presentation Centre</h4>
-        <span>184 Street &amp; 72 Avenue, Surrey</span>
-        <span>Open daily 12&ndash;5pm, closed Fridays</span>
-        <a href="tel:5550122026">555.012.2026</a>
+
+      <a class="ff-map" href="https://www.google.com/maps/search/?api=1&query=%2330+-+2411+160+Street+Surrey+BC+V3Z+0C8" target="_blank" rel="noopener">
+        <div class="ff-head"><small>Presentation centre</small><b>#30 &ndash; 2411 160 Street, South Surrey</b></div>
+        <svg viewBox="0 0 440 320" role="img" aria-label="Map to the presentation centre at 160 Street and 24 Avenue">
+          <g fill="none" stroke="rgba(255,255,255,.9)" stroke-width="6" stroke-linecap="round">
+            <path d="M20 140 L210 300"/>
+            <path d="M95 30 L250 300"/>
+            <path d="M285 40 V300"/>
+            <path d="M10 220 H430"/>
+          </g>
+          <g fill="rgba(255,255,255,.9)" font-family="Manrope,Inter,sans-serif" font-weight="700" font-size="14">
+            <text transform="translate(66 178) rotate(41)">King George Blvd</text>
+            <text transform="translate(138 84) rotate(61)">Highway 99</text>
+            <text transform="translate(304 84) rotate(-90)">160 St</text>
+            <text x="318" y="252">24 Ave</text>
+          </g>
+          <g transform="translate(236 178)">
+            <rect x="-15" y="-11" width="30" height="22" rx="4" fill="#fff"/>
+            <text x="0" y="5" text-anchor="middle" font-family="Manrope,Inter,sans-serif" font-weight="800" font-size="12" fill="#1C2A33">99</text>
+          </g>
+          <path d="M268 200 l12 -22 l12 22 z" fill="#C0664A"/>
+          <g fill="#fff" font-family="Manrope,Inter,sans-serif" font-weight="700" font-size="13">
+            <text x="300" y="124">Clayton</text><text x="300" y="142">presentation</text><text x="300" y="160">centre</text>
+          </g>
+        </svg>
+      </a>
+
+      <a class="ff-map" href="https://www.google.com/maps/search/?api=1&query=18088+72+Avenue+Surrey+BC" target="_blank" rel="noopener">
+        <div class="ff-head"><small>The site</small><b>18088 72 Avenue, Surrey</b></div>
+        <svg viewBox="0 0 440 320" role="img" aria-label="Map to the site at 72 Avenue and 184 Street">
+          <g fill="none" stroke="rgba(255,255,255,.9)" stroke-width="6" stroke-linecap="round">
+            <path d="M90 20 V300"/>
+            <path d="M380 20 V300"/>
+            <path d="M20 90 L410 300"/>
+            <path d="M222 178 H412"/>
+          </g>
+          <g fill="rgba(255,255,255,.9)" font-family="Manrope,Inter,sans-serif" font-weight="700" font-size="14">
+            <text transform="translate(206 218) rotate(28)">Fraser Hwy</text>
+            <text transform="translate(400 132) rotate(-90)">184 St</text>
+            <text x="308" y="208">72 Ave</text>
+          </g>
+          <g transform="translate(90 240)">
+            <rect x="-15" y="-11" width="30" height="22" rx="4" fill="#fff"/>
+            <text x="0" y="5" text-anchor="middle" font-family="Manrope,Inter,sans-serif" font-weight="800" font-size="12" fill="#1C2A33">15</text>
+          </g>
+          <path d="M290 178 l14 -24 l14 24 z" fill="#C0664A"/>
+          <g transform="translate(196 104)" fill="#fff">
+            <g transform="scale(.42)"><g transform="rotate(180 43 43)"><rect x="14" y="14" width="40" height="12" rx="1.5"/><rect x="60" y="14" width="12" height="40" rx="1.5"/><rect x="32" y="60" width="40" height="12" rx="1.5"/><rect x="14" y="32" width="12" height="40" rx="1.5" fill="none" stroke="#fff" stroke-width="2.4" opacity=".55"/></g></g>
+            <text x="46" y="27" font-family="Bricolage,Archivo,sans-serif" font-weight="600" font-size="17" letter-spacing="3.5">CLAYTON</text>
+          </g>
+        </svg>
+      </a>
+    </div>
+
+    <!-- the title block: the footer drawn the way an architect's sheet ends,
+         a ruled block of labelled cells along the bottom edge -->
+    <div class="tblock">
+      <div class="tb-cell tb-wide">
+        <small>Project</small>
+        <b>Ahead of <i>the line.</i></b>
+        <p>198 homes in two buildings at West Clayton, Surrey. Studios to three bedrooms, minutes from three schools, the parks and the SkyTrain now under construction.</p>
+      </div>
+      <div class="tb-cell tb-pc">
+        <small>Presentation centre</small>
+        <span class="nw">#30 &ndash; 2411 160 Street, South Surrey</span>
+        <span class="nw">Open daily 12&ndash;5pm, closed Fridays</span>
+        <a href="tel:6042435439">604.243.5439</a>
         <a href="mailto:hello@liveclayton.ca">hello@liveclayton.ca</a>
       </div>
-      <div>
-        <h4>Register</h4>
-        <span>Priority access to plans and pricing.</span>
-        <a class="f-cta" href="index.html#register">Join the list &rarr;</a>
+      <div class="tb-cell tb-bl">
+        <small>The buildings</small>
+        <a class="nw" href="homes.html">Quadra &middot; A &middot; 115 homes</a>
+        <a class="nw" href="homes.html">Saturna &middot; B &middot; 83 homes</a>
+        <span>Six storeys each, one courtyard</span>
       </div>
-    </nav>
-  </div>
+      <div class="tb-cell tb-reg">
+        <small>Registration</small>
+        <span class="f-now"><i></i>Open now</span>
+        <button class="btn btn-clay" type="button" data-register><span class="tx">Register</span><span class="arr">&#8594;</span></button>
+      </div>
 
-  <div class="wrap f-credits">
-    <span class="credit">
-      <small>Renderings by</small>
-      <a href="https://dreamlife.org" target="_blank" rel="noopener">
+      <a class="tb-cell tb-credit tb-c1" href="https://dreamlife.org" target="_blank" rel="noopener">
+        <small>Renderings</small>
         <img class="mk dl" src="assets/logos/dreamlife-white.svg" alt="Dreamlife" width="387" height="87">
+        <em>dreamlife.org &#8599;</em>
       </a>
-    </span>
-    <span class="credit">
-      <small>2D floor plans by</small>
-      <img class="mk tl" src="assets/logos/twinlines-white.png" alt="TwinLines Studio" width="820" height="225">
-    </span>
-  </div>
+      <a class="tb-cell tb-credit tb-c2" href="https://twinlines.ca" target="_blank" rel="noopener">
+        <small>2D floor plans</small>
+        <img class="mk tl" src="assets/logos/twinlines-white.png" alt="TwinLines Studio" width="820" height="225">
+        <em>twinlines.ca &#8599;</em>
+      </a>
+      <div class="tb-cell tb-meta tb-m1"><small>The homes</small><b>Studios to three bedrooms</b></div>
+      <div class="tb-cell tb-meta tb-m2"><small>Issue</small><b>2026</b></div>
+      <div class="tb-cell tb-meta tb-m3"><small>Scale</small><b>NTS</b></div>
+      <div class="tb-cell tb-meta tb-top"><a class="totop" href="#top"><small>Back to top</small><b>&#8593;</b></a></div>
+    </div>
 
-  <div class="wrap f-legal">
-    <p>Renderings are artistic representations and may differ from the finished buildings.
-       Dimensions and areas are approximate. The developer reserves the right to modify plans,
-       specifications and features without notice. This is not an offering for sale; any such
-       offering may only be made with a disclosure statement. E.&amp;O.E.</p>
-    <p class="f-copy">&copy; 2026 Clayton &nbsp;&#183;&nbsp; Website by Dreamlife</p>
+    <div class="f-legal">
+      <p>Renderings are artistic representations and may differ from the finished buildings.
+         Dimensions and areas are approximate. The developer reserves the right to modify plans,
+         specifications and features without notice. This is not an offering for sale; any such
+         offering may only be made with a disclosure statement. E.&amp;O.E.</p>
+      <p class="f-copy">&copy; 2026 Clayton &nbsp;&#183;&nbsp; Website by Dreamlife</p>
+    </div>
   </div>
 </footer>
 
-<script src="assets/site.js?v=20260902h"></script>
-<script src="assets/anim.js?v=20260902h" defer></script>
-<script src="assets/vr/pannellum.js?v=20260902h"></script>
+<script src="assets/site.js?v=20260907a"></script>
+<script src="assets/register.js?v=20260907a" defer></script>
+<script src="assets/anim.js?v=20260907a" defer></script>
+<script src="assets/vr/pannellum.js?v=20260907a"></script>
 <script>
 /* ---------- the tour ----------
    One scene per room, defined in walking order. The panoramas live in this
@@ -493,11 +686,16 @@ function mark(id){
 }
 
 /* start on demand: nothing downloads until someone steps inside */
-document.getElementById("tourGo").addEventListener("click", () => {
+/* Opened straight off the disk, a browser will not let WebGL read a local
+   jpg, so the tour never got past the cover. In that case the panoramas come
+   from panos.js, inlined, fetched only when someone steps inside. */
+function startTour(){
   if (viewer) return;
+  const local = location.protocol === "file:";
+  const src = r => (local && window.PANOS && window.PANOS[r.id]) || `assets/vr/${r.id}.jpg?v=${V}`;
   const scenes = {};
   ROOMS.forEach(r => {
-    scenes[r.id] = {type: "equirectangular", panorama: `assets/vr/${r.id}.jpg?v=${V}`,
+    scenes[r.id] = {type: "equirectangular", panorama: src(r),
                     hfov: 100, pitch: 0, yaw: r.yaw};
   });
   viewer = pannellum.viewer("pano", {
@@ -509,6 +707,28 @@ document.getElementById("tourGo").addEventListener("click", () => {
   });
   viewer.on("load", () => { box.classList.add("on"); mark(viewer.getScene()); });
   viewer.on("scenechange", id => mark(id));
+  viewer.on("error", msg => { box.classList.add("on"); console.warn("tour:", msg); });
+}
+document.getElementById("tourGo").addEventListener("click", () => {
+  if (viewer) return;
+  if (location.protocol === "file:" && !window.PANOS){
+    const go = document.getElementById("tourGo");
+    go.classList.add("busy");
+    const sc = document.createElement("script");
+    sc.src = "assets/vr/panos.js";
+    sc.onload = startTour;
+    sc.onerror = startTour;
+    document.head.appendChild(sc);
+  } else startTour();
+});
+
+/* tour.html#start, from the plates and buttons on the other pages: scroll
+   the box into view and step inside without a second click */
+if (location.hash === "#start") addEventListener("load", () => {
+  setTimeout(() => {
+    box.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => document.getElementById("tourGo").click(), 700);
+  }, 300);
 });
 
 /* fullscreen wraps the whole box, so the rail and the room name come along */
@@ -518,8 +738,8 @@ fsBtn.addEventListener("click", () => {
   else (box.requestFullscreen || box.webkitRequestFullscreen).call(box);
 });
 document.addEventListener("fullscreenchange", () => {
-  fsBtn.innerHTML = document.fullscreenElement
-    ? "&#10005;&ensp;Exit fullscreen" : "&#x26F6;&ensp;Fullscreen";
+  box.classList.toggle("is-fs", !!document.fullscreenElement);
+  fsBtn.title = document.fullscreenElement ? "Exit fullscreen" : "Fullscreen";
   if (viewer) setTimeout(() => viewer.resize(), 120);
 });
 </script>

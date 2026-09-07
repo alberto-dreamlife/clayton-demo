@@ -3,31 +3,56 @@
    Ink, sky, sand, clay and paper, the palette pulled from the renders
    themselves so the interface never argues with the photography.
    ============================================================ */
+/* ---- type ----
+   v2: the faces ship with the site, so it reads the same off a USB stick as
+   it does on a connection. Bricolage carries the headlines: a grotesque with
+   enough of its own opinions to sit beside the mark without looking like a
+   theme default. Instrument Serif italic is the accent word inside a title,
+   the one that turns clay. Manrope is the reading face. */
+@font-face{font-family:'Bricolage';font-style:normal;font-weight:200 800;font-stretch:75% 100%;
+  font-display:swap;src:url(fonts/bricolage.woff2) format('woff2-variations')}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;
+  font-display:swap;src:url(fonts/manrope.woff2) format('woff2-variations')}
+@font-face{font-family:'Instrument';font-style:italic;font-weight:400;
+  font-display:swap;src:url(fonts/instrument-italic.woff2) format('woff2')}
+
 :root{
   --ink:#1C2A33; --sky:#8FB4C6; --sand:#D8CDBE; --clay:#C0664A; --paper:#F7F5F1;
   --line:rgba(28,42,51,.14); --muted:rgba(28,42,51,.60);
-  --band:clamp(64px,8vw,120px);
+  --band:clamp(56px,6.5vw,100px);
+  --ov:clamp(14px,1.6vw,22px);   /* the empty strip a section leaves for the join */
   --ease:cubic-bezier(.22,.7,.24,1);
+  --fd:'Bricolage','Archivo',-apple-system,sans-serif;
+  --fb:'Manrope','Inter',-apple-system,sans-serif;
+  --fi:'Instrument',Georgia,serif;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
+html.lock,html.lock body{overflow:hidden!important;overscroll-behavior:none}
 body{margin:0;background:var(--paper);color:var(--ink);
-     font-family:'Inter',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;
+     font-family:var(--fb);-webkit-font-smoothing:antialiased;
      font-size:16px;line-height:1.6}
 img{max-width:100%;display:block}
 a{color:inherit}
+/* the accent word: a serif italic set a touch larger, since its x-height is
+   smaller than the grotesque around it */
+.display i,.title i,h1 i,h2 i{font-family:var(--fi);font-style:italic;font-weight:400;
+  font-size:1.08em;letter-spacing:0}
 
 /* The shell grows with the monitor instead of freezing at laptop width: capped
    as a share of the viewport so a 27 inch screen gets a wide page, not a
    centered column with acres of paper around it. */
 .wrap{max-width:min(1560px,88vw);margin:0 auto;padding:0 clamp(18px,4vw,44px)}
 @media(max-width:900px){.wrap{max-width:none}}
-section{padding-block:var(--band)}
+section{padding-block:var(--band);position:relative}
 
-.display{font-family:'Archivo',sans-serif;font-weight:500;letter-spacing:-.01em}
-.kicker{font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-.title{font-size:clamp(30px,4.4vw,74px);line-height:1.05;margin:14px 0 0}
-.title i{font-style:italic;color:var(--clay)}
+.display{font-family:var(--fd);font-weight:500;letter-spacing:-.025em;font-optical-sizing:auto}
+.kicker{font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;gap:12px}
+.kicker::before{content:"";width:22px;height:2px;border-radius:2px;background:var(--clay);flex:none}
+.hero-copy .kicker::before,.nm-say .kicker::before,.regm .kicker::before{display:none}
+.title{font-size:clamp(30px,4.4vw,74px);line-height:1.02;margin:14px 0 0}
+.title i{color:var(--clay)}
 .lead{max-width:62ch;color:var(--muted);font-size:clamp(15px,1.2vw,20px);line-height:1.7;margin:18px 0 0}
 
 /* ---- nav ----
@@ -51,129 +76,379 @@ section{padding-block:var(--band)}
    menu is open and the X reads as part of the same row rather than floating. */
 .nav-in{position:relative;z-index:2;max-width:min(1560px,88vw);margin:0 auto;
         padding:clamp(18px,1.5vw,26px) clamp(18px,4vw,44px);
-        display:flex;align-items:center;gap:26px}
+        display:flex;align-items:center;gap:26px;transition:padding .4s var(--ease)}
+.nav.solid .nav-in{padding-top:10px;padding-bottom:10px}
 @media(max-width:900px){.nav-in{max-width:none}}
-.brand{display:flex;align-items:center;gap:.55em;text-decoration:none;color:#fff;
-       font-family:'Archivo',sans-serif;font-weight:500;
-       font-size:clamp(20px,1.45vw,27px);letter-spacing:.26em}
-.brand svg{width:1.45em;height:1.45em}
+/* v2: the mark leads. It is turned so the open bar sits on the right and the
+   three solid bars read as a C, and it is set at roughly twice its old size,
+   with the wordmark beside it in the display face. */
+.brand{display:flex;align-items:center;gap:.5em;text-decoration:none;color:#fff;
+       font-family:var(--fd);font-weight:600;font-stretch:96%;
+       font-size:clamp(22px,2.1vw,38px);letter-spacing:.18em;
+       transition:color .3s ease,font-size .4s var(--ease)}
+.brand svg{width:2.4em;height:2.4em;flex:none;transition:transform .6s var(--ease)}
+.nav.solid .brand,.nav.static .brand{font-size:clamp(18px,1.4vw,26px)}
+.brand svg rect:last-child{transition:opacity .4s}
+.brand:hover svg rect:last-child{opacity:1}
 .nav.solid .brand{color:var(--ink)}
-.nav-links{display:flex;gap:4px;margin-left:auto;align-items:center}
-.nav-links a{text-decoration:none;font-weight:600;color:rgba(255,255,255,.85);
-             font-size:clamp(13.5px,.95vw,16.5px);padding:.72em 1.05em;
-             border-radius:999px;transition:color .2s ease,background .2s ease}
-.nav.solid .nav-links a{color:var(--muted)}
-.nav-links a:hover{color:#fff;background:rgba(255,255,255,.14)}
-.nav.solid .nav-links a:hover{color:var(--ink);background:rgba(28,42,51,.07)}
-.nav-links a.on{color:#fff;background:rgba(255,255,255,.18)}
-.nav.solid .nav-links a.on{color:var(--ink);background:rgba(28,42,51,.09)}
-.nav-links a.cta{background:var(--clay);color:#fff;margin-left:8px}
-.nav-links a.cta:hover{background:#A9552F;color:#fff}
-/* Pages with no hero start the bar solid from the first pixel. */
+
+/* v2: the page list has left the bar. Two controls, both squared off the
+   way the mark is: Register, and Menu, which reads Close while it is open. */
+.nav-links{display:none}
 .nav.static{position:sticky;background:var(--paper);box-shadow:0 1px 0 var(--line)}
 .nav.static .brand{color:var(--ink)}
-.nav.static .nav-links a{color:var(--muted)}
-.nav.static .nav-links a:hover{color:var(--ink);background:rgba(28,42,51,.07)}
-.nav.static .nav-links a.on{color:var(--ink);background:rgba(28,42,51,.09)}
-.nav.static .nav-links a.cta{color:#fff}
+.nav-acts{margin-left:auto;display:flex;align-items:center;gap:10px}
+.navreg,.navbtn{border:0;cursor:pointer;position:relative;z-index:2;border-radius:7px;
+  font-family:var(--fb);font-weight:600;font-size:clamp(13.5px,.95vw,16px);letter-spacing:.02em;
+  padding:1em 1.35em;line-height:1;transition:background .25s ease,color .25s ease,box-shadow .25s ease}
+.navreg{background:var(--clay);color:#fff;box-shadow:0 8px 22px rgba(192,102,74,.25);
+  display:none;opacity:0;transition:opacity .35s ease,background .25s}
+.nav.solid .navreg,.nav.static .navreg{display:inline-block;opacity:1}
+.navreg:hover{background:#B25D42}
+.navbtn{display:inline-flex;align-items:center;gap:14px;color:#fff;
+        background:rgba(28,42,51,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+        box-shadow:0 6px 18px rgba(12,20,26,.2)}
+.navbtn .lbl{display:grid;line-height:1}
+.navbtn .lbl span{grid-area:1/1;transition:opacity .25s ease}
+.navbtn .l-close{opacity:0}
+.navbtn .ico{position:relative;width:18px;height:12px;display:block}
+.navbtn .ico span{position:absolute;left:0;width:18px;height:2px;border-radius:2px;
+             background:currentColor;transition:transform .3s var(--ease),width .3s var(--ease)}
+.navbtn .ico span:nth-child(1){top:2px}
+.navbtn .ico span:nth-child(2){top:8px;width:12px}
+.navbtn:hover{background:rgba(28,42,51,.78)}
+.navbtn:hover .ico span:nth-child(2){width:18px}
+.nav.solid .navbtn,.nav.static .navbtn{color:#fff;background:var(--ink)}
+.nav.solid .navbtn:hover,.nav.static .navbtn:hover{background:#0E1820}
+.nav.menu-open .brand{color:var(--ink)}
+.nav.menu-open .navbtn{color:#fff;background:var(--ink)}
+.nav.menu-open .navbtn .l-open{opacity:0}
+.nav.menu-open .navbtn .l-close{opacity:1}
+.nav.menu-open .navbtn .ico span{width:18px}
+.nav.menu-open .navbtn .ico span:nth-child(1){transform:translateY(3px) rotate(45deg)}
+.nav.menu-open .navbtn .ico span:nth-child(2){transform:translateY(-3px) rotate(-45deg)}
+/* the bar stays on paper while the panel is open, wherever the page was */
+.nav.menu-open{background:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+
+/* ---- the panel ----
+   Paper, full screen, a sibling of the bar. Wide screens: the pages on the
+   left, a picture on the right that changes with whatever is under the
+   cursor, and Register as a solid bar across the foot of the picture. */
+.navmenu{position:fixed;inset:0;z-index:45;background:var(--paper);
+  background-image:linear-gradient(rgba(28,42,51,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(28,42,51,.05) 1px,transparent 1px),
+    radial-gradient(60% 50% at 0% 100%,rgba(216,205,190,.55),transparent 60%);
+  background-size:180px 180px,180px 180px,auto;background-position:-1px -1px,-1px -1px,0 0;
+         display:grid;grid-template-columns:1.1fr .9fr;align-items:stretch;
+         opacity:0;visibility:hidden;overflow:auto;
+         transition:opacity .36s ease,visibility .36s}
+.navmenu.open{opacity:1;visibility:visible}
+.nm-links{display:flex;flex-direction:column;justify-content:center;
+          padding:clamp(90px,14vh,140px) clamp(24px,4vw,44px) clamp(40px,6vh,72px) clamp(24px,4vw,44px);
+          max-width:min(780px,44vw);margin-left:calc((100vw - min(1560px,88vw)) / 2)}
+@media(max-width:900px){.nm-links{margin-left:0;max-width:none}}
+.navmenu a.nm{position:relative;display:block;text-decoration:none;color:var(--ink);
+           font-family:var(--fd);font-weight:500;letter-spacing:-.025em;
+           font-size:clamp(30px,4.6vw,64px);line-height:1.1;
+           padding:clamp(8px,1.2vh,14px) 0 clamp(8px,1.2vh,14px) 0;border-bottom:1px solid transparent;
+           opacity:0;transform:translateY(14px);
+           transition:opacity .4s ease,transform .5s var(--ease),color .25s ease}
+/* the rollover: a clay bar draws in under the word, and the word itself turns
+   clay. Nothing shifts, so nothing flickers. */
+.navmenu a.nm::after{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--clay);
+  transition:width .55s var(--ease)}
+.navmenu a.nm:hover,.navmenu a.nm:focus-visible{color:var(--clay);outline:none}
+.navmenu a.nm:hover::after,.navmenu a.nm:focus-visible::after{width:100%}
+.navmenu a.nm.on{color:var(--clay)}
+.navmenu.open a.nm{opacity:1;transform:none}
+.navmenu.open a.nm:nth-child(1){transition-delay:.05s}
+.navmenu.open a.nm:nth-child(2){transition-delay:.10s}
+.navmenu.open a.nm:nth-child(3){transition-delay:.15s}
+.navmenu.open a.nm:nth-child(4){transition-delay:.20s}
+.navmenu.open a.nm:nth-child(5){transition-delay:.25s}
+.navmenu.open a.nm:nth-child(6){transition-delay:.30s}
+.nm-foot{margin:clamp(22px,4vh,40px) 0 0;font-size:12.5px;line-height:1.8;color:var(--muted);
+  opacity:0;transition:opacity .5s ease .35s}
+.navmenu.open .nm-foot{opacity:1}
+
+.nm-side{position:relative;background:var(--ink);color:#fff;overflow:hidden;
+         display:flex;flex-direction:column;justify-content:flex-end;
+         opacity:0;transform:translateX(24px);transition:opacity .5s ease .15s,transform .7s var(--ease) .15s}
+.navmenu.open .nm-side{opacity:1;transform:none}
+.nm-pic{position:absolute;inset:0}
+.nm-pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center bottom;opacity:0;
+  transition:opacity .7s ease}
+.nm-pic img.on{opacity:.7}
+.nm-pic::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(12,20,26,.45) 0%,rgba(12,20,26,.15) 30%,rgba(12,20,26,.1) 100%)}
+.nm-say{display:none}
+.nm-say{position:relative;padding:clamp(24px,4vw,56px) clamp(24px,4vw,56px) 22px}
+.nm-say .kicker{color:#E39377}
+.nm-say h3{font-family:var(--fd);font-weight:500;letter-spacing:-.02em;font-size:clamp(22px,2.2vw,36px);
+            line-height:1.1;margin:10px 0 0}
+.nm-reg{position:relative;display:flex;align-items:center;justify-content:space-between;gap:20px;
+  width:100%;border:0;border-top:3px solid rgba(255,255,255,.55);cursor:pointer;background:var(--clay);color:#fff;text-align:left;
+  box-shadow:0 -24px 60px rgba(0,0,0,.45);
+  padding:clamp(30px,3.6vw,52px) clamp(24px,4vw,56px);
+  font-family:var(--fd);font-weight:500;font-size:clamp(22px,2.2vw,36px);letter-spacing:-.02em;
+  overflow:hidden;isolation:isolate}
+.nm-reg::before{content:"";position:absolute;inset:0;background:#D97B5E;z-index:-1;
+  transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
+.nm-reg:hover::before{transform:scaleX(1)}
+.nm-reg b{font-weight:400;font-size:1.2em;position:relative;width:1.4em;height:1em;overflow:hidden;display:inline-block}
+.nm-reg b::before,.nm-reg b::after{content:"\2192";position:absolute;left:0;top:0;transition:transform .5s var(--ease)}
+.nm-reg b::after{transform:translateX(-160%)}
+.nm-reg:hover b::before{transform:translateX(160%)}
+.nm-reg:hover b::after{transform:none}
 
 @media(max-width:900px){
-  .nav-links a{padding:8px 9px;font-size:12px}
-  .brand{font-size:16px;letter-spacing:.2em}
+  .navmenu{grid-template-columns:1fr;grid-template-rows:1fr auto}
+  .nm-links{justify-content:flex-start;padding-top:clamp(84px,14vh,120px)}
+  .navmenu a.nm{font-size:clamp(26px,7vw,40px)}
+  .nm-pic{display:none}
+  .nm-say{padding:22px clamp(18px,4vw,44px) 16px}
+  .nm-say h3{font-size:19px}
+  .nm-reg{padding:20px clamp(18px,4vw,44px);font-size:17px}
 }
-
-/* ---- mobile menu ----
-   Below this width the five links stop fitting beside the brand, so they move
-   into a panel. Register stays in the bar: it is the one action worth a tap
-   without opening anything first. */
-.navbtn{display:none;margin-left:10px;width:40px;height:40px;padding:0;border:0;
-        background:none;cursor:pointer;position:relative;z-index:2;
-        border-radius:999px;transition:background .2s ease}
-.navbtn span{position:absolute;left:11px;width:18px;height:2px;border-radius:2px;
-             background:#fff;transition:transform .3s var(--ease),opacity .2s ease}
-.navbtn span:nth-child(1){top:16px}
-.navbtn span:nth-child(2){top:22px}
-.nav.solid .navbtn span,.nav.static .navbtn span{background:var(--ink)}
-.navbtn:hover{background:rgba(255,255,255,.14)}
-.nav.solid .navbtn:hover,.nav.static .navbtn:hover{background:rgba(28,42,51,.07)}
-/* Open: the two bars cross. Both are pinned to the same line first so the X is
-   centred rather than hinged off one of them. */
-/* Over the panel everything in the bar is on paper, including on the home page
-   where the bar is otherwise white type over the hero. */
-.nav.menu-open .navbtn span{background:var(--ink)}
-.nav.menu-open .brand{color:var(--ink)}
-.nav.menu-open .nav-links a:not(.cta){color:var(--muted)}
-.nav.menu-open .navbtn span:nth-child(1){transform:translateY(3px) rotate(45deg)}
-.nav.menu-open .navbtn span:nth-child(2){transform:translateY(-3px) rotate(-45deg)}
-
-.navmenu{position:fixed;inset:0;z-index:-1;background:var(--paper);
-         display:flex;flex-direction:column;justify-content:center;
-         padding:0 clamp(24px,7vw,48px);
-         opacity:0;visibility:hidden;
-         transition:opacity .32s ease,visibility .32s}
-.nav.menu-open .navmenu{opacity:1;visibility:visible;z-index:1}
-.navmenu a{display:block;text-decoration:none;color:var(--ink);
-           font-size:clamp(26px,8vw,40px);line-height:1.28;letter-spacing:-.01em;
-           padding:9px 0;border-bottom:1px solid var(--line);
-           opacity:0;transform:translateY(14px);
-           transition:opacity .4s ease,transform .5s var(--ease),color .2s ease}
-.navmenu a:last-child{border-bottom:0}
-.navmenu a.on{color:var(--clay)}
-.nav.menu-open .navmenu a{opacity:1;transform:none}
-/* Staggered so the list reads as it arrives instead of landing all at once. */
-.nav.menu-open .navmenu a:nth-child(1){transition-delay:.05s}
-.nav.menu-open .navmenu a:nth-child(2){transition-delay:.10s}
-.nav.menu-open .navmenu a:nth-child(3){transition-delay:.15s}
-.nav.menu-open .navmenu a:nth-child(4){transition-delay:.20s}
-.nav.menu-open .navmenu a:nth-child(5){transition-delay:.25s}
-.navmenu .m-foot{margin-top:clamp(28px,6vw,44px);font-size:13.5px;color:var(--muted);
-                 line-height:1.7;opacity:0;transition:opacity .4s ease .3s}
-.nav.menu-open .navmenu .m-foot{opacity:1}
-
 @media(max-width:760px){
-  .nav-links a:not(.cta){display:none}
-  .navbtn{display:block}
+  .navbtn .lbl{display:none}
+  .navbtn,.navreg{padding:14px 14px}
 }
 @media(prefers-reduced-motion:reduce){
-  .navmenu a{transform:none}
-  .navbtn span{transition:none}
+  .navmenu a.nm,.nm-side{transform:none}
+  .navbtn .ico span{transition:none}
 }
 
-/* ---- hero ---- */
-.hero{position:relative;height:100svh;min-height:560px;overflow:hidden;background:var(--ink)}
-.hero img{width:100%;height:100%;object-fit:cover}
-/* The copy sits over whatever the render happens to show, and this one is a
-   pale building in daylight. The veil leans harder on the bottom third, where
-   the words are, and stays out of the sky. */
+/* ---- hero ----
+   v2. The render drifts slower than the page (parallax, set from script), a
+   short stack of three more pictures sits at the right and moves at its own
+   rate, and a scroll cue hangs at the right edge. */
+.hero{position:relative;height:calc(100svh + var(--ov));min-height:calc(600px + var(--ov));
+  overflow:hidden;background:var(--ink);z-index:1}
+.hero-bg{position:absolute;inset:-18% 0 0 0;will-change:transform}   /* taller than the frame, hung from the bottom, so the ground of every render stays in view and the parallax gives back sky, not street */
+.hero-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center bottom;opacity:0;
+  transform:scale(1.06);transition:opacity 1.6s ease,transform 7s ease-out}
+.hero-bg img.on{opacity:1;transform:scale(1)}
+.hero-dots{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--ov) + 22px);z-index:3;display:flex;gap:8px}
+.hero-dots i{width:26px;height:3px;border-radius:2px;background:rgba(255,255,255,.3);cursor:pointer;
+  transition:background .4s,width .4s var(--ease)}
+.hero-dots i.on{background:#fff;width:44px}
 .hero-veil{position:absolute;inset:0;
-           background:linear-gradient(to top,rgba(12,20,26,.82) 0%,rgba(12,20,26,.55) 26%,
-                                      rgba(12,20,26,.12) 52%,rgba(12,20,26,.28) 100%)}
-.hero-copy{position:absolute;left:0;right:0;bottom:clamp(40px,8vh,90px);color:#fff}
-.hero-copy .kicker{color:rgba(255,255,255,.72)}
-/* The negative margin is set from script, per headline: a big display capital
-   carries its own side bearing, so a title left-aligned by its box looks
-   indented next to the small caps above it. See optical() in site.js. */
-.hero-copy h1{font-size:clamp(40px,7vw,132px);line-height:1;margin:14px 0 0;color:#fff}
-.hero-copy p{max-width:52ch;color:rgba(255,255,255,.85);font-size:clamp(15px,1.25vw,21px);
-             line-height:1.65;margin:18px 0 0}
-.hero-ctas{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+           background:linear-gradient(to top,rgba(12,20,26,.86) 0%,rgba(12,20,26,.58) 26%,
+                                      rgba(12,20,26,.14) 52%,rgba(12,20,26,.30) 100%)}
+.hero-copy{position:absolute;left:0;right:0;bottom:calc(clamp(40px,8vh,90px) + var(--ov));color:#fff;will-change:transform}
+/* the place tag: a small mark and the words, in a glass pill, so it reads
+   over any part of the render instead of dissolving into the pale building */
+.place{font-family:var(--fd);font-weight:500;font-size:clamp(17px,1.9vw,30px);letter-spacing:.14em;
+  text-transform:uppercase;color:#fff;text-shadow:0 2px 24px rgba(12,20,26,.5)}
+.hero-copy h1{font-size:clamp(44px,7.4vw,140px);line-height:.98;margin:18px 0 0;color:#fff;letter-spacing:-.035em}
+/* the standfirst: lighter, larger, and hung off a short clay rule so it is
+   a line of copy with a place, not a paragraph that landed under a title */
+.hero-copy p{max-width:44ch;color:rgba(255,255,255,.88);font-size:clamp(16px,1.3vw,22px);font-weight:400;
+  line-height:1.6;margin:22px 0 0;padding-left:20px;border-left:2px solid var(--clay)}
+.hero-ctas{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
 
-/* em padding, so the buttons scale together with their type on big screens */
-.btn{display:inline-flex;align-items:center;gap:.55em;text-decoration:none;cursor:pointer;
-     border:0;border-radius:999px;padding:1em 1.85em;font-family:'Inter',sans-serif;
-     font-size:clamp(14px,.95vw,17px);font-weight:600;
-     transition:transform .25s var(--ease),background .25s ease,color .25s ease}
-.btn:hover{transform:translateY(-2px)}
-.btn-clay{background:var(--clay);color:#fff}
-.btn-clay:hover{background:#A9552F}
-.btn-ghost{background:rgba(255,255,255,.14);color:#fff;backdrop-filter:blur(6px)}
-.btn-ghost:hover{background:rgba(255,255,255,.24)}
+.scrollcue{position:absolute;right:clamp(18px,4vw,44px);bottom:calc(var(--ov) + 18px);z-index:3;
+  width:1px;height:44px;background:rgba(255,255,255,.22);overflow:hidden}
+.scrollcue i{position:absolute;left:0;width:1px;height:14px;background:rgba(255,255,255,.85);top:-14px;animation:cue 2.2s var(--ease) infinite}
+@keyframes cue{to{top:48px}}20%{opacity:1}80%{opacity:1}100%{top:50px;opacity:0}}100%{top:110%}}
+
+@media(max-width:860px){
+  .scrollcue{display:none}
+
+  .hero{height:auto;min-height:calc(100svh + var(--ov))}
+  .hero-copy{position:relative;padding-top:120px;bottom:auto;padding-bottom:calc(40px + var(--ov))}
+  .hero-bg{inset:0}
+}
+
+/* ---- cross links ----
+   .xf, a plate that changes its picture on rollover: the second image comes
+   up over the first (Dawn to Dusk, empty to peopled, aerial to floorplate),
+   the arrow fills, and the caption sits under the picture on the paper.
+   .nextp, a ruled band that names the next page and sweeps on rollover. */
+.xfs{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,44px);margin-top:clamp(26px,3.4vw,44px)}
+.xf{display:block;text-decoration:none;color:var(--ink);grid-column:span 1}
+.xf.wide{grid-column:1/-1}
+.xf .pic{display:block;position:relative;border-radius:16px;overflow:hidden;background:var(--ink);isolation:isolate;
+  box-shadow:0 18px 44px rgba(28,42,51,.12)}
+.xf .pic img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block;transition:transform 1.6s var(--ease)}
+.xf.wide .pic img{aspect-ratio:2.5/1}
+.xf .pic img.b{position:absolute;inset:0;height:100%;opacity:0;transition:opacity .9s ease,transform 1.6s var(--ease)}
+.xf:hover .pic img{transform:scale(1.04)}
+.xf:hover .pic img.b{opacity:1}
+.xf .pic .tag{position:absolute;top:14px;left:14px;z-index:3;font-family:var(--fd);font-weight:600;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;padding:8px 11px;border-radius:6px;background:rgba(247,245,241,.94);color:var(--ink);display:inline-grid}
+.xf .pic .tag span{grid-area:1/1;transition:opacity .4s}
+.xf .pic .tag span.b{opacity:0}
+.xf:hover .pic .tag span.a{opacity:0}
+.xf:hover .pic .tag span.b{opacity:1}
+.xf .go{position:absolute;right:14px;bottom:14px;z-index:3;width:44px;height:44px;border-radius:7px;display:grid;place-items:center;
+  background:rgba(247,245,241,.94);color:var(--ink);overflow:hidden;font-size:17px}
+.xf .go::before{content:"";position:absolute;inset:0;background:var(--clay);transform:translateY(100%);transition:transform .5s var(--ease)}
+.xf .go span{position:relative;transition:color .3s}
+.xf:hover .go::before{transform:none}
+.xf:hover .go span{color:#fff}
+.xf .say{display:grid;grid-template-columns:1fr auto;gap:6px 20px;align-items:baseline;margin-top:16px;padding-top:14px;border-top:1px solid var(--line);position:relative}
+.xf .say::before{content:"";position:absolute;left:0;top:-1px;height:2px;width:0;background:var(--clay);transition:width .7s var(--ease)}
+.xf:hover .say::before{width:100%}
+.xf .say i{font-style:normal;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--clay);grid-column:1/-1}
+.xf .say b{font-family:var(--fd);font-weight:500;letter-spacing:-.025em;font-size:clamp(20px,2vw,30px);line-height:1.05}
+.xf .say p{grid-column:1/-1;margin:2px 0 0;font-size:14px;line-height:1.6;color:var(--muted);max-width:56ch}
+@media(max-width:760px){.xfs{grid-template-columns:1fr}.xf.wide .pic img{aspect-ratio:3/2}}
+
+.nextp{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(18px,3vw,48px);text-decoration:none;color:var(--ink);
+  padding:clamp(22px,3vw,40px) 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);position:relative;isolation:isolate;
+  margin-top:clamp(36px,5vw,72px)}
+.nextp::before{content:"";position:absolute;inset:0 -24px;z-index:-1;border-radius:14px;background:rgba(216,205,190,.35);opacity:0;transition:opacity .5s}
+.nextp:hover::before{opacity:1}
+.nextp::after{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:100%;background:var(--clay);transform:scaleX(0);transform-origin:left;transition:transform .7s var(--ease)}
+.nextp:hover::after{transform:scaleX(1)}
+.nextp .k{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--clay);writing-mode:vertical-rl;transform:rotate(180deg)}
+.nextp b{font-family:var(--fd);font-weight:500;letter-spacing:-.03em;font-size:clamp(28px,4vw,64px);line-height:1;display:block;transition:color .35s}
+.nextp b i{font-family:var(--fi);font-style:italic;font-weight:400;font-size:1.06em;color:var(--clay)}
+.nextp p{margin:10px 0 0;font-size:14.5px;line-height:1.6;color:var(--muted);max-width:52ch}
+.nextp .arr{width:64px;height:64px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;font-size:24px;position:relative;overflow:hidden;flex:none}
+.nextp .arr::before{content:"";position:absolute;inset:0;background:var(--ink);transform:scale(0);border-radius:50%;transition:transform .5s var(--ease)}
+.nextp .arr span{position:relative;transition:color .3s}
+.nextp:hover .arr::before{transform:scale(1)}
+.nextp:hover .arr span{color:#fff}
+@media(max-width:640px){.nextp{grid-template-columns:1fr auto}.nextp .k{display:none}.nextp .arr{width:48px;height:48px;font-size:19px}}
+
+/* ---- buttons ----
+   v2. Built from the mark: a bar with a gap. The label sits in the bar and
+   the arrow in its own cap at the end, separated by a hairline, on the small
+   corner radius the mark itself uses. The outline version draws only the
+   two open corners of the frame, the way the ghost bar in the mark is only
+   an outline. */
+.btn{display:inline-flex;align-items:stretch;text-decoration:none;cursor:pointer;
+     border:0;border-radius:7px;padding:0;font-family:var(--fb);
+     font-size:clamp(14px,.95vw,17px);font-weight:600;letter-spacing:.01em;line-height:1;
+     position:relative;overflow:hidden;isolation:isolate;
+     transition:background .25s ease,color .25s ease,box-shadow .25s ease}
+.btn .tx{display:inline-flex;align-items:center;padding:1.05em 1.5em}
+.btn .arr{display:inline-flex;align-items:center;justify-content:center;padding:0 1em;font-size:1em;position:relative;overflow:hidden;
+  border-left:1px solid rgba(255,255,255,.22);transition:background .25s}
+/* the arrow in the cap leaves and comes back in from the left on rollover */
+.btn .arr::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:rgba(255,255,255,.7);
+  transform:scaleY(0);transform-origin:bottom;transition:transform .45s var(--ease)}
+.btn:hover .arr::after{transform:scaleY(1)}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(0,0,0,.16);
+  transform:scaleX(0);transform-origin:left;transition:transform .55s var(--ease)}
+.btn:hover::before{transform:scaleX(1)}
+.btn:hover .arr{background:rgba(0,0,0,.14)}
+.btn-line::before,.btn-ghost::before{background:none}
+.btn-clay{background:var(--clay);color:#fff;box-shadow:0 10px 26px rgba(192,102,74,.28)}
+.btn-clay:hover{background:#B25D42}
 .btn-dark{background:var(--ink);color:#fff}
 .btn-dark:hover{background:#0E1820}
-.btn-line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn-ghost{color:#fff;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35)}
+.btn-ghost:hover{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.7)}
+.btn-line{background-color:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
 .btn-line:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
-.arr{font-size:15px;transition:transform .25s var(--ease)}
-.btn:hover .arr{transform:translateX(3px)}
+.btn-line .arr,.btn-ghost .arr{border-left-color:currentColor;opacity:.9}
+/* the frame corners on outline buttons: two open corners of the mark,
+   drawn as gradients so they cost no extra elements, and they brighten on
+   rollover while the fill sweeps in behind the label */
+.btn-line,.btn-ghost{background-image:
+  linear-gradient(currentColor,currentColor),linear-gradient(currentColor,currentColor),
+  linear-gradient(currentColor,currentColor),linear-gradient(currentColor,currentColor);
+  background-repeat:no-repeat;background-size:12px 2px,2px 12px,12px 2px,2px 12px;
+  background-position:left top,left top,right bottom,right bottom;
+  transition:background-size .4s var(--ease),box-shadow .3s,color .3s}
+.btn-line:hover,.btn-ghost:hover{background-size:22px 2px,2px 22px,22px 2px,2px 22px}
+.btn-ghost{background-color:rgba(255,255,255,.1)}
+.btn-ghost:hover{background-color:rgba(255,255,255,.18)}
+/* single-part buttons (no arrow) keep even padding */
+.btn:not(:has(.arr)){padding:1.05em 1.6em;align-items:center}
+.btn.btn-full{width:100%;justify-content:center}
+
+/* ---- texture ----
+   Grain over the whole page, in one fixed sheet, so no fill anywhere reads as
+   a flat fill. The ink bands carry a fine vertical rib as well, from the
+   corrugated cladding on the buildings. */
+.grain{position:fixed;inset:-50%;z-index:60;pointer-events:none;opacity:.055;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* Every ground gets its own drawing. None of them repeat. */
+/* the plate: a floorplate grid, two scales, offset, so it reads as a drawing
+   rather than a tile */
+.tex-plate{background-image:
+  radial-gradient(70% 60% at 12% 0%,rgba(255,255,255,.7),transparent 60%),
+  linear-gradient(rgba(28,42,51,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(28,42,51,.07) 1px,transparent 1px),
+  linear-gradient(rgba(28,42,51,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(28,42,51,.035) 1px,transparent 1px);
+  background-size:auto,264px 264px,264px 264px,66px 66px,66px 66px;
+  background-position:0 0,-1px -1px,-1px -1px,32px 32px,32px 32px}
+/* the balcony lines: horizontal courses, a light sweep across them */
+.tex-lines{background-image:
+  linear-gradient(115deg,rgba(143,180,198,.10) 0%,transparent 45%,rgba(216,205,190,.18) 100%),
+  repeating-linear-gradient(0deg,rgba(28,42,51,.06) 0 1px,transparent 1px 44px)}
+/* the survey dots: a field of points, the way a site plan is set out */
+.tex-dots{background-image:
+  radial-gradient(rgba(28,42,51,.16) 1.2px,transparent 1.6px),
+  radial-gradient(60% 60% at 100% 0%,rgba(143,180,198,.16),transparent 60%);
+  background-size:34px 34px,auto;background-position:17px 17px,0 0}
+/* the weave: two fine diagonals over the sand, like the textile in the renders */
+.tex-weave{background-image:
+  repeating-linear-gradient(45deg,rgba(28,42,51,.04) 0 1px,transparent 1px 12px),
+  repeating-linear-gradient(-45deg,rgba(28,42,51,.04) 0 1px,transparent 1px 12px),
+  radial-gradient(60% 50% at 0% 100%,rgba(255,255,255,.35),transparent 60%)}
+/* the sheet: the footer, a title sheet with a heavy border grid on ink */
+.tex-sheet{background-image:
+  linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),
+  radial-gradient(50% 60% at 100% 0%,rgba(192,102,74,.16),transparent 60%);
+  background-size:160px 160px,160px 160px,auto;background-position:-1px -1px,-1px -1px,0 0}
+.tex-rib{background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.028) 0 1px,transparent 1px 13px)}
+/* the section index on the right edge, the sheet number on a drawing set */
+.sec-no{display:none !important;position:absolute;right:clamp(10px,1.6vw,26px);top:calc(var(--band) + 6px);z-index:1;
+  writing-mode:vertical-rl;font-size:10.5px;font-weight:700;letter-spacing:.32em;color:var(--muted);opacity:.55;
+  pointer-events:none;display:flex;align-items:center;gap:12px}
+.sec-no::before{content:"";width:1px;height:38px;background:currentColor;opacity:.5}
+.reg2 .sec-no{color:rgba(255,255,255,.55)}
+/* the frame corners on pictures: the C of the mark, drawn in at the corners
+   of a card when the cursor arrives */
+.fr-zoom{position:absolute;right:16px;top:16px;z-index:3;width:40px;height:40px;border-radius:8px;display:grid;place-items:center;
+  background:rgba(247,245,241,.9);color:var(--ink);font-size:16px;opacity:0;transition:opacity .35s ease}
+.frame:hover .fr-zoom{opacity:1}
+.frame{cursor:zoom-in}
+.frame img{transition:transform 1.6s var(--ease);display:block}
+/* the caption that rises from the foot of a framed picture on rollover */
+.frame .fr-cap{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:18px 22px;color:#fff;
+  display:flex;justify-content:space-between;align-items:center;gap:14px;
+  background:linear-gradient(to top,rgba(12,20,26,.85),rgba(12,20,26,0));
+  transform:translateY(100%);transition:transform .6s var(--ease)}
+.frame:hover .fr-cap{transform:none}
+.frame .fr-cap b{font-family:var(--fd);font-weight:500;font-size:18px;letter-spacing:-.02em}
+.frame .fr-cap span{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#E39377}
+.frame:hover img{transform:scale(1.03)}
+.frame::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 0 var(--clay);transition:box-shadow .5s var(--ease);pointer-events:none;border-radius:inherit}
+.frame:hover::after{box-shadow:inset 0 0 0 4px var(--clay)}
+/* a soft light on the paper sections, so they are not one even cream */
+.tex-paper{background-image:radial-gradient(70% 60% at 12% 0%,rgba(255,255,255,.7),transparent 60%),
+  radial-gradient(50% 50% at 100% 100%,rgba(216,205,190,.35),transparent 60%)}
+
+/* ---- section joins ----
+   The mark is bars offset from one another, so the joins are steps: each
+   section leaves an empty strip at its foot, and the next section paints its
+   own colour over that strip through a stepped mask. Nothing is ever a
+   straight line across the page. The lip variants draw a thin bar of colour
+   along the step, the ghost bar of the mark. */
+:root{
+  --m-step-l:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 72' preserveAspectRatio='none'><path d='M0 72V18H560V46H1440V72Z' fill='black'/></svg>");
+  --m-step-r:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 72' preserveAspectRatio='none'><path d='M0 72V46H880V18H1440V72Z' fill='black'/></svg>");
+  --m-shelf:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 72' preserveAspectRatio='none'><path d='M0 72V44H320V14H1120V44H1440V72Z' fill='black'/></svg>");
+  --m-lip-l:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 72' preserveAspectRatio='none'><path d='M0 10H560V38H1440V42H556V14H0Z' fill='black'/></svg>");
+  --m-lip-r:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 72' preserveAspectRatio='none'><path d='M0 38H880V10H1440V14H884V42H0Z' fill='black'/></svg>");
+}
+.jn{position:relative;z-index:2;--jc:var(--paper)}
+.jn::before{content:"";position:absolute;left:0;right:0;top:calc(var(--ov) * -1 + 1px);height:var(--ov);
+  background:var(--jc);pointer-events:none;z-index:1;
+  -webkit-mask:var(--jt) center/100% 100% no-repeat;mask:var(--jt) center/100% 100% no-repeat}
+.jn-step-l{--jt:var(--m-step-l)}.jn-step-r{--jt:var(--m-step-r)}.jn-shelf{--jt:var(--m-shelf)}
+.jn-lip::after{content:"";position:absolute;left:0;right:0;top:calc(var(--ov) * -1 + 1px);height:var(--ov);
+  background:var(--jl,var(--clay));pointer-events:none;z-index:1;
+  -webkit-mask:var(--jtl) center/100% 100% no-repeat;mask:var(--jtl) center/100% 100% no-repeat}
+.jn-step-l.jn-lip{--jtl:var(--m-lip-l)}.jn-step-r.jn-lip{--jtl:var(--m-lip-r)}
+/* the strip the section above leaves empty */
+.leave{padding-bottom:calc(var(--band) + var(--ov)) !important}
 
 /* ---- reveal on scroll ---- */
 .reveal{opacity:0;transform:translateY(22px);
@@ -182,93 +457,190 @@ section{padding-block:var(--band)}
 .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
 
 /* ---- shared cards and figures ---- */
-.frame{border-radius:18px;overflow:hidden;background:var(--ink);
+.frame{position:relative;border-radius:18px;overflow:hidden;background:var(--ink);
        box-shadow:0 22px 54px rgba(28,42,51,.15)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2.6vw,36px);align-items:center}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,26px)}
 @media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
 
-.stat-row{display:flex;gap:clamp(26px,5vw,72px);flex-wrap:wrap;margin-top:clamp(28px,3.4vw,44px)}
-.stat b{display:block;font-family:'Archivo',sans-serif;font-weight:500;
-        font-size:clamp(30px,3.4vw,46px);line-height:1}
-.stat span{display:block;margin-top:6px;font-size:12.5px;font-weight:600;
-           letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+/* v2: the numbers used to sit loose on the paper. Now they are a plate: four
+   cells in one ruled strip, each with a short clay tick, an index and its
+   label, so the row reads as one piece of information instead of four
+   figures that happened to land near each other. */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  margin-top:clamp(28px,3.4vw,44px);
+  border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.55) 100%)}
+.stat{position:relative;padding:clamp(18px,1.8vw,28px) clamp(16px,1.6vw,26px) clamp(16px,1.6vw,24px);
+  border-left:1px solid var(--line);transition:background .4s ease}
+.stat:hover{background:rgba(255,255,255,.9)}
+.stat b{transition:color .35s}
+.stat:hover b{color:var(--clay)}
+.stat::before{transition:width .5s var(--ease)}
+.stat:hover::before{width:44px}
+.stat:first-child{border-left:0}
+.stat::before{content:"";display:block;width:26px;height:3px;border-radius:2px;background:var(--clay);
+  margin-bottom:clamp(14px,1.6vw,24px)}
+.stat b{display:block;font-family:var(--fd);font-weight:500;letter-spacing:-.03em;
+        font-size:clamp(26px,2.75vw,46px);line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat span{display:block;margin-top:8px;font-size:11.5px;font-weight:700;
+           letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.stat em{position:absolute;top:clamp(16px,1.6vw,24px);right:clamp(14px,1.4vw,22px);
+  font-style:normal;font-size:10.5px;font-weight:700;letter-spacing:.16em;color:rgba(28,42,51,.32)}
+@media(max-width:640px){
+  .stat-row{grid-template-columns:1fr 1fr}
+  .stat:nth-child(3){border-left:0}
+  .stat:nth-child(n+3){border-top:1px solid var(--line)}
+}
 
 /* ---- footer ----
-   Three bands, same recipe as Culmena and Victoria Haus: brand and navigation,
-   then the studio credits with both marks, then the legal line. */
-footer{background:var(--ink);color:rgba(255,255,255,.7);font-size:14px;line-height:1.7;
-       padding-block:clamp(56px,7vw,96px) clamp(26px,3vw,40px)}
-footer a{color:rgba(255,255,255,.85);text-decoration:none;transition:color .3s}
+   v3. Not a panel and not a place: a drawing sheet. The page ends the way an
+   architect's sheet ends, in a ruled title block along the bottom edge, with
+   labelled cells for project, address, buildings, registration, the studios,
+   sheet number, issue and scale. Nothing else on the three sites ends this way. */
+footer{position:relative;background:#182530;color:rgba(255,255,255,.72);font-size:14px;line-height:1.7;
+  padding:clamp(56px,7vw,110px) 0 clamp(22px,3vw,36px)}
+footer a{color:rgba(255,255,255,.88);text-decoration:none;transition:color .3s}
 footer a:hover{color:#fff}
+.f-head{display:flex;align-items:center;justify-content:space-between;gap:30px;flex-wrap:wrap;
+  margin-bottom:clamp(28px,4vw,56px)}
+.f-head .brand{color:#fff;font-size:clamp(20px,1.8vw,30px)}
+.f-nav{display:flex;gap:clamp(14px,2vw,30px);flex-wrap:wrap}
+.f-nav a{position:relative;font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:6px 0}
+.f-nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--clay);
+  transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease)}
+.f-nav a:hover::after{transform:scaleX(1)}
 
-.f-top{display:grid;grid-template-columns:1.15fr 1.6fr;gap:clamp(36px,5vw,90px)}
-.f-brand .brand{color:#fff;font-size:clamp(20px,1.8vw,26px)}
-.f-brand .brand svg{width:30px;height:30px}
-.f-brand p{margin:18px 0 0;max-width:44ch;color:rgba(255,255,255,.55)}
+.tblock{display:grid;grid-template-columns:2fr 1.3fr 1.1fr 1fr;
+  border:1.5px solid rgba(255,255,255,.28);border-radius:10px;overflow:hidden;
+  background:rgba(255,255,255,.02);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.tb-cell{position:relative;padding:clamp(18px,2vw,30px) clamp(18px,2vw,28px);
+  border-right:1px solid rgba(255,255,255,.18);border-bottom:1px solid rgba(255,255,255,.18);
+  display:flex;flex-direction:column;gap:4px;transition:background .4s ease}
+.tb-cell:hover{background:rgba(255,255,255,.045)}
+.tb-cell small{font-size:9.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#E39377;margin-bottom:8px}
+.tb-cell a,.tb-cell span{font-size:14px;line-height:1.55}
+.tb-cell span{color:rgba(255,255,255,.6)}
+.tb-cell a{position:relative;width:fit-content}
+.tb-cell a::after{content:"";position:absolute;left:0;right:0;bottom:1px;height:1px;background:#fff;
+  transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.tb-cell a:hover::after{transform:scaleX(1)}
+.tb-wide b{font-family:var(--fd);font-weight:500;letter-spacing:-.03em;color:#fff;font-size:clamp(28px,3vw,48px);line-height:1;margin:2px 0 12px}
+.tb-wide b i{color:#E39377}
+.tb-wide p{margin:0;max-width:44ch;color:rgba(255,255,255,.62);font-size:14px}
+.tb-reg .btn{margin-top:auto;align-self:flex-start;margin-top:14px}
+.f-now{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#fff !important}
+.f-now i{width:8px;height:8px;border-radius:50%;background:var(--clay);box-shadow:0 0 0 0 rgba(192,102,74,.6);animation:fpulse 2.4s infinite}
+@keyframes fpulse{0%{box-shadow:0 0 0 0 rgba(192,102,74,.6)}70%{box-shadow:0 0 0 9px rgba(192,102,74,0)}100%{box-shadow:0 0 0 0 rgba(192,102,74,0)}}
+/* second row: the credits and the sheet data */
+.tb-credit{grid-column:span 1;border-bottom:0;justify-content:center;color:inherit}
+.tb-credit em{font-style:normal;font-size:11px;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-top:10px;transition:color .3s}
+.tb-credit:hover em{color:#E39377}
+.tb-credit::after{display:none}
+.tb-credit .mk{display:block;width:auto;align-self:flex-start;opacity:.92;margin-top:8px;transition:opacity .3s}
+.tb-credit a:hover .mk{opacity:1}
+.tb-credit a::after{display:none}
+/* sized off the wordmarks, not the boxes, so the two names read the same height */
+.tb-credit .mk.dl{height:42px}
+.tb-credit .mk.tl{height:50px}
+.tb-meta{border-bottom:0;justify-content:center;align-items:flex-start}
+.tb-meta b{font-family:var(--fd);font-weight:500;font-size:clamp(18px,1.4vw,22px);letter-spacing:-.02em;color:#fff;line-height:1.15}
+.tb-top{padding:0}
+.tb-top .totop{display:flex;flex-direction:column;gap:6px;justify-content:center;width:100%;height:100%;
+  padding:clamp(18px,2vw,30px) clamp(18px,2vw,28px);transition:background .4s}
+.tb-top .totop:hover{background:var(--clay)}
+.tb-top .totop b{font-family:var(--fd);font-weight:500;font-size:24px;color:#fff;line-height:1}
+.tb-top .totop::after{display:none}
+/* the second row is four cells of 1fr each inside the same grid: the credits
+   take two columns, the three sheet cells share the last two */
+.tblock{grid-template-areas:"proj pc bldg reg" "cr1 cr2 meta top"}
+.tb-wide{grid-area:proj}.tb-pc{grid-area:pc}.tb-bl{grid-area:bldg}.tb-reg{grid-area:reg;border-right:0}
+.tb-c1{grid-area:cr1}.tb-c2{grid-area:cr2;border-right:1px solid rgba(255,255,255,.18)}
+.tb-m1{grid-area:meta;border-right:1px solid rgba(255,255,255,.18)}
+.tb-m2,.tb-m3{display:none}
+.tb-top{grid-area:top;border-right:0}
 
-.f-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(22px,3vw,44px)}
-.f-cols h4{font-size:10.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
-           color:rgba(255,255,255,.42);margin:0 0 16px}
-.f-cols a,.f-cols span{display:block;padding:5px 0;font-size:14px}
-.f-cols span{color:rgba(255,255,255,.55)}
-.f-cta{margin-top:10px;font-weight:600;color:#E39377 !important}
-.f-cta:hover{color:#fff !important}
-
-/* Both marks are sized off their wordmark, not their box: Twinlines carries
-   STUDIO underneath, so equal box heights would leave its name a third smaller.
-   Ratios measured on the artwork, same as the other two sites. */
-.f-credits{--mark:22px;
-  margin-top:clamp(44px,5vw,72px);padding-top:clamp(26px,3vw,38px);
-  border-top:1px solid rgba(255,255,255,.12);
-  display:flex;align-items:center;gap:clamp(28px,5vw,72px);flex-wrap:wrap}
-.credit{display:flex;align-items:center;gap:14px}
-.credit small{font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
-              color:rgba(255,255,255,.42);white-space:nowrap}
-.credit .mk{display:block;width:auto;opacity:.92;transition:opacity .3s}
-.credit a:hover .mk{opacity:1}
-.credit .mk.dl{height:calc(var(--mark) * 1.35)}
-.credit .mk.tl{height:calc(var(--mark) * 1.619)}
-.f-demo{margin-left:auto}
-
-.f-legal{margin-top:clamp(26px,3vw,38px);padding-top:22px;
-         border-top:1px solid rgba(255,255,255,.12);
-         display:flex;justify-content:space-between;align-items:baseline;gap:14px 40px;
-         flex-wrap:wrap;font-size:11.5px;line-height:1.7;color:rgba(255,255,255,.45)}
-.f-legal p{margin:0;flex:1 1 auto}
+.f-legal{margin-top:clamp(18px,2.4vw,30px);display:flex;justify-content:space-between;align-items:baseline;gap:14px 40px;
+  flex-wrap:wrap;font-size:11.5px;line-height:1.7;color:rgba(255,255,255,.45)}
+.f-legal p{margin:0;flex:1 1 auto;max-width:96ch}
 .f-copy{white-space:nowrap}
+.nw{white-space:nowrap}
 
-@media(max-width:900px){
-  .f-top{grid-template-columns:1fr;gap:34px}
-  .f-cols{grid-template-columns:1fr 1fr}
+@media(max-width:1000px){
+  .tblock{grid-template-columns:1fr 1fr;grid-template-areas:"proj proj" "pc bldg" "reg reg" "cr1 cr2" "meta top"}
+  .tb-cell{border-right:1px solid rgba(255,255,255,.18) !important}
+  .tb-wide,.tb-reg,.tb-bl,.tb-c2,.tb-top{border-right:0 !important}
+  .tb-credit{border-bottom:1px solid rgba(255,255,255,.18)}
 }
 @media(max-width:560px){
-  .f-cols{grid-template-columns:1fr}
-  .f-credits{--mark:19px;gap:22px}
-  .f-demo{margin-left:0}
+  .tblock{grid-template-columns:1fr;grid-template-areas:"proj" "pc" "bldg" "reg" "cr1" "cr2" "meta" "top"}
+  .tb-cell{border-right:0 !important}
+  .tb-meta{border-bottom:1px solid rgba(255,255,255,.18)}
+  .f-head{gap:18px}
 }
 
-/* ---- lightbox ---- */
-.lb{position:fixed;inset:0;z-index:90;display:none;background:rgba(10,16,21,.94);
-    opacity:0;transition:opacity .3s ease}
+/* ---- lightbox ----
+   v2. The picture is the whole point, so everything else gets out of its way:
+   the backdrop is the page blurred to ink, the controls are glass, and the
+   caption sits in a gradient at the foot with a short clay rule above it and
+   the counter beside it. Click or scroll to zoom, drag to pan. */
+.lb{position:fixed;inset:0;z-index:90;display:none;background:rgba(14,22,28,.9);
+    -webkit-backdrop-filter:blur(14px) saturate(.8);backdrop-filter:blur(14px) saturate(.8);
+    opacity:0;transition:opacity .32s ease}
 .lb.open{display:block}
 .lb.show{opacity:1}
-.lb-stage{position:absolute;inset:56px 26px 86px;display:grid;place-items:center}
-.lb-stage img{max-width:100%;max-height:100%;border-radius:8px;
-              box-shadow:0 30px 80px rgba(0,0,0,.5)}
-.lb-close{position:absolute;top:14px;right:16px;z-index:2;border:0;background:rgba(255,255,255,.1);
-          color:#fff;width:42px;height:42px;border-radius:999px;cursor:pointer;font-size:17px;
-          display:grid;place-items:center;transition:background .2s ease}
-.lb-close:hover{background:rgba(255,255,255,.22)}
-.lb-prev,.lb-next{position:absolute;top:50%;transform:translateY(-50%);z-index:2;border:0;
-                  background:rgba(255,255,255,.1);color:#fff;width:46px;height:46px;border-radius:999px;
-                  cursor:pointer;font-size:24px;display:grid;place-items:center;transition:background .2s ease}
-.lb-prev{left:16px}.lb-next{right:16px}
-.lb-prev:hover,.lb-next:hover{background:rgba(255,255,255,.22)}
-.lb-bar{position:absolute;left:26px;right:26px;bottom:22px;display:flex;justify-content:space-between;
-        gap:18px;color:rgba(255,255,255,.85);font-size:13.5px;align-items:baseline}
-.lb-cap b{font-family:'Archivo',sans-serif;font-weight:500;font-size:16px;margin-right:10px;color:#fff}
-.lb-count{color:rgba(255,255,255,.55);flex:none}
+.lb-stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:clamp(60px,8vh,96px) clamp(16px,6vw,110px) clamp(96px,14vh,150px);overflow:hidden}
+.lb-stage img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;
+  border-radius:18px;box-shadow:0 40px 100px rgba(0,0,0,.55);cursor:zoom-in;
+  transform-origin:center;user-select:none;-webkit-user-drag:none;
+  transition:transform .38s var(--ease),opacity .3s ease}
+.lb.show .lb-stage>img{animation:lbIn .55s var(--ease) both}
+@keyframes lbIn{from{opacity:0;transform:scale(.94) translateY(12px)}to{opacity:1;transform:none}}
+.lb-stage img.zoomed{cursor:grab;transition:transform .18s ease-out;animation:none;border-radius:0}
+.lb-stage img.zoomed.grabbing{cursor:grabbing;transition:none}
+
+.lb-close,.lb-prev,.lb-next{position:absolute;z-index:3;border:1px solid rgba(255,255,255,.16);
+  background:rgba(20,30,37,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  color:#fff;cursor:pointer;border-radius:50%;display:grid;place-items:center;
+  transition:background .3s,transform .3s var(--ease),border-color .3s,opacity .25s}
+.lb-close{top:clamp(14px,2.4vh,26px);right:clamp(14px,2.4vw,30px);width:48px;height:48px;font-size:17px}
+.lb-close:hover{background:var(--clay);border-color:var(--clay);transform:rotate(90deg)}
+.lb-prev,.lb-next{top:50%;margin-top:-28px;width:56px;height:56px;font-size:26px;line-height:1}
+.lb-prev{left:clamp(10px,1.8vw,28px)}.lb-next{right:clamp(10px,1.8vw,28px)}
+.lb-prev:hover,.lb-next:hover{background:rgba(255,255,255,.18)}
+.lb-prev:hover{transform:translateX(-3px)}.lb-next:hover{transform:translateX(3px)}
+
+.lb-zoomhint{position:absolute;top:clamp(20px,2.8vh,32px);left:clamp(16px,2.4vw,30px);z-index:3;
+  font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.7);
+  border:1px solid rgba(255,255,255,.16);background:rgba(20,30,37,.45);border-radius:999px;
+  padding:9px 16px;transition:opacity .25s}
+
+.lb-bar{position:absolute;left:0;right:0;bottom:0;z-index:3;pointer-events:none;
+  padding:clamp(60px,10vh,130px) clamp(18px,3.4vw,44px) clamp(18px,3vh,34px);
+  background:linear-gradient(to top,rgba(10,17,22,.94) 0%,rgba(10,17,22,.62) 48%,rgba(10,17,22,0) 100%);
+  display:flex;justify-content:space-between;align-items:flex-end;gap:24px;color:#fff;
+  transition:opacity .25s}
+.lb-bar::before{content:"";position:absolute;left:clamp(18px,3.4vw,44px);width:clamp(60px,8vw,120px);height:2px;
+  bottom:calc(clamp(18px,3vh,34px) + 66px);border-radius:2px;
+  background:linear-gradient(90deg,var(--clay),rgba(192,102,74,.2))}
+.lb-cap{pointer-events:auto;max-width:min(64ch,72%);font-size:13.5px;line-height:1.6;color:rgba(247,245,241,.72)}
+.lb-cap b{display:block;margin:0 0 5px;font-family:var(--fd);font-weight:500;letter-spacing:-.02em;
+  font-size:clamp(20px,2.2vw,30px);line-height:1.1;color:#fff}
+.lb-count{pointer-events:auto;flex:none;font-size:10.5px;font-weight:700;letter-spacing:.26em;
+  color:rgba(247,245,241,.6);padding-bottom:6px;font-variant-numeric:tabular-nums}
+.lb.is-zoomed .lb-bar,.lb.is-zoomed .lb-zoomhint,
+.lb.is-zoomed .lb-prev,.lb.is-zoomed .lb-next{opacity:0;pointer-events:none}
+@media(max-width:700px){
+  .lb-stage{padding:64px 12px 120px}
+  .lb-prev,.lb-next{width:44px;height:44px;margin-top:-22px;font-size:20px}
+  .lb-zoomhint{display:none}
+  .lb-bar{flex-direction:column-reverse;align-items:flex-start;gap:8px;
+    padding:70px var(--g,18px) calc(env(safe-area-inset-bottom) + 18px)}
+  .lb-bar::before{width:70px;bottom:auto;top:52px;left:18px}
+  .lb-cap{max-width:100%;font-size:12.5px}.lb-cap b{font-size:20px}
+  .lb-count{padding-bottom:0}
+}
 
 /* ---- page headers with media ----
    RK asked for headers that carry something behind the type instead of flat
@@ -299,3 +671,227 @@ footer a:hover{color:#fff}
 .pagehead.has-media h1{color:#fff}
 .pagehead.has-media .lead{color:rgba(255,255,255,.86);
   text-shadow:0 1px 24px rgba(12,20,26,.5)}
+
+
+/* ---- register form ----
+   Shared between the band on the home page and the modal. Paper card, three
+   questions, a rail that fills as you go. Rollovers change colour and draw
+   lines; nothing shifts under the cursor. */
+.rg-form{position:relative;background:var(--paper);color:var(--ink);border-radius:18px;
+  padding:clamp(26px,3vw,44px);box-shadow:0 40px 100px rgba(0,0,0,.35);
+  display:flex;flex-direction:column;min-height:min(520px,72vh)}
+.rg-form.shake{animation:rgShake .45s ease}
+@keyframes rgShake{20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+.rg-rail{display:flex;gap:6px;margin-bottom:18px}
+.rg-rail i{flex:1;height:3px;border-radius:2px;background:rgba(28,42,51,.12);overflow:hidden;position:relative}
+.rg-rail i::after{content:"";position:absolute;inset:0;background:var(--clay);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
+.rg-rail i.on::after{transform:scaleX(1)}
+.rg-count{margin:0;font-size:10.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.rg-step{border:0;margin:0;padding:0;display:none;min-width:0}
+.rg-step.is-on{display:block;animation:rgIn .5s var(--ease) both;margin:auto 0;padding:clamp(18px,3vh,40px) 0}
+@keyframes rgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.rg-step legend{font-family:var(--fd);font-weight:500;letter-spacing:-.025em;
+  font-size:clamp(28px,2.6vw,40px);line-height:1.08;padding:0;margin:0 0 28px;color:var(--ink)}
+.rg-step legend i{font-family:var(--fi);font-style:italic;font-weight:400;font-size:1.08em;color:var(--clay)}
+.rg-hint{margin:-8px 0 18px;font-size:13.5px;color:var(--muted)}
+.rg-two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+/* floating labels: the label sits in the field and rises when you type */
+.rg-f{position:relative;display:block;margin-bottom:14px}
+.rg-f input{width:100%;border:0;border-bottom:1.5px solid rgba(28,42,51,.22);background:transparent;
+  padding:22px 0 10px;font-family:var(--fb);font-size:18px;color:var(--ink);outline:none;border-radius:0}
+.rg-f span{position:absolute;left:0;top:22px;font-size:16px;color:rgba(28,42,51,.45);pointer-events:none;
+  transition:top .3s var(--ease),font-size .3s var(--ease),color .3s}
+.rg-f input:focus+span,.rg-f input:not(:placeholder-shown)+span{top:2px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--clay)}
+.rg-f::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.5px;background:var(--clay);
+  transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.rg-f:hover::after{transform:scaleX(.35)}
+.rg-f:focus-within::after{transform:scaleX(1)}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chips button{position:relative;border:1.5px solid rgba(28,42,51,.2);background:transparent;color:var(--ink);cursor:pointer;
+  border-radius:7px;padding:13px 20px;font-family:var(--fb);font-size:14.5px;font-weight:600;overflow:hidden;isolation:isolate;
+  transition:border-color .3s,color .3s}
+.chips button::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--ink);
+  transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease)}
+.chips button:hover{border-color:var(--ink)}
+.chips button[aria-pressed="true"]{border-color:var(--ink);color:#fff}
+.chips button[aria-pressed="true"]::before{transform:scaleX(1)}
+.rg-err{margin:0;font-size:13px;color:var(--clay);font-weight:600}
+.rg-err:not(:empty){margin:0 0 10px}
+.rg-acts{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:0;padding-top:18px}
+.rg-back{border:0;background:none;cursor:pointer;font-family:var(--fb);font-size:14px;font-weight:600;
+  color:var(--muted);padding:10px 0;visibility:hidden;transition:color .3s}
+.rg-back.show{visibility:visible}
+.rg-back:hover{color:var(--ink)}
+.rg-consent{margin:14px 0 0;font-size:11.5px;color:var(--muted)}
+.rg-done{margin:auto 0;padding:clamp(18px,3vh,40px) 0;outline:none;animation:rgIn .6s var(--ease) both}
+.rg-done .tick{display:grid;place-items:center;width:54px;height:54px;border-radius:12px;
+  background:var(--clay);color:#fff;margin-bottom:20px}
+.rg-done .tick svg{width:24px;height:24px;stroke-dasharray:30;stroke-dashoffset:30;animation:tick .7s var(--ease) .3s forwards}
+@keyframes tick{to{stroke-dashoffset:0}}
+.rg-done h3{font-family:var(--fd);font-weight:500;letter-spacing:-.025em;font-size:clamp(26px,2.4vw,38px);line-height:1.05;margin:0}
+.rg-done h3 i{font-family:var(--fi);font-style:italic;font-weight:400;font-size:1.08em;color:var(--clay)}
+.rg-done p{margin:14px 0 0;color:var(--muted);font-size:15px;max-width:40ch}
+.rg-sum{margin:22px 0 0;display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:13.5px}
+.rg-sum dt{color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:10.5px;align-self:baseline}
+.rg-sum dd{margin:0}
+.rg-form.done .rg-acts,.rg-form.done .rg-count,.rg-form.done .rg-consent{display:none}
+@media(max-width:520px){.rg-two{grid-template-columns:1fr}}
+
+/* the band on the home page */
+.reg2{position:relative;background:var(--ink);color:#fff;padding-block:clamp(72px,9vw,140px)}
+.reg2-art{position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+.reg2-mark{position:absolute;color:var(--sky);opacity:.075;width:clamp(520px,66vw,1040px);height:auto;left:-24%;top:50%;transform:translateY(-50%)}
+.reg2-glow{position:absolute;inset:0;
+  background:radial-gradient(60% 70% at 88% 20%,rgba(192,102,74,.28),transparent 60%),
+             radial-gradient(50% 60% at 10% 90%,rgba(143,180,198,.18),transparent 60%)}
+.reg2-in{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,6vw,110px);align-items:center}
+.reg2-say .kicker{color:#E39377}
+.reg2-say h2{font-size:clamp(38px,4.8vw,80px);line-height:1;margin:16px 0 0;color:#fff;letter-spacing:-.03em}
+.reg2-say h2 i{color:#E39377}
+.reg2-why{list-style:none;margin:clamp(28px,3.4vw,48px) 0 0;padding:0;max-width:44ch}
+.reg2-why li{display:flex;gap:18px;align-items:baseline;padding:16px 0;
+  border-top:1px solid rgba(255,255,255,.14);font-size:clamp(15px,1.15vw,19px);line-height:1.5;color:rgba(255,255,255,.86)}
+.reg2-why li:last-child{border-bottom:1px solid rgba(255,255,255,.14)}
+.reg2-why b{font-family:var(--fb);font-size:11px;font-weight:700;letter-spacing:.2em;color:#E39377;flex:none;min-width:2.4em}
+.reg2-mail{display:inline-block;margin-top:clamp(22px,2.6vw,36px);text-decoration:none;
+  font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.8);
+  border:1px solid rgba(255,255,255,.22);border-radius:7px;padding:14px 22px;transition:background .3s,border-color .3s}
+.reg2-mail:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.5)}
+@media(max-width:900px){
+  .reg2-in{grid-template-columns:1fr}
+  .reg2-mark{width:120vw;left:-40%;top:auto;bottom:-30%;transform:none}
+  .rg-form{min-height:0}
+}
+
+/* ---- the register modal ----
+   A lightbox for the form. Picture and the reasons on the left, the three
+   questions on the right; on a phone the picture goes and the card becomes
+   a sheet that rises from the bottom. */
+.regm{position:fixed;inset:0;z-index:95;display:none;align-items:center;justify-content:center;padding:clamp(12px,3vw,40px)}
+.regm.open{display:flex}
+.regm-veil{position:absolute;inset:0;background:rgba(10,17,22,.72);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  opacity:0;transition:opacity .4s ease}
+.regm.show .regm-veil{opacity:1}
+.regm-card{position:relative;width:min(1080px,100%);max-height:min(760px,100%);min-height:min(600px,100%);display:grid;grid-template-columns:.85fr 1.15fr;
+  border-radius:22px;overflow:hidden;background:var(--paper);box-shadow:0 60px 140px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(28px) scale(.98);transition:opacity .45s ease,transform .6s var(--ease)}
+.regm.show .regm-card{opacity:1;transform:none}
+.regm-x{position:absolute;top:16px;right:16px;z-index:5;width:46px;height:46px;border:0;border-radius:10px;cursor:pointer;
+  background:rgba(28,42,51,.08);transition:background .3s}
+.regm-x span{position:absolute;left:14px;top:22px;width:18px;height:2px;background:var(--ink);border-radius:2px;transition:transform .4s var(--ease)}
+.regm-x span:nth-child(1){transform:rotate(45deg)}.regm-x span:nth-child(2){transform:rotate(-45deg)}
+.regm-x:hover{background:var(--clay)}
+.regm-x:hover span{background:#fff;transform:rotate(0)}
+.regm-side{position:relative;background:var(--ink);color:#fff;overflow:hidden;min-height:100%}
+.regm-side img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;transform:scale(1.06);
+  transition:transform 8s ease-out}
+.regm.show .regm-side img{transform:scale(1)}
+.regm-side::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(12,20,26,.96) 0%,rgba(12,20,26,.7) 45%,rgba(12,20,26,.25) 100%)}
+.regm-say{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:clamp(24px,3vw,44px)}
+.regm-brand{display:inline-flex;align-items:center;gap:.5em;margin-bottom:auto;color:#fff;font-family:var(--fd);font-weight:600;font-stretch:96%;font-size:22px;letter-spacing:.18em}
+.regm-mark{width:52px;height:52px;color:#fff;flex:none}
+.regm-say .kicker{color:#E39377}
+.regm-say h2{font-family:var(--fd);font-weight:500;letter-spacing:-.03em;font-size:clamp(28px,2.8vw,44px);line-height:1;margin:12px 0 0}
+.regm-say h2 i{font-family:var(--fi);font-style:italic;font-weight:400;font-size:1.08em;color:#E39377}
+.regm-say ul{list-style:none;margin:20px 0 0;padding:14px 16px;background:rgba(12,20,26,.55);border-radius:10px;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.regm-say li{padding:7px 0;font-size:14px;font-weight:500;color:#fff;display:flex;gap:12px;align-items:baseline;line-height:1.4}
+.regm-say li::before{content:"";width:12px;height:2px;background:#E39377;flex:none;border-radius:2px}
+.regm-body{overflow:auto}
+.regm-body .rg-form{box-shadow:none;border-radius:0;min-height:100%;padding:clamp(26px,3.4vw,52px) clamp(26px,3.4vw,52px) clamp(22px,3vw,40px)}
+.regm-body .rg-rail{margin-right:56px}
+@media(max-width:820px){
+  .regm{padding:0;align-items:flex-end}
+  .regm-x{background:rgba(255,255,255,.14)}
+  .regm-x span{background:#fff}
+  .regm-card{grid-template-columns:1fr;max-height:92svh;border-radius:22px 22px 0 0;transform:translateY(60px)}
+  .regm-side{min-height:0;height:auto}
+  .regm-side img{display:none}
+  .regm-say{padding:22px 22px 18px;padding-right:72px}
+  .regm-brand{display:none}
+  .regm-say h2{font-size:24px}
+  .regm-say ul{display:none}
+  .regm-body .rg-form{padding:22px 22px calc(env(safe-area-inset-bottom) + 22px)}
+}
+
+/* register band rollovers: each reason lights when you pass over it, the
+   mail pill fills, the form card's edge glows when the cursor is on it */
+.reg2-why li{position:relative;transition:color .3s;cursor:default}
+.reg2-why li::after{content:"";position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:#E39377;
+  transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
+.reg2-why li:hover::after{transform:scaleX(1)}
+.reg2-why li:hover{color:#fff}
+.reg2-why li b{transition:color .3s}
+.reg2-why li:hover b{color:#fff}
+.reg2-mail{position:relative;overflow:hidden;isolation:isolate}
+.reg2-mail::before{content:"";position:absolute;inset:0;z-index:-1;background:#fff;transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.reg2-mail:hover{color:var(--ink);border-color:#fff;background:transparent}
+.reg2-mail:hover::before{transform:scaleX(1)}
+.rg-form{transition:box-shadow .6s ease}
+.reg2 .rg-form:hover{box-shadow:0 40px 100px rgba(0,0,0,.35),0 0 0 1px rgba(143,180,198,.35),0 0 60px rgba(143,180,198,.18)}
+.reg2-mark{transition:opacity 1s ease}
+.reg2:hover .reg2-mark{opacity:.12}
+.rg-rail i{transition:background .3s}
+.rg-form:hover .rg-rail i{background:rgba(28,42,51,.18)}
+
+/* ---- the 360 button, shared by the home page and the tour ---- */
+/* the VR button: a disc with the 360 glyph and a label, sitting in the room.
+   Rollover: the disc fills clay, the halo breathes out, the label unfolds. */
+.vrbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;display:flex;align-items:center;gap:0;
+  border-radius:999px;background:rgba(12,20,26,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px;transition:background .4s,border-color .4s}
+.vrbtn .disc{width:clamp(56px,6vw,84px);height:clamp(56px,6vw,84px);border-radius:50%;background:#fff;color:var(--ink);
+  display:grid;place-items:center;position:relative;transition:background .4s,color .4s}
+.vrbtn .disc b{font-family:var(--fd);font-weight:600;font-size:clamp(14px,1.3vw,19px);letter-spacing:-.02em}
+.vrbtn .disc::before{content:"";position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(255,255,255,.5);
+  animation:halo 2.6s ease-out infinite}
+@keyframes halo{0%{transform:scale(.9);opacity:.8}100%{transform:scale(1.5);opacity:0}}
+.vrbtn .lbl{white-space:nowrap;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:0 24px 0 16px;
+  transition:color .3s}
+.plate:hover .vrbtn,.tour-cover:hover .vrbtn{background:rgba(12,20,26,.75);border-color:rgba(255,255,255,.7)}
+.plate:hover .vrbtn .disc,.tour-cover:hover .vrbtn .disc{background:var(--clay);color:#fff}
+.plate:hover .vrbtn .lbl,.tour-cover:hover .vrbtn .lbl{color:#fff}
+.vrbtn:hover{transform:translate(-50%,-50%)}
+
+@media(max-width:760px){
+  .navreg{display:none !important}
+  .nm-say{padding:18px clamp(18px,4vw,44px) 14px}
+  .nm-say .kicker{font-size:10px}
+  .nm-say h3{font-size:16px;margin-top:6px}
+  .nm-reg{padding:28px clamp(18px,4vw,44px) calc(28px + env(safe-area-inset-bottom));font-size:22px}
+}
+
+/* ---- find us: the two drawn maps under the page links ---- */
+.f-find{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:clamp(22px,3vw,48px);align-items:stretch;
+  margin-bottom:clamp(28px,4vw,56px);padding-bottom:clamp(28px,4vw,56px);border-bottom:1px solid rgba(255,255,255,.14)}
+.ff-say{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.f-kick{font-size:10.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#E39377}
+.ff-say h3{font-family:var(--fd);font-weight:500;letter-spacing:-.03em;color:#fff;font-size:clamp(30px,3.2vw,48px);line-height:1;margin:10px 0 4px}
+.ff-say h3 i{font-family:var(--fi);font-style:italic;font-weight:400;font-size:1.08em;color:#E39377}
+.ff-say p{margin:0 0 10px;color:rgba(255,255,255,.62);max-width:36ch;font-size:14.5px}
+.ff-line{font-size:15px;color:#fff;position:relative;width:fit-content}
+.ff-line::after{content:"";position:absolute;left:0;right:0;bottom:1px;height:1px;background:#fff;transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.ff-line:hover::after{transform:scaleX(1)}
+.ff-say .btn{margin-top:18px}
+.ff-hours{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 16px;width:100%;max-width:360px}
+.ff-hours div{border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:14px 16px;transition:background .4s,border-color .4s}
+.ff-hours div:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.35)}
+.ff-hours small{display:block;font-size:9.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#E39377;margin-bottom:6px}
+.ff-hours b{font-family:var(--fd);font-weight:500;font-size:clamp(22px,2vw,30px);letter-spacing:-.02em;color:#fff;line-height:1}
+.ff-map{display:block;text-decoration:none;color:inherit;cursor:pointer}
+.ff-map .ff-head::after{content:"Open in Google Maps \2197";display:block;margin-top:4px;font-size:10.5px;letter-spacing:.08em;color:rgba(255,255,255,.45);transition:color .3s}
+.ff-map:hover .ff-head::after{color:#E39377}
+.ff-map:hover svg path[fill="#C0664A"]{animation:pinpop .6s var(--ease)}
+@keyframes pinpop{50%{transform:translateY(-4px)}}
+.ff-map{border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:18px 18px 8px;background:rgba(255,255,255,.02);
+  transition:background .4s,border-color .4s}
+.ff-map:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.3)}
+.ff-head{margin-bottom:8px}
+.ff-head small{display:block;font-size:9.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#E39377;margin-bottom:6px}
+.ff-head b{display:block;font-weight:600;color:#fff;font-size:14px;line-height:1.4}
+.ff-map svg{width:100%;height:auto;display:block}
+.ff-map svg path{transition:stroke .4s}
+@media(max-width:1000px){.f-find{grid-template-columns:1fr 1fr}.ff-say{grid-column:1/-1}}
+@media(max-width:600px){.f-find{grid-template-columns:1fr}}

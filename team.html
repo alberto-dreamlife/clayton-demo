@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Team | Clayton</title>
+<meta name="description" content="Clayton is developed and built by Zenterra Developments, Multi-Family Home Builder of the Year, with architecture by Integra Architecture.">
+<link rel="preload" href="assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/site.css?v=20260907a">
+<link rel="stylesheet" href="assets/anim.css?v=20260907a">
+<style>
+/* ---- the team page ----
+   One developer, doing nearly everything in-house, and the handful of people
+   it works with. The page is built around that fact: a big developer story,
+   then the disciplines under one roof, then the partners on this project. */
+.thero{position:relative;background:var(--ink);color:#fff;overflow:hidden;
+  padding:calc(clamp(44px,6vw,80px) + 110px) 0 clamp(70px,9vw,140px)}
+.thero .kicker{color:#E39377}
+.thero h1{font-size:clamp(40px,6.4vw,110px);line-height:.98;letter-spacing:-.035em;margin:16px 0 0;color:#fff;max-width:14ch}
+.thero h1 i{color:#E39377}
+.thero .lead{color:rgba(255,255,255,.72);max-width:52ch}
+/* the Zenterra mark, huge and faint, drawn line by line behind the words */
+.thero .zmark{position:absolute;right:-6%;top:50%;transform:translateY(-50%);width:clamp(360px,44vw,760px);color:var(--sky);opacity:.16;pointer-events:none}
+.thero .zmark path{fill:none;stroke:currentColor;stroke-width:.6;stroke-dasharray:200;stroke-dashoffset:200;animation:zdraw 2.6s var(--ease) forwards}
+.thero .zmark path:nth-child(2){animation-delay:.25s}.thero .zmark path:nth-child(3){animation-delay:.5s}.thero .zmark path:nth-child(4){animation-delay:.75s}
+@keyframes zdraw{to{stroke-dashoffset:0}}
+.thero-logo{display:inline-flex;align-items:center;gap:18px;margin-top:clamp(28px,3.4vw,48px);padding:16px 22px;border:1px solid rgba(255,255,255,.18);border-radius:10px;
+  color:#fff;text-decoration:none;transition:background .3s,border-color .3s}
+.thero-logo:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.4)}
+.thero-logo svg{height:34px;width:auto}
+.thero-logo span{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+
+/* the numbers, as one ruled strip that counts up */
+.tstats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:clamp(28px,3.4vw,48px)}
+.tstat{padding:clamp(20px,2.2vw,30px) clamp(18px,2vw,28px);border-left:1px solid var(--line);transition:background .4s}
+.tstat:first-child{border-left:0}
+.tstat:hover{background:rgba(255,255,255,.7)}
+.tstat b{display:block;font-family:var(--fd);font-weight:500;letter-spacing:-.03em;font-size:clamp(36px,3.8vw,60px);line-height:1;transition:color .3s}
+.tstat:hover b{color:var(--clay)}
+.tstat span{display:block;margin-top:8px;font-size:12.5px;color:var(--muted);line-height:1.5}
+
+/* the story: copy left, a stack of renders right that swap on scroll */
+.tstory{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(30px,5vw,90px);align-items:start;margin-top:clamp(40px,5vw,80px)}
+.tstory .txt p{color:var(--muted);font-size:clamp(15px,1.15vw,19px);line-height:1.7;max-width:58ch}
+.tstory .txt p+p{margin-top:18px}
+.tstory .txt h2{margin-bottom:8px}
+.tquote{margin:clamp(26px,3vw,44px) 0 0;padding:22px 0 22px 26px;border-left:3px solid var(--clay);font-family:var(--fd);font-weight:500;letter-spacing:-.02em;
+  font-size:clamp(20px,1.7vw,26px);line-height:1.3;color:var(--ink)}
+.tquote small{display:block;margin-top:12px;font-family:var(--fb);font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.tpics{position:sticky;top:clamp(80px,10vh,120px);display:grid;gap:14px;grid-template-columns:1fr 1fr}
+.tpics .frame{margin:0;aspect-ratio:4/3}
+.tpics .frame img{width:100%;height:100%;object-fit:cover}
+.tpics .frame:first-child{grid-column:1/-1;aspect-ratio:16/9}
+
+/* ---- under one roof: the disciplines as an index ----
+   Each line is a discipline Zenterra keeps in-house. Rolling over one lights
+   it, extends its rule, and turns the picture on the right to the room that
+   fits it. */
+.roof{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(30px,5vw,80px);align-items:start;margin-top:clamp(30px,4vw,56px)}
+.roof-list{border-top:1px solid var(--line)}
+.rf{display:grid;grid-template-columns:auto 1fr auto;gap:0 clamp(16px,2vw,28px);align-items:baseline;padding:clamp(16px,1.8vw,24px) 0;
+  border-bottom:1px solid var(--line);position:relative;cursor:default;isolation:isolate}
+.rf::after{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:100%;background:var(--clay);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
+.rf:hover::after,.rf.on::after{transform:scaleX(1)}
+.rf i{font-style:normal;font-size:10.5px;font-weight:700;letter-spacing:.2em;color:rgba(28,42,51,.32);min-width:2.4em;transition:color .3s}
+.rf b{font-family:var(--fd);font-weight:500;letter-spacing:-.03em;font-size:clamp(24px,2.6vw,40px);line-height:1;transition:color .3s}
+.rf em{font-style:normal;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--clay);opacity:0;transform:translateX(-8px);transition:opacity .3s,transform .5s var(--ease)}
+.rf p{grid-column:2/-1;margin:0;max-height:0;overflow:hidden;opacity:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-width:52ch;
+  transition:max-height .6s var(--ease),opacity .4s ease,margin .5s var(--ease)}
+.rf:hover b,.rf.on b{color:var(--clay)}
+.rf:hover i,.rf.on i{color:var(--ink)}
+.rf:hover em,.rf.on em{opacity:1;transform:none}
+.rf:hover p,.rf.on p{max-height:6em;opacity:1;margin-top:10px}
+.roof-pic{position:sticky;top:clamp(80px,10vh,120px);border-radius:18px;overflow:hidden;background:var(--ink);aspect-ratio:4/4.2;box-shadow:0 30px 70px rgba(28,42,51,.2)}
+.roof-pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.05);transition:opacity .7s ease,transform 1.6s var(--ease)}
+.roof-pic img.on{opacity:1;transform:none}
+.roof-pic .cap{position:absolute;left:18px;bottom:16px;color:#fff;font-size:12px;font-weight:600;letter-spacing:.04em;text-shadow:0 1px 8px rgba(12,20,26,.7);z-index:2}
+
+/* ---- values: five words, each a card that opens ---- */
+.vals{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:clamp(26px,3.4vw,44px)}
+.val{position:relative;border:1px solid var(--line);border-radius:14px;padding:22px 20px;min-height:200px;display:flex;flex-direction:column;justify-content:flex-end;
+  overflow:hidden;isolation:isolate;background:var(--paper);transition:border-color .4s,color .4s}
+.val::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--ink);transform:translateY(100%);transition:transform .55s var(--ease)}
+.val i{font-style:normal;font-family:var(--fd);font-weight:500;font-size:44px;letter-spacing:-.04em;line-height:1;color:rgba(28,42,51,.14);position:absolute;top:16px;left:18px;transition:color .4s}
+.val b{font-family:var(--fd);font-weight:500;letter-spacing:-.02em;font-size:clamp(18px,1.4vw,22px);line-height:1.1}
+.val p{margin:0;max-height:0;opacity:0;overflow:hidden;font-size:13px;line-height:1.55;transition:max-height .5s var(--ease),opacity .4s,margin .5s var(--ease)}
+.val:hover{border-color:var(--ink);color:#fff}
+.val:hover::before{transform:none}
+.val:hover i{color:rgba(255,255,255,.2)}
+.val:hover p{max-height:8em;opacity:1;margin-top:10px}
+@media(max-width:1000px){.vals{grid-template-columns:repeat(2,1fr)}.val{min-height:150px}}
+
+/* ---- giving back: two panels on the sand ---- */
+.give{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2.6vw,36px);margin-top:clamp(26px,3.4vw,44px)}
+.gv{position:relative;border-radius:18px;overflow:hidden;background:var(--ink);color:#fff;min-height:360px;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(22px,2.6vw,36px);isolation:isolate}
+.gv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.55;transition:transform 1.8s var(--ease),opacity .6s}
+.gv::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,rgba(12,20,26,.9),rgba(12,20,26,.2) 70%)}
+.gv:hover img{transform:scale(1.05);opacity:.7}
+.gv i{font-style:normal;font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#E39377}
+.gv b{display:block;font-family:var(--fd);font-weight:500;letter-spacing:-.03em;font-size:clamp(30px,3.2vw,52px);line-height:1;margin-top:8px}
+.gv p{margin:12px 0 0;color:rgba(255,255,255,.8);max-width:44ch;font-size:14.5px;line-height:1.6}
+.gv .big{font-family:var(--fd);font-weight:500;font-size:clamp(44px,5vw,84px);letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:auto;padding-bottom:30px}
+.gv .big small{display:block;font-family:var(--fb);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:8px}
+
+/* ---- the partners on Clayton ---- */
+.partners{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:clamp(26px,3.4vw,44px)}
+.pt{position:relative;border:1px solid var(--line);border-radius:14px;padding:clamp(20px,2.2vw,30px);background:var(--paper);display:flex;flex-direction:column;gap:12px;
+  text-decoration:none;color:var(--ink);isolation:isolate;overflow:hidden;transition:border-color .4s;min-height:260px}
+.pt::before{content:"";position:absolute;left:0;top:0;height:3px;width:100%;background:var(--clay);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
+.pt:hover{border-color:var(--ink)}
+.pt:hover::before{transform:none}
+.pt i{font-style:normal;font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--clay)}
+.pt b{font-family:var(--fd);font-weight:500;letter-spacing:-.025em;font-size:clamp(22px,2vw,30px);line-height:1.05}
+.pt p{margin:0;font-size:13.5px;line-height:1.6;color:var(--muted)}
+.pt .lg{margin-top:auto;height:34px;display:flex;align-items:center}
+.pt .lg img,.pt .lg svg{height:100%;width:auto;filter:none}
+.pt .lg.dark img{filter:invert(1) brightness(.2)}
+.pt .go{position:absolute;right:16px;top:16px;width:36px;height:36px;border-radius:7px;display:grid;place-items:center;box-shadow:inset 0 0 0 1.5px var(--line);font-size:15px;
+  overflow:hidden;transition:color .3s}
+.pt .go::before{content:"";position:absolute;inset:0;background:var(--ink);transform:translateY(100%);transition:transform .5s var(--ease);z-index:-1}
+.pt:hover .go{color:#fff}
+.pt:hover .go::before{transform:none}
+@media(max-width:1100px){.partners{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){
+  .tstory,.roof{grid-template-columns:1fr}
+  .tpics,.roof-pic{position:static}
+  .tstats{grid-template-columns:1fr 1fr}
+  .tstat:nth-child(3){border-left:0}.tstat:nth-child(n+3){border-top:1px solid var(--line)}
+  .give{grid-template-columns:1fr}
+  .thero .zmark{right:-30%;width:120vw;opacity:.08}
+}
+@media(max-width:600px){.partners,.vals{grid-template-columns:1fr}.rf p{max-width:none}}
+/* ---- the project, moved here from the home page ---- */
+.story .grid2{align-items:center;grid-template-columns:1.15fr .85fr;gap:clamp(28px,4vw,72px)}
+.story .lead{max-width:none;font-size:clamp(16px,1.25vw,21px)}
+.story .frame img{aspect-ratio:4/3;object-fit:cover;width:100%}
+
+</style>
+<script>
+window.AX_CONFIG = {
+  heads: "h1, h2, .title",
+  skip:  ".hero-copy, .ax-skip, .lb, .vr-plan, .viewer, .rg-step legend, .regm h2, .navmenu, .thero h1",
+  figs:  ".tpics .frame",
+  stats: ".tstat b, .stat b",
+  ups:   "[data-up]",
+  lifts: ".ax-none",
+  curtain: false
+};
+</script>
+</head>
+<body id="top">
+<div class="grain" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-in">
+    <a class="brand" href="index.html">
+      <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true"><g transform="rotate(180 43 43)">
+        <rect x="14" y="14" width="40" height="12" rx="1.5"/>
+        <rect x="60" y="14" width="12" height="40" rx="1.5"/>
+        <rect x="32" y="60" width="40" height="12" rx="1.5"/>
+        <rect x="14" y="32" width="12" height="40" rx="1.5"
+              fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/></g>
+      </svg>
+      CLAYTON
+    </a>
+    <div class="nav-acts">
+      <button class="navreg" type="button" data-register>Register</button>
+      <button class="navbtn" id="navBtn" type="button"
+              aria-expanded="false" aria-controls="navMenu" aria-label="Menu">
+        <span class="lbl"><span class="l-open">Menu</span><span class="l-close">Close</span></span>
+        <span class="ico"><span></span><span></span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- the menu lives outside the bar: the bar carries a blur and a transform,
+     and either one would pin a fixed panel to the bar's own box -->
+<div class="navmenu" id="navMenu" aria-hidden="true">
+  <div class="nm-links">
+    <a class="nm" href="homes.html" data-img="assets/img/Clayton_View_04_Straight_fr.webp?v=20260907a">Homes</a>
+    <a class="nm" href="interiors.html" data-img="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260907a">Interiors</a>
+    <a class="nm" href="tour.html" data-img="assets/img/Clayton_Living_fr.webp?v=20260907a">3D Tour</a>
+    <a class="nm" href="amenities.html" data-img="assets/img/Clayton_CoWorking_fr_people.webp?v=20260907a">Amenities</a>
+    <a class="nm" href="neighbourhood.html" data-img="assets/img/Clayton_View_05_Aerial_fr_Crop.webp?v=20260907a">Neighbourhood</a>
+    <a class="nm" href="gallery.html" data-img="assets/img/Clayton_Rooftop_Building_A_View1_fr.webp?v=20260907a">Gallery</a>
+    <a class="nm on" href="team.html" data-img="assets/img/Clayton_Lobby_fr.webp?v=20260907a">Team</a>
+    <p class="nm-foot">Presentation Centre &nbsp;&middot;&nbsp; #30 &ndash; 2411 160 Street, South Surrey<br>Open daily 12&ndash;5pm, closed Fridays &nbsp;&middot;&nbsp; 604.243.5439</p>
+  </div>
+  <aside class="nm-side">
+    <div class="nm-pic"><img src="assets/img/Clayton_Courtyard_fr.webp?v=20260907a" alt=""><img src="" alt=""></div>
+    <button class="nm-reg" type="button" data-register><span>Register for first access</span><b>&#8594;</b></button>
+  </aside>
+</div>
+
+<!-- ============ HEAD ============ -->
+<header class="thero tex-rib jn leave" style="--jc:var(--ink)">
+  <svg class="zmark" viewBox="0 0 41 40" aria-hidden="true">
+    <path d="M20.5,0L0,11.8V40h28.5v-1.5h-27V12.6l19-10.9L39,12.1V40h1.5V11.2L20.5,0z"/>
+    <path d="M4.5,35.5V14.4l16-9.2L36,13.9V40h1.5V13l-17-9.6L3,13.5V37h25.5v-1.5L4.5,35.5z"/>
+    <path d="M7.5,32.5V16.1l12.9-7.5L33,15.7V40h1.5V14.8l-14-7.9L6,15.2V34h22.5v-1.5L7.5,32.5z"/>
+    <path d="M10.5,29.5V17.8l9.9-5.8l9.6,5.5V40h1.5V16.6l-11.1-6.3L9,16.9V31h19.5v-1.5L10.5,29.5z"/>
+  </svg>
+  <div class="wrap">
+    <div class="kicker">The team</div>
+    <h1 class="display">Built by the people who <i>build it.</i></h1>
+    <p class="lead">Clayton is developed, designed and constructed by Zenterra Developments, a Surrey builder that has kept every part of the job under its own roof for thirty years.</p>
+    <a class="thero-logo" href="https://zenterra.ca" target="_blank" rel="noopener">
+      <svg viewBox="0 0 176.4 40" aria-hidden="true"><use href="#zenterra-logo"/></svg>
+      <span>Developer and builder</span>
+    </a>
+  </div>
+</header>
+
+<!-- ============ THE DEVELOPER ============ -->
+<section class="jn jn-step-l jn-lip tex-plate leave" style="--jc:var(--paper);--jl:var(--sky)">
+  <div class="wrap">
+    <div class="kicker reveal">Zenterra Developments</div>
+    <h2 class="title display reveal d1">Thirty years, <i>one standard.</i></h2>
+
+    <div class="tstats reveal d2">
+      <div class="tstat"><b data-count="30">30</b><span>Years building condos and townhomes in Surrey and Langley</span></div>
+      <div class="tstat"><b data-count="12">12</b><span>Consecutive years named Multi-Family Home Builder of the Year</span></div>
+      <div class="tstat"><b data-count="35">35</b><span>Awards won, including four national Georgies</span></div>
+      <div class="tstat"><b data-count="120">120+</b><span>Award nominations, provincial and national</span></div>
+    </div>
+
+    <div class="tstory">
+      <div class="txt">
+        <p class="reveal">Zenterra was founded on a simple belief: that homebuyers deserve more. More quality, more care, and more attention to the details that make a house feel like a home from the day you walk in. For three decades it has built to that standard without moving off it, and it is now one of the largest multi-family builders south of the Fraser River.</p>
+        <p class="reveal d1">What sets it apart is how much it does itself. Land acquisition, land development, construction, interior design, marketing, sales and customer care are all in-house. There is no general contractor between the developer and the building: Zenterra's own construction team builds Zenterra's own homes, which is how the home you move into matches the showhome you fell for.</p>
+        <p class="reveal d2">Clayton sits on land the company assembled over fifteen years, on a site three blocks from the coming 184 Street SkyTrain station, and it broke ground in spring 2026 in a market where most projects were pausing. Zenterra's presentation centre and showhome is open daily in South Surrey.</p>
+        <blockquote class="tquote reveal d2">"The market has cooled, but well-built homes, priced appropriately and located in desirable areas are still selling."
+          <small>Derek Fenton, Vice-President, Zenterra Developments</small></blockquote>
+      </div>
+      <div class="tpics">
+        <figure class="frame reveal" data-lightbox data-title="Quadra" data-caption="From the corner of the site" data-full="assets/img/Clayton_View_01_Corner_Hero_fr_tree.webp?v=20260907a"><img src="assets/img/Clayton_View_01_Corner_Hero_fr_tree.webp?v=20260907a" alt="Quadra from the corner" loading="lazy"><span class="fr-zoom">&#8599;</span></figure>
+        <figure class="frame reveal d1" data-lightbox data-title="The lobby" data-caption="Quadra, at dusk" data-full="assets/img/Clayton_Lobby_fr.webp?v=20260907a"><img src="assets/img/Clayton_Lobby_fr.webp?v=20260907a" alt="The lobby" loading="lazy"><span class="fr-zoom">&#8599;</span></figure>
+        <figure class="frame reveal d2" data-lightbox data-title="The kitchen" data-caption="Dawn scheme" data-full="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260907a"><img src="assets/img/Clayton_Kitchen_fr_upd.webp?v=20260907a" alt="A kitchen in the Dawn scheme" loading="lazy"><span class="fr-zoom">&#8599;</span></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ UNDER ONE ROOF ============ -->
+<section class="jn jn-shelf tex-lines leave" style="background:#fff;--jc:#fff">
+  <div class="wrap">
+    <div class="kicker reveal">All under one roof</div>
+    <h2 class="title display reveal d1">Every trade, <i>in-house.</i></h2>
+    <div class="roof">
+      <div class="roof-list" id="roof">
+        <div class="rf on" data-img="assets/img/Clayton_View_05_Aerial_fr_Crop.webp?v=20260907a" data-cap="The 5.5 acre site, assembled over fifteen years"><i>01</i><b>Land acquisition</b><em>In-house</em>
+          <p>Zenterra buys and holds its own land. The Clayton site was assembled parcel by parcel over fifteen years, which is why the homes can be priced the way they are.</p></div>
+        <div class="rf" data-img="assets/img/Clayton_View_02_Straight_fr.webp?v=20260907a" data-cap="Seven buildings, planned as one community"><i>02</i><b>Land development</b><em>In-house</em>
+          <p>Rezoning, servicing and the master plan for all seven buildings, done with the City of Surrey under the new Clayton Corridor Community Plan.</p></div>
+        <div class="rf" data-img="assets/img/Clayton_View_04_Straight_fr.webp?v=20260907a" data-cap="Saturna, over the courtyard"><i>03</i><b>Construction</b><em>In-house</em>
+          <p>No general contractor. Zenterra's own construction team builds every Zenterra home, with the same site supervisors from the first pour to the last key.</p></div>
+        <div class="rf" data-img="assets/img/Clayton_Kitchen_Dark_fr_upd.webp?v=20260907a" data-cap="The Dusk scheme"><i>04</i><b>Interior design</b><em>In-house</em>
+          <p>The two colour schemes, the kitchens, the tile and the closets are chosen by Zenterra's own interiors team, so what you pick in the showhome is what gets installed.</p></div>
+        <div class="rf" data-img="assets/img/Clayton_CoWorking_fr_people.webp?v=20260907a" data-cap="The presentation centre team"><i>05</i><b>Sales and marketing</b><em>In-house</em>
+          <p>The people in the presentation centre work for the developer, not for a brokerage, and the pricing and the plans come straight from the source.</p></div>
+        <div class="rf" data-img="assets/img/Clayton_Living_fr.webp?v=20260907a" data-cap="Homeowner care, long after the keys"><i>06</i><b>Customer care</b><em>In-house</em>
+          <p>A homeowner care team that stays with you after completion, from the walk-through to the warranty, because the same company is answerable for the whole thing.</p></div>
+      </div>
+      <div class="roof-pic" id="roofPic">
+        <img src="assets/img/Clayton_View_05_Aerial_fr_Crop.webp?v=20260907a" alt="" class="on"><img src="" alt="">
+        <span class="cap" id="roofCap">The 5.5 acre site, assembled over fifteen years</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VALUES ============ -->
+<section class="jn jn-step-r tex-dots leave" style="--jc:var(--paper)">
+  <div class="wrap">
+    <div class="kicker reveal">What Zenterra stands for</div>
+    <h2 class="title display reveal d1">Five things they <i>hold to.</i></h2>
+    <div class="vals reveal d2">
+      <div class="val"><i>01</i><b>Get it done</b><p>People of action. A deadline, a detail, a promise to a buyer: they follow through, every time.</p></div>
+      <div class="val"><i>02</i><b>Pay attention to detail</b><p>The difference between a good home and a great one lives in the small things, so they sweat them.</p></div>
+      <div class="val"><i>03</i><b>Act with serious purpose</b><p>From land acquisition to the last finish, every decision is made with intention and respect for the people who will live there.</p></div>
+      <div class="val"><i>04</i><b>Forge enduring relationships</b><p>With homebuyers, trades and communities. The homes are meant to last, and so are the connections behind them.</p></div>
+      <div class="val"><i>05</i><b>Deliver homes to be proud of</b><p>A standard they would be proud to live in themselves, which is the standard every buyer gets.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GIVING BACK ============ -->
+<section class="jn jn-step-l tex-weave leave" style="background:var(--sand);--jc:var(--sand)">
+  <div class="wrap">
+    <div class="kicker reveal">Giving back</div>
+    <h2 class="title display reveal d1">A builder that stays <i>in the neighbourhood.</i></h2>
+    <div class="give">
+      <div class="gv reveal">
+        <img src="assets/img/Clayton_Daycare_fr_people.webp?v=20260907a" alt="" loading="lazy">
+        <div class="big">4,000<small>Breakfasts and lunches, every school day</small></div>
+        <i>Zenterra Cares Food Program</i><b>Feeding Surrey's students</b>
+        <p>Every day the program supports more than 4,000 breakfasts and lunches for students in need across 23 elementary and 10 secondary schools in Surrey. Zenterra staff volunteer to serve them.</p>
+      </div>
+      <div class="gv reveal d1">
+        <img src="assets/img/nb-04-park.webp?v=20260907a" alt="" loading="lazy">
+        <div class="big">ReLeaf<small>With the City of Surrey, every year</small></div>
+        <i>Zenterra Green Program</i><b>Keeping the city green</b>
+        <p>Through the City of Surrey's ReLeaf initiative, Zenterra's team joins local volunteers each year to plant trees and shrubs across parks and schools in the neighbourhoods where it builds.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE PARTNERS ============ -->
+<!-- ============ THE PROJECT ============ -->
+<section class="story jn jn-step-l jn-lip tex-plate leave" style="--jc:var(--paper)">
+  <div class="wrap grid2">
+    <div>
+      <div class="kicker reveal">The project</div>
+      <h2 class="title display reveal d1">Built for the life<br>that comes <i>next.</i></h2>
+      <p class="lead reveal d2">Clayton is a community in two chapters. Quadra and Saturna open the
+         story: six storeys each, wrapped around a shared courtyard, with a co-working lounge,
+         daycare, fitness studio and rooftop terraces folded into daily life. The later phases
+         will finish the block, but the neighbourhood starts now.</p>
+      <div class="stat-row reveal d3">
+        <div class="stat"><em>01</em><b>198</b><span>Homes</span></div>
+        <div class="stat"><em>02</em><b>2</b><span>Buildings</span></div>
+        <div class="stat"><em>03</em><b>13</b><span>Home types</span></div>
+        <div class="stat"><em>04</em><b>451&#8211;1,253</b><span>Sq ft</span></div>
+      </div>
+    </div>
+    <figure class="frame reveal d2" style="margin:0" data-lightbox
+            data-title="The courtyard" data-caption="Between Quadra and Saturna"
+            data-full="assets/img/Clayton_Courtyard_fr.webp?v=20260907a">
+      <img src="assets/img/Clayton_Courtyard_fr.webp?v=20260907a" alt="The courtyard between the two buildings" loading="lazy">
+      <span class="fr-cap" aria-hidden="true"><b>The courtyard</b><span>View full screen &#8599;</span></span>
+    </figure>
+  </div>
+</section>
+
+<section class="jn jn-step-r tex-plate leave" style="--jc:var(--paper)">
+  <div class="wrap">
+    <div class="kicker reveal">On Clayton</div>
+    <h2 class="title display reveal d1">The rest of <i>the team.</i></h2>
+    <p class="lead reveal d2">The developer, and the three studios it brought in for this project.</p>
+    <div class="partners">
+      <a class="pt reveal" href="https://zenterra.ca" target="_blank" rel="noopener">
+        <span class="go">&#8599;</span>
+        <i>Developer and builder</i><b>Zenterra Developments</b>
+        <p>Surrey. Thirty years, locally owned, with construction, interiors, sales and homeowner care all in-house.</p>
+        <span class="lg"><svg viewBox="0 0 176.4 40" style="height:30px;width:auto;color:var(--ink)"><use href="#zenterra-logo"/></svg></span>
+      </a>
+      <a class="pt reveal d1" href="https://www.integra-arch.com" target="_blank" rel="noopener">
+        <span class="go">&#8599;</span>
+        <i>Architecture</i><b>Integra Architecture</b>
+        <p>Vancouver. The master plan for all seven buildings at Clayton Crest and the west coast, wood-frame architecture of Quadra and Saturna.</p>
+        <span class="lg"><b style="font-family:var(--fd);font-size:18px;letter-spacing:.14em;font-weight:600">INTEGRA</b></span>
+      </a>
+      <a class="pt reveal d2" href="https://dreamlife.org" target="_blank" rel="noopener">
+        <span class="go">&#8599;</span>
+        <i>Renderings and interactivity</i><b>Dreamlife</b>
+        <p>Every rendering on this site, the 3D tour, the home selector and the site itself.</p>
+        <span class="lg dark"><img src="assets/logos/dreamlife-white.svg" alt="Dreamlife" width="387" height="87"></span>
+      </a>
+      <a class="pt reveal d3" href="https://twinlines.ca" target="_blank" rel="noopener">
+        <span class="go">&#8599;</span>
+        <i>2D floor plans</i><b>TwinLines Studio</b>
+        <p>The plans on the floorplates and the plan sheets for every home in the release.</p>
+        <span class="lg dark"><img src="assets/logos/twinlines-white.png" alt="TwinLines Studio" width="820" height="225"></span>
+      </a>
+    </div>
+    <a class="nextp reveal" href="homes.html">
+      <span class="k">Next</span>
+      <span><b>The <i>homes.</i></b><p>What thirty years of building looks like on a floorplate: two buildings, 198 homes, every plan in the release.</p></span>
+      <span class="arr"><span>&#8594;</span></span>
+    </a>
+  </div>
+</section>
+
+<section class="reg2 jn jn-step-r jn-lip tex-rib leave" id="register" style="--jc:var(--ink);--jl:var(--sky)">
+  <div class="reg2-art" aria-hidden="true">
+    <svg class="reg2-mark" viewBox="0 0 86 86"><g transform="rotate(180 43 43)" fill="currentColor">
+      <rect x="14" y="14" width="40" height="12" rx="1.5"/><rect x="60" y="14" width="12" height="40" rx="1.5"/>
+      <rect x="32" y="60" width="40" height="12" rx="1.5"/>
+      <rect x="14" y="32" width="12" height="40" rx="1.5" fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/></g></svg>
+    <div class="reg2-glow"></div>
+  </div>
+  <div class="wrap reg2-in">
+    <div class="reg2-say">
+      <div class="kicker">Register</div>
+      <h2 class="display">Be first<br>through <i>the door.</i></h2>
+      <ol class="reg2-why">
+        <li><b>01</b><span>Plans and pricing before they are public</span></li>
+        <li><b>02</b><span>A private preview at the presentation centre</span></li>
+        <li><b>03</b><span>Your place in the line, kept in the order you arrived</span></li>
+      </ol>
+      <a class="reg2-mail" href="mailto:hello@liveclayton.ca">hello@liveclayton.ca</a>
+    </div>
+    <div class="rg-mount" data-register-form></div>
+  </div>
+</section>
+
+<footer class="jn jn-step-l jn-lip tex-sheet" style="--jc:#182530;--jl:var(--sky)">
+  <div class="wrap">
+    <div class="f-head">
+      <a class="brand" href="index.html">
+        <svg viewBox="0 0 86 86" fill="currentColor" aria-hidden="true"><g transform="rotate(180 43 43)">
+          <rect x="14" y="14" width="40" height="12" rx="1.5"/>
+          <rect x="60" y="14" width="12" height="40" rx="1.5"/>
+          <rect x="32" y="60" width="40" height="12" rx="1.5"/>
+          <rect x="14" y="32" width="12" height="40" rx="1.5"
+                fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/></g>
+        </svg>
+        CLAYTON
+      </a>
+      <nav class="f-nav" aria-label="Footer">
+        <a href="homes.html">Homes</a>
+        <a href="interiors.html">Interiors</a>
+        <a href="tour.html">3D Tour</a>
+        <a href="amenities.html">Amenities</a>
+        <a href="neighbourhood.html">Neighbourhood</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="team.html">Team</a>
+      </nav>
+    </div>
+
+
+    <!-- where to find it: two drawn maps, the presentation centre and the site -->
+    <div class="f-find">
+      <div class="ff-say">
+        <h3>Come and <i>see it.</i></h3>
+        <div class="ff-hours">
+          <div><small>Open daily</small><b>12 &ndash; 5</b></div>
+          <div><small>Closed</small><b>Fridays</b></div>
+        </div>
+        <a class="ff-line" href="tel:6042435439">604.243.5439</a>
+        <a class="ff-line" href="mailto:hello@liveclayton.ca">hello@liveclayton.ca</a>
+        <button class="btn btn-clay" type="button" data-register><span class="tx">Book an appointment</span><span class="arr">&#8594;</span></button>
+      </div>
+
+      <a class="ff-map" href="https://www.google.com/maps/search/?api=1&query=%2330+-+2411+160+Street+Surrey+BC+V3Z+0C8" target="_blank" rel="noopener">
+        <div class="ff-head"><small>Presentation centre</small><b>#30 &ndash; 2411 160 Street, South Surrey</b></div>
+        <svg viewBox="0 0 440 320" role="img" aria-label="Map to the presentation centre at 160 Street and 24 Avenue">
+          <g fill="none" stroke="rgba(255,255,255,.9)" stroke-width="6" stroke-linecap="round">
+            <path d="M20 140 L210 300"/>
+            <path d="M95 30 L250 300"/>
+            <path d="M285 40 V300"/>
+            <path d="M10 220 H430"/>
+          </g>
+          <g fill="rgba(255,255,255,.9)" font-family="Manrope,Inter,sans-serif" font-weight="700" font-size="14">
+            <text transform="translate(66 178) rotate(41)">King George Blvd</text>
+            <text transform="translate(138 84) rotate(61)">Highway 99</text>
+            <text transform="translate(304 84) rotate(-90)">160 St</text>
+            <text x="318" y="252">24 Ave</text>
+          </g>
+          <g transform="translate(236 178)">
+            <rect x="-15" y="-11" width="30" height="22" rx="4" fill="#fff"/>
+            <text x="0" y="5" text-anchor="middle" font-family="Manrope,Inter,sans-serif" font-weight="800" font-size="12" fill="#1C2A33">99</text>
+          </g>
+          <path d="M268 200 l12 -22 l12 22 z" fill="#C0664A"/>
+          <g fill="#fff" font-family="Manrope,Inter,sans-serif" font-weight="700" font-size="13">
+            <text x="300" y="124">Clayton</text><text x="300" y="142">presentation</text><text x="300" y="160">centre</text>
+          </g>
+        </svg>
+      </a>
+
+      <a class="ff-map" href="https://www.google.com/maps/search/?api=1&query=18088+72+Avenue+Surrey+BC" target="_blank" rel="noopener">
+        <div class="ff-head"><small>The site</small><b>18088 72 Avenue, Surrey</b></div>
+        <svg viewBox="0 0 440 320" role="img" aria-label="Map to the site at 72 Avenue and 184 Street">
+          <g fill="none" stroke="rgba(255,255,255,.9)" stroke-width="6" stroke-linecap="round">
+            <path d="M90 20 V300"/>
+            <path d="M380 20 V300"/>
+            <path d="M20 90 L410 300"/>
+            <path d="M222 178 H412"/>
+          </g>
+          <g fill="rgba(255,255,255,.9)" font-family="Manrope,Inter,sans-serif" font-weight="700" font-size="14">
+            <text transform="translate(206 218) rotate(28)">Fraser Hwy</text>
+            <text transform="translate(400 132) rotate(-90)">184 St</text>
+            <text x="308" y="208">72 Ave</text>
+          </g>
+          <g transform="translate(90 240)">
+            <rect x="-15" y="-11" width="30" height="22" rx="4" fill="#fff"/>
+            <text x="0" y="5" text-anchor="middle" font-family="Manrope,Inter,sans-serif" font-weight="800" font-size="12" fill="#1C2A33">15</text>
+          </g>
+          <path d="M290 178 l14 -24 l14 24 z" fill="#C0664A"/>
+          <g transform="translate(196 104)" fill="#fff">
+            <g transform="scale(.42)"><g transform="rotate(180 43 43)"><rect x="14" y="14" width="40" height="12" rx="1.5"/><rect x="60" y="14" width="12" height="40" rx="1.5"/><rect x="32" y="60" width="40" height="12" rx="1.5"/><rect x="14" y="32" width="12" height="40" rx="1.5" fill="none" stroke="#fff" stroke-width="2.4" opacity=".55"/></g></g>
+            <text x="46" y="27" font-family="Bricolage,Archivo,sans-serif" font-weight="600" font-size="17" letter-spacing="3.5">CLAYTON</text>
+          </g>
+        </svg>
+      </a>
+    </div>
+
+    <!-- the title block: the footer drawn the way an architect's sheet ends,
+         a ruled block of labelled cells along the bottom edge -->
+    <div class="tblock">
+      <div class="tb-cell tb-wide">
+        <small>Project</small>
+        <b>Ahead of <i>the line.</i></b>
+        <p>198 homes in two buildings at West Clayton, Surrey. Studios to three bedrooms, minutes from three schools, the parks and the SkyTrain now under construction.</p>
+      </div>
+      <div class="tb-cell tb-pc">
+        <small>Presentation centre</small>
+        <span class="nw">#30 &ndash; 2411 160 Street, South Surrey</span>
+        <span class="nw">Open daily 12&ndash;5pm, closed Fridays</span>
+        <a href="tel:6042435439">604.243.5439</a>
+        <a href="mailto:hello@liveclayton.ca">hello@liveclayton.ca</a>
+      </div>
+      <div class="tb-cell tb-bl">
+        <small>The buildings</small>
+        <a class="nw" href="homes.html">Quadra &middot; A &middot; 115 homes</a>
+        <a class="nw" href="homes.html">Saturna &middot; B &middot; 83 homes</a>
+        <span>Six storeys each, one courtyard</span>
+      </div>
+      <div class="tb-cell tb-reg">
+        <small>Registration</small>
+        <span class="f-now"><i></i>Open now</span>
+        <button class="btn btn-clay" type="button" data-register><span class="tx">Register</span><span class="arr">&#8594;</span></button>
+      </div>
+
+      <a class="tb-cell tb-credit tb-c1" href="https://dreamlife.org" target="_blank" rel="noopener">
+        <small>Renderings</small>
+        <img class="mk dl" src="assets/logos/dreamlife-white.svg" alt="Dreamlife" width="387" height="87">
+        <em>dreamlife.org &#8599;</em>
+      </a>
+      <a class="tb-cell tb-credit tb-c2" href="https://twinlines.ca" target="_blank" rel="noopener">
+        <small>2D floor plans</small>
+        <img class="mk tl" src="assets/logos/twinlines-white.png" alt="TwinLines Studio" width="820" height="225">
+        <em>twinlines.ca &#8599;</em>
+      </a>
+      <div class="tb-cell tb-meta tb-m1"><small>The homes</small><b>Studios to three bedrooms</b></div>
+      <div class="tb-cell tb-meta tb-m2"><small>Issue</small><b>2026</b></div>
+      <div class="tb-cell tb-meta tb-m3"><small>Scale</small><b>NTS</b></div>
+      <div class="tb-cell tb-meta tb-top"><a class="totop" href="#top"><small>Back to top</small><b>&#8593;</b></a></div>
+    </div>
+
+    <div class="f-legal">
+      <p>Renderings are artistic representations and may differ from the finished buildings.
+         Dimensions and areas are approximate. The developer reserves the right to modify plans,
+         specifications and features without notice. This is not an offering for sale; any such
+         offering may only be made with a disclosure statement. E.&amp;O.E.</p>
+      <p class="f-copy">&copy; 2026 Clayton &nbsp;&#183;&nbsp; Website by Dreamlife</p>
+    </div>
+  </div>
+</footer>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="zenterra-logo" viewBox="0 0 176.4 40">
+    <g fill="currentColor">
+      <path d="M20.5,0L0,11.8V40h28.5v-1.5h-27V12.6l19-10.9L39,12.1V40h1.5V11.2L20.5,0z"/>
+      <path d="M4.5,35.5V14.4l16-9.2L36,13.9V40h1.5V13l-17-9.6L3,13.5V37h25.5v-1.5L4.5,35.5z"/>
+      <path d="M7.5,32.5V16.1l12.9-7.5L33,15.7V40h1.5V14.8l-14-7.9L6,15.2V34h22.5v-1.5L7.5,32.5z"/>
+      <path d="M10.5,29.5V17.8l9.9-5.8l9.6,5.5V40h1.5V16.6l-11.1-6.3L9,16.9V31h19.5v-1.5L10.5,29.5z"/>
+    </g>
+    <g fill="currentColor" transform="translate(50.979 19.227)">
+      <path d="M0,13.3L8.5,3.2H0.3V0.1h12.6v2.7L4.4,12.9h8.5V16H0L0,13.3z"/>
+      <path d="M16.1,0.1h11.7v3.1h-8.3v3.2h7.3v3.1h-7.3v3.3h8.3V16H16.1V0.1z"/>
+      <path d="M31.1,0.1h3.1l7.3,9.8V0.1h3.4V16h-2.9L34.4,5.9V16h-3.4V0.1z"/>
+      <path d="M52.3,3.3h-4.7V0.1h12.8v3.2h-4.7V16h-3.4L52.3,3.3z"/>
+      <path d="M63.2,0.1h11.7v3.1h-8.3v3.2h7.3v3.1h-7.3v3.3H75V16H63.2V0.1z"/>
+      <path d="M78.2,0.1h7.1c1.7-0.1,3.3,0.5,4.5,1.6c0.9,1,1.4,2.3,1.3,3.6v0c0.1,2.2-1.2,4.2-3.3,4.9l3.8,5.7h-4l-3.3-5.1h-2.7V16h-3.4L78.2,0.1z M85,7.8c1.7,0,2.6-0.9,2.6-2.2v0c0-1.5-1-2.3-2.7-2.3h-3.4v4.6H85z"/>
+      <path d="M94.3,0.1h7.1c1.7-0.1,3.3,0.5,4.5,1.6c0.9,1,1.4,2.3,1.3,3.6v0c0.1,2.2-1.2,4.2-3.3,4.9l3.8,5.7h-4l-3.3-5.1h-2.7V16h-3.4L94.3,0.1z M101.2,7.8c1.7,0,2.6-0.9,2.6-2.2v0c0-1.5-1-2.3-2.7-2.3h-3.4v4.6H101.2z"/>
+      <path d="M115.6,0h3.1l6.6,16h-3.6l-1.4-3.6h-6.5l-1.4,3.6H109L115.6,0z M119.2,9.4l-2.1-5.2l-2.1,5.2H119.2z"/>
+    </g>
+  </symbol>
+</svg>
+
+<script>
+/* the roof index: the picture follows the line under the cursor */
+(() => {
+  const pics = document.querySelectorAll("#roofPic img"), cap = document.getElementById("roofCap");
+  const rows = [...document.querySelectorAll("#roof .rf")];
+  let front = 0, seq = 0;
+  const go = r => {
+    rows.forEach(x => x.classList.toggle("on", x === r));
+    const src = r.dataset.img; if (pics[front].getAttribute("src") === src) return;
+    const id = ++seq, back = pics[1 - front];
+    back.src = src;
+    const show = () => { if (id !== seq) return; back.classList.add("on"); pics[front].classList.remove("on"); front = 1 - front; cap.textContent = r.dataset.cap; };
+    (back.decode ? back.decode() : Promise.resolve()).then(show, show);
+  };
+  rows.forEach(r => { r.addEventListener("mouseenter", () => go(r)); r.addEventListener("click", () => go(r)); });
+})();
+</script>
+<script src="assets/site.js?v=20260907a"></script>
+<script src="assets/register.js?v=20260907a" defer></script>
+<script src="assets/anim.js?v=20260907a" defer></script>
+</body>
+</html>

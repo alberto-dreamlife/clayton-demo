@@ -110,6 +110,8 @@ function countUp(el){
   var target = parseFloat(m[0].replace(/,/g, ""));
   if (!isFinite(target) || target === 0) return;
   var grouped = m[0].indexOf(",") > -1;
+  /* a year counts from data-from, so 2029 rolls up from 2000 and not from zero */
+  var from = parseFloat(el.dataset.from || 0); if (!isFinite(from)) from = 0;
   var dur = 1400, t0 = null;
   el.classList.add("ax-num");
   function fmt(v){
@@ -121,7 +123,7 @@ function countUp(el){
     var p = Math.min(1, (t - t0) / dur);
     /* ease out: fast to nearly there, then settle, like a dial coming to rest */
     var e = 1 - Math.pow(1 - p, 3);
-    el.textContent = raw.replace(m[0], fmt(target * e));
+    el.textContent = raw.replace(m[0], fmt(from + (target - from) * e));
     if (p < 1) requestAnimationFrame(step);
     else el.textContent = raw;
   }
